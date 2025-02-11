@@ -18,7 +18,7 @@ class UserModel {
       'name': name,
       'email': email,
       'password': password,
-      'createdAt': createdAt.toIso8601String(),
+      'created_at': createdAt.toIso8601String(),
     };
   }
 
