@@ -4,6 +4,7 @@ import 'package:self_management/common/app_color.dart';
 import 'package:self_management/core/session.dart';
 import 'package:self_management/presentation/pages/dashboard_page.dart';
 import 'package:self_management/presentation/pages/login_page.dart';
+import 'package:self_management/presentation/pages/register_page.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -49,6 +50,7 @@ class MyApp extends StatelessWidget {
       routes: {
         LoginPage.routeName: (context) => const LoginPage(),
         DashboardPage.routeName: (context) => const DashboardPage(),
+        RegisterPage.routeName: (context) => const RegisterPage(),
       },
     );
   }
