@@ -2,18 +2,17 @@ import 'dart:convert';
 
 import 'package:self_management/common/logging.dart';
 import 'package:self_management/core/api.dart';
-import 'package:intl/intl.dart';
 import 'package:http/http.dart' as http;
-import 'package:self_management/data/models/agenda_model.dart';
+import 'package:self_management/data/models/solution_model.dart';
 
-class AgendaRemoteDataSource {
-  static Future<(bool, String)> add(AgendaModel agenda) async {
-    Uri url = Uri.parse('{$API.baseUrl}/api/agendas/add.php');
+class SolutionRemoteDataSource {
+  static Future<(bool, String)> add(SolutionModel solution) async {
+    Uri url = Uri.parse('{$API.baseUrl}/api/solutions/add.php');
 
     try {
       final response = await http.post(
         url,
-        body: agenda.toJsonRequest(),
+        body: solution.toJsonRequest(),
       );
       fdLog.response(response);
 
@@ -25,15 +24,15 @@ class AgendaRemoteDataSource {
       return (success, message);
     } catch (e) {
       fdLog.title(
-        "AgendaRemoteDataSource - add",
+        "SolutionRemoteDataSource - add",
         e.toString(),
       );
       return (false, 'Something went wrong');
     }
   }
 
-  static Future<(bool, String, List<AgendaModel>?)> all(int userId) async {
-    Uri url = Uri.parse('{$API.baseUrl}/api/agendas/all.php');
+  static Future<(bool, String, List<SolutionModel>?)> all(int userId) async {
+    Uri url = Uri.parse('{$API.baseUrl}/api/solutions/all.php');
     try {
       final response = await http.post(
         url,
@@ -49,18 +48,18 @@ class AgendaRemoteDataSource {
 
       if (response.statusCode == 200) {
         Map data = Map.from(resBody['data']);
-        List agendasRaw = data['agendas'];
-        List<AgendaModel> agendas = agendasRaw
+        List solutionRaw = data['solutions'];
+        List<SolutionModel> solutions = solutionRaw
             .map(
-              (e) => AgendaModel.fromJson(e),
+              (e) => SolutionModel.fromJson(e),
             )
             .toList();
-        return (true, message, agendas);
+        return (true, message, solutions);
       }
       return (false, message, null);
     } catch (e) {
       fdLog.title(
-        "AgendaRemoteDataSource - all",
+        "SolutionRemoteDataSource - all",
         e.toString(),
       );
       return (false, 'Something went wrong', null);
@@ -68,7 +67,7 @@ class AgendaRemoteDataSource {
   }
 
   static Future<(bool, String)> delete(int id) async {
-    Uri url = Uri.parse('{$API.baseUrl}/api/agendas/delete.php?id=$id');
+    Uri url = Uri.parse('{$API.baseUrl}/api/solutions/delete.php?id=$id');
 
     try {
       final response = await http.get(
@@ -84,15 +83,15 @@ class AgendaRemoteDataSource {
       return (success, message);
     } catch (e) {
       fdLog.title(
-        "AgendaRemoteDataSource - delete",
+        "SolutionRemoteDataSource - delete",
         e.toString(),
       );
       return (false, 'Something went wrong');
     }
   }
 
-  static Future<(bool, String, AgendaModel?)> detail(int id) async {
-    Uri url = Uri.parse('{$API.baseUrl}/api/agendas/detail.php?id=$id');
+  static Future<(bool, String, SolutionModel?)> detail(int id) async {
+    Uri url = Uri.parse('{$API.baseUrl}/api/solutions/detail.php?id=$id');
 
     try {
       final response = await http.get(
@@ -105,34 +104,27 @@ class AgendaRemoteDataSource {
       String message = resBody['message'];
 
       if (response.statusCode == 200) {
-        AgendaModel agenda =
-            AgendaModel.fromJson(Map<String, dynamic>.from(resBody['data']));
-        return (true, message, agenda);
+        SolutionModel solution =
+            SolutionModel.fromJson(Map<String, dynamic>.from(resBody['data']));
+        return (true, message, solution);
       }
       return (false, message, null);
     } catch (e) {
       fdLog.title(
-        "AgendaRemoteDataSource - detail",
+        "SolutionRemoteDataSource - detail",
         e.toString(),
       );
       return (false, 'Something went wrong', null);
     }
   }
 
-  static Future<(bool, String, List<AgendaModel>?)> today(int userId) async {
-    Uri url = Uri.parse('{$API.baseUrl}/api/agendas/today.php');
-    DateTime now = DateTime.now();
-    String startDate = DateFormat('yyyy-MM-dd').format(
-      DateTime(now.year, now.month, now.day),
-    );
-
+  static Future<(bool, String, List<SolutionModel>?)> search(
+      int userId, String query) async {
+    Uri url = Uri.parse('{$API.baseUrl}/api/solutions/search.php');
     try {
       final response = await http.post(
         url,
-        body: {
-          'user_id': userId.toString(),
-          'start_date': startDate,
-        },
+        body: {'user_id': userId.toString(), 'query': query},
       );
       fdLog.response(response);
 
@@ -142,57 +134,46 @@ class AgendaRemoteDataSource {
 
       if (response.statusCode == 200) {
         Map data = Map.from(resBody['data']);
-        List agendasRaw = data['agendas'];
-        List<AgendaModel> agendas = agendasRaw
+        List solutionRaw = data['solutions'];
+        List<SolutionModel> solutions = solutionRaw
             .map(
-              (e) => AgendaModel.fromJson(e),
+              (e) => SolutionModel.fromJson(e),
             )
             .toList();
-        return (true, message, agendas);
+        return (true, message, solutions);
       }
       return (false, message, null);
     } catch (e) {
       fdLog.title(
-        "AgendaRemoteDataSource - today",
+        "SolutionRemoteDataSource - search",
         e.toString(),
       );
       return (false, 'Something went wrong', null);
     }
   }
 
-  static Future<(bool, String, List?)> analytic(int userId) async {
-    Uri url = Uri.parse('{$API.baseUrl}/api/agendas/analytic.php');
-    DateTime now = DateTime.now();
-    String startDate = DateFormat('yyyy-MM-dd').format(
-      DateTime(now.year, now.month, 1),
-    );
+  static Future<(bool, String)> update(SolutionModel solution) async {
+    Uri url = Uri.parse('{$API.baseUrl}/api/solutions/update.php');
 
     try {
       final response = await http.post(
         url,
-        body: {
-          'user_id': userId.toString(),
-          'start_date': startDate,
-        },
+        body: solution.toJsonRequest(),
       );
       fdLog.response(response);
 
       final resBody = jsonDecode(response.body);
 
       String message = resBody['message'];
+      bool success = response.statusCode == 200;
 
-      if (response.statusCode == 200) {
-        List data = resBody['data']['agendas'];
-
-        return (true, message, data);
-      }
-      return (false, message, null);
+      return (success, message);
     } catch (e) {
       fdLog.title(
-        "AgendaRemoteDataSource - today",
+        "SolutionRemoteDataSource - update",
         e.toString(),
       );
-      return (false, 'Something went wrong', null);
+      return (false, 'Something went wrong');
     }
   }
 }
