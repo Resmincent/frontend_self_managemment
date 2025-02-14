@@ -6,6 +6,7 @@ import 'package:self_management/presentation/pages/dashboard_page.dart';
 import 'package:self_management/presentation/pages/login_page.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
   runApp(const MyApp());
 }
 
@@ -30,20 +31,25 @@ class MyApp extends StatelessWidget {
         shadowColor: AppColor.primary.withOpacity(0.3),
       ),
       home: FutureBuilder(
-          future: Session.getUser(),
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return const Scaffold(
-                body: Center(
-                  child: CircularProgressIndicator(),
-                ),
-              );
-            }
-            if (snapshot.data == null) {
-              return const LoginPage();
-            }
-            return const DashboardPage();
-          }),
+        future: Session.getUser(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Scaffold(
+              body: Center(
+                child: CircularProgressIndicator(),
+              ),
+            );
+          }
+          if (snapshot.data == null) {
+            return const LoginPage();
+          }
+          return const DashboardPage();
+        },
+      ),
+      routes: {
+        LoginPage.routeName: (context) => const LoginPage(),
+        DashboardPage.routeName: (context) => const DashboardPage(),
+      },
     );
   }
 }
