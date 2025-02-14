@@ -4,7 +4,6 @@ import 'package:self_management/common/logging.dart';
 import 'package:self_management/core/api.dart';
 import 'package:intl/intl.dart';
 import 'package:http/http.dart' as http;
-import 'package:self_management/data/models/agenda_model.dart';
 import 'package:self_management/data/models/expense_modal.dart';
 
 class ExpenseRemoteDataSource {
