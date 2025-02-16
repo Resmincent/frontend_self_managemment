@@ -7,7 +7,7 @@ class BottomClipPointer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CustomPaint(
-      size: const Size(190, 350),
+      size: const Size(250, 450),
       painter: _ClipPainter(),
     );
   }

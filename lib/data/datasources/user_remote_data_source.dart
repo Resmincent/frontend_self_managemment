@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:self_management/common/logging.dart';
 import 'package:self_management/core/api.dart';
 import 'package:http/http.dart' as http;
@@ -11,7 +10,7 @@ class UserRemoteDataSource {
     String email,
     String password,
   ) async {
-    Uri url = Uri.parse('{$API.baseUrl}/api/register.php');
+    Uri url = Uri.parse('${API.baseUrl}/api/register.php');
 
     try {
       final response = await http.post(
@@ -43,7 +42,7 @@ class UserRemoteDataSource {
     String email,
     String password,
   ) async {
-    Uri url = Uri.parse('{$API.baseUrl}/api/login.php');
+    Uri url = Uri.parse('${API.baseUrl}/api/login.php');
 
     try {
       final response = await http.post(
@@ -60,7 +59,7 @@ class UserRemoteDataSource {
       String message = resBody['message'];
 
       if (response.statusCode == 200) {
-        final data = resBody['message'];
+        final data = resBody['data'];
         final user = UserModel.fromJson(data['user']);
         return (true, message, user);
       }

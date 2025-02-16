@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:self_management/presentation/pages/register_page.dart';
+import 'package:self_management/presentation/widgets/custom_button.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -12,6 +14,23 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return Scaffold(
+      body: Center(
+        child: SizedBox(
+          width: double.infinity,
+          child: ButtonPrimary(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const RegisterPage(),
+                ),
+              );
+            },
+            title: 'Register',
+          ),
+        ),
+      ),
+    );
   }
 }
