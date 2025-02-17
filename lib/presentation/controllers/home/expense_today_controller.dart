@@ -15,7 +15,7 @@ class ExpenseTodayController extends GetxController {
 
   set state(ExpenseTodayState value) => _state.value = value;
 
-  Future executeRequest(int userId) async {
+  Future fetch(int userId) async {
     state = state.copyWith(statusRequest: StatusRequest.loading);
 
     final (success, message, expenses) =

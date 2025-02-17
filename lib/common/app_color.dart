@@ -8,4 +8,6 @@ class AppColor {
   static const error = Color(0xffE52020);
   static const success = Color(0xff77B254);
   static const textBody = Color(0xff757575);
+  static const textWhite = Color(0xffFFFFFF);
+  static const textTitle = Color(0xff252525);
 }

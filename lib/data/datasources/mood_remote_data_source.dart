@@ -103,7 +103,7 @@ class MoodRemoteDataSource {
   }
 
   static Future<(bool, String, List<MoodModel>?)> today(int userId) async {
-    Uri url = Uri.parse('{$API.baseUrl}/api/moods/today.php');
+    Uri url = Uri.parse('${API.baseUrl}/api/moods/today.php');
     DateTime now = DateTime.now();
     String startDate = DateFormat('yyyy-MM-dd').format(
       DateTime(now.year, now.month, now.day),

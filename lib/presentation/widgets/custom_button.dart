@@ -18,7 +18,7 @@ class ButtonSecondary extends _CustomButton {
     required super.onPressed,
     required super.title,
   }) : super(
-          color: Colors.white,
+          color: AppColor.secondary,
           titleColor: AppColor.primary,
         );
 }
