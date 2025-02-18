@@ -12,7 +12,13 @@ import 'package:self_management/data/models/user_model.dart';
 import 'package:self_management/presentation/controllers/home/agenda_today_controller.dart';
 import 'package:self_management/presentation/controllers/home/expense_today_controller.dart';
 import 'package:self_management/presentation/controllers/home/mood_today_controller.dart';
+import 'package:self_management/presentation/pages/agendas/all_agenda_page.dart';
+import 'package:self_management/presentation/pages/chat_ai_page.dart';
+import 'package:self_management/presentation/pages/choose_mood_page.dart';
+import 'package:self_management/presentation/pages/profile_page.dart';
 import 'package:self_management/presentation/widgets/response_failed.dart';
+
+import '../expenses/all_expense_page.dart';
 
 class HomeFragment extends StatefulWidget {
   const HomeFragment({super.key});
@@ -59,15 +65,25 @@ class _HomeFragmentState extends State<HomeFragment> {
     super.dispose();
   }
 
-  Future<void> _goToChatAI() async {}
+  Future<void> _goToChatAI() async {
+    await Navigator.pushReplacementNamed(context, ChatAiPage.routeName);
+  }
 
-  Future<void> _goToProfile() async {}
+  Future<void> _goToProfile() async {
+    await Navigator.pushReplacementNamed(context, ProfilePage.routeName);
+  }
 
-  Future<void> _goToMood() async {}
+  Future<void> _goToMood() async {
+    await Navigator.pushReplacementNamed(context, ChooseMoodPage.routeName);
+  }
 
-  Future<void> _goToAgendaAll() async {}
+  Future<void> _goToAgendaAll() async {
+    await Navigator.pushReplacementNamed(context, AllAgendaPage.routeName);
+  }
 
-  Future<void> _goToExpenseAll() async {}
+  Future<void> _goToExpenseAll() async {
+    await Navigator.pushReplacementNamed(context, AllExpensePage.routeName);
+  }
 
   Widget _buildProfile() {
     return Row(
