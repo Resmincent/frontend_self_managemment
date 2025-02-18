@@ -34,7 +34,7 @@ class AgendaModel {
       userId: json['user_id'],
       title: json['title'],
       category: json['category'],
-      startEvent: DateTime.parse(json['startEvent']),
+      startEvent: DateTime.parse(json['start_event']),
       endEvent: DateTime.parse(json['end_event']),
       description: json['description'],
     );

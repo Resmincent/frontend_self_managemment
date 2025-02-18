@@ -8,7 +8,7 @@ import 'package:self_management/data/models/agenda_model.dart';
 
 class AgendaRemoteDataSource {
   static Future<(bool, String)> add(AgendaModel agenda) async {
-    Uri url = Uri.parse('{$API.baseUrl}/api/agendas/add.php');
+    Uri url = Uri.parse('${API.baseUrl}/api/agendas/add.php');
 
     try {
       final response = await http.post(
@@ -120,7 +120,7 @@ class AgendaRemoteDataSource {
   }
 
   static Future<(bool, String, List<AgendaModel>?)> today(int userId) async {
-    Uri url = Uri.parse('{$API.baseUrl}/api/agendas/today.php');
+    Uri url = Uri.parse('${API.baseUrl}/api/agendas/today.php');
     DateTime now = DateTime.now();
     String startDate = DateFormat('yyyy-MM-dd').format(
       DateTime(now.year, now.month, now.day),

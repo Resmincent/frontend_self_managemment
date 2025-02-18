@@ -8,7 +8,7 @@ import 'package:self_management/data/models/expense_modal.dart';
 
 class ExpenseRemoteDataSource {
   static Future<(bool, String)> add(ExpenseModal expense) async {
-    Uri url = Uri.parse('{$API.baseUrl}/api/expenses/add.php');
+    Uri url = Uri.parse('${API.baseUrl}/api/expenses/add.php');
 
     try {
       final response = await http.post(
@@ -120,7 +120,7 @@ class ExpenseRemoteDataSource {
   }
 
   static Future<(bool, String, List<ExpenseModal>?)> today(int userId) async {
-    Uri url = Uri.parse('{$API.baseUrl}/api/expenses/today.php');
+    Uri url = Uri.parse('${API.baseUrl}/api/expenses/today.php');
     DateTime now = DateTime.now();
     String expenseDate = DateFormat('yyyy-MM-dd').format(
       DateTime(now.year, now.month, now.day),

@@ -36,7 +36,7 @@ class _DashboardPageState extends State<DashboardPage> {
     },
     {
       'iconType': 'material',
-      'icon': Icons.add_card,
+      'icon': Icons.tv_rounded,
       'view': const ExpenseFragment(),
     }
   ];

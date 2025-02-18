@@ -35,7 +35,7 @@ class ExpenseModal {
       description: json['description'],
       title: json['title'],
       category: json['category'],
-      expense: json['expense'],
+      expense: (json['expense'] as num).toDouble(),
       dateExpense: DateTime.parse(json['date_expense']),
     );
   }
