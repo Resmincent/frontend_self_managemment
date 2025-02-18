@@ -33,7 +33,7 @@ class AgendaRemoteDataSource {
   }
 
   static Future<(bool, String, List<AgendaModel>?)> all(int userId) async {
-    Uri url = Uri.parse('{$API.baseUrl}/api/agendas/all.php');
+    Uri url = Uri.parse('${API.baseUrl}/api/agendas/all.php');
     try {
       final response = await http.post(
         url,
@@ -68,7 +68,7 @@ class AgendaRemoteDataSource {
   }
 
   static Future<(bool, String)> delete(int id) async {
-    Uri url = Uri.parse('{$API.baseUrl}/api/agendas/delete.php?id=$id');
+    Uri url = Uri.parse('${API.baseUrl}/api/agendas/delete.php?id=$id');
 
     try {
       final response = await http.get(
@@ -92,7 +92,7 @@ class AgendaRemoteDataSource {
   }
 
   static Future<(bool, String, AgendaModel?)> detail(int id) async {
-    Uri url = Uri.parse('{$API.baseUrl}/api/agendas/detail.php?id=$id');
+    Uri url = Uri.parse('${API.baseUrl}/api/agendas/detail.php?id=$id');
 
     try {
       final response = await http.get(
@@ -161,7 +161,7 @@ class AgendaRemoteDataSource {
   }
 
   static Future<(bool, String, List?)> analytic(int userId) async {
-    Uri url = Uri.parse('{$API.baseUrl}/api/agendas/analytic.php');
+    Uri url = Uri.parse('${API.baseUrl}/api/agendas/analytic.php');
     DateTime now = DateTime.now();
     String startDate = DateFormat('yyyy-MM-dd').format(
       DateTime(now.year, now.month, 1),

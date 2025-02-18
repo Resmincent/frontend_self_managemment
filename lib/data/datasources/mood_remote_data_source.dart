@@ -8,7 +8,7 @@ import 'package:self_management/data/models/mood_model.dart';
 
 class MoodRemoteDataSource {
   static Future<(bool, String)> add(MoodModel mood) async {
-    Uri url = Uri.parse('{$API.baseUrl}/api/moods/add.php');
+    Uri url = Uri.parse('${API.baseUrl}/api/moods/add.php');
 
     try {
       final response = await http.post(
@@ -33,7 +33,7 @@ class MoodRemoteDataSource {
   }
 
   static Future<(bool, String, Map?)> analyticToday(int userId) async {
-    Uri url = Uri.parse('{$API.baseUrl}/api/moods/analytic.php');
+    Uri url = Uri.parse('${API.baseUrl}/api/moods/analytic.php');
     DateTime now = DateTime.now();
     String startDate = DateFormat('yyyy-MM-dd').format(
       DateTime(now.year, now.month, now.day),
@@ -68,7 +68,7 @@ class MoodRemoteDataSource {
   }
 
   static Future<(bool, String, Map?)> analyticLastMonth(int userId) async {
-    Uri url = Uri.parse('{$API.baseUrl}/api/moods/analytic.php');
+    Uri url = Uri.parse('${API.baseUrl}/api/moods/analytic.php');
     DateTime now = DateTime.now();
     String startDate = DateFormat('yyyy-MM-dd').format(
       DateTime(now.year, now.month, 1),

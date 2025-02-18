@@ -33,7 +33,7 @@ class ExpenseRemoteDataSource {
   }
 
   static Future<(bool, String, List<ExpenseModal>?)> all(int userId) async {
-    Uri url = Uri.parse('{$API.baseUrl}/api/expenses/all.php');
+    Uri url = Uri.parse('${API.baseUrl}/api/expenses/all.php');
     try {
       final response = await http.post(
         url,
@@ -68,7 +68,7 @@ class ExpenseRemoteDataSource {
   }
 
   static Future<(bool, String)> delete(int id) async {
-    Uri url = Uri.parse('{$API.baseUrl}/api/expenses/delete.php?id=$id');
+    Uri url = Uri.parse('${API.baseUrl}/api/expenses/delete.php?id=$id');
 
     try {
       final response = await http.get(
@@ -92,7 +92,7 @@ class ExpenseRemoteDataSource {
   }
 
   static Future<(bool, String, ExpenseModal?)> detail(int id) async {
-    Uri url = Uri.parse('{$API.baseUrl}/api/expenses/detail.php?id=$id');
+    Uri url = Uri.parse('${API.baseUrl}/api/expenses/detail.php?id=$id');
 
     try {
       final response = await http.get(
@@ -161,7 +161,7 @@ class ExpenseRemoteDataSource {
   }
 
   static Future<(bool, String, List?)> analytic(int userId) async {
-    Uri url = Uri.parse('{$API.baseUrl}/api/expenses/analytic.php');
+    Uri url = Uri.parse('${API.baseUrl}/api/expenses/analytic.php');
     DateTime now = DateTime.now();
     String expenseDate = DateFormat('yyyy-MM-dd').format(
       DateTime(now.year, now.month, 1),

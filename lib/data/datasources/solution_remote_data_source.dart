@@ -7,7 +7,7 @@ import 'package:self_management/data/models/solution_model.dart';
 
 class SolutionRemoteDataSource {
   static Future<(bool, String)> add(SolutionModel solution) async {
-    Uri url = Uri.parse('{$API.baseUrl}/api/solutions/add.php');
+    Uri url = Uri.parse('${API.baseUrl}/api/solutions/add.php');
 
     try {
       final response = await http.post(
@@ -32,7 +32,7 @@ class SolutionRemoteDataSource {
   }
 
   static Future<(bool, String, List<SolutionModel>?)> all(int userId) async {
-    Uri url = Uri.parse('{$API.baseUrl}/api/solutions/all.php');
+    Uri url = Uri.parse('${API.baseUrl}/api/solutions/all.php');
     try {
       final response = await http.post(
         url,
@@ -67,7 +67,7 @@ class SolutionRemoteDataSource {
   }
 
   static Future<(bool, String)> delete(int id) async {
-    Uri url = Uri.parse('{$API.baseUrl}/api/solutions/delete.php?id=$id');
+    Uri url = Uri.parse('${API.baseUrl}/api/solutions/delete.php?id=$id');
 
     try {
       final response = await http.get(
@@ -91,7 +91,7 @@ class SolutionRemoteDataSource {
   }
 
   static Future<(bool, String, SolutionModel?)> detail(int id) async {
-    Uri url = Uri.parse('{$API.baseUrl}/api/solutions/detail.php?id=$id');
+    Uri url = Uri.parse('${API.baseUrl}/api/solutions/detail.php?id=$id');
 
     try {
       final response = await http.get(
@@ -120,7 +120,7 @@ class SolutionRemoteDataSource {
 
   static Future<(bool, String, List<SolutionModel>?)> search(
       int userId, String query) async {
-    Uri url = Uri.parse('{$API.baseUrl}/api/solutions/search.php');
+    Uri url = Uri.parse('${API.baseUrl}/api/solutions/search.php');
     try {
       final response = await http.post(
         url,
@@ -153,7 +153,7 @@ class SolutionRemoteDataSource {
   }
 
   static Future<(bool, String)> update(SolutionModel solution) async {
-    Uri url = Uri.parse('{$API.baseUrl}/api/solutions/update.php');
+    Uri url = Uri.parse('${API.baseUrl}/api/solutions/update.php');
 
     try {
       final response = await http.post(
