@@ -26,7 +26,7 @@ class AnalyticMoodLastMonthController extends GetxController {
       if (!success || data == null) {
         state = state.copyWith(
           statusRequest: StatusRequest.failed,
-          message: message ?? 'Failed to fetch mood data',
+          message: message,
         );
         return state;
       }
@@ -62,7 +62,7 @@ class AnalyticMoodLastMonthController extends GetxController {
         statusRequest: StatusRequest.success,
         moods: moods,
         group: data['group'] as List? ?? [],
-        message: message ?? 'Success',
+        message: message,
       );
 
       return state;

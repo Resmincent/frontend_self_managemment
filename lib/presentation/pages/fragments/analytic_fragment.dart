@@ -1,6 +1,4 @@
-import 'package:d_chart/commons/data_model/data_model.dart';
 import 'package:d_chart/d_chart.dart';
-import 'package:d_chart/time/line.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
@@ -252,7 +250,7 @@ class _AnalyticFragmentState extends State<AnalyticFragment> {
                       TimeGroup(
                         id: 'id',
                         data: moods,
-                        color: AppColor.primary,
+                        color: Colors.blue,
                       ),
                     ],
                     measureAxis: const MeasureAxis(
@@ -263,12 +261,8 @@ class _AnalyticFragmentState extends State<AnalyticFragment> {
                       ),
                     ),
                     layoutMargin: LayoutMargin(10, 0, 0, 10),
-                    domainAxis: DomainAxis(
+                    domainAxis: const DomainAxis(
                       minimumPaddingBetweenLabels: 20,
-                      labelAnchor: LabelAnchor.after,
-                      tickLabelFormatterT: (domain) {
-                        return DateFormat('H:mm').format(domain);
-                      },
                     ),
                     configRenderLine: const ConfigRenderLine(
                       includeArea: true,
@@ -288,23 +282,26 @@ class _AnalyticFragmentState extends State<AnalyticFragment> {
                   children: groupLevels.map((value) {
                     int level = value['level'];
                     int total = value['total'];
-                    return Row(
-                      children: [
-                        Image.asset(
-                          'assets/images/mood_big_$level.png',
-                          width: 24,
-                          height: 24,
-                        ),
-                        const Gap(12),
-                        Text(
-                          '$total',
-                          style: const TextStyle(
-                            fontSize: 12,
-                            fontWeight: FontWeight.bold,
-                            color: AppColor.primary,
+                    return Container(
+                      margin: const EdgeInsets.only(bottom: 2),
+                      child: Row(
+                        children: [
+                          Image.asset(
+                            'assets/images/mood_big_$level.png',
+                            width: 24,
+                            height: 24,
                           ),
-                        )
-                      ],
+                          const Gap(12),
+                          Text(
+                            '$total',
+                            style: const TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.bold,
+                              color: AppColor.primary,
+                            ),
+                          ),
+                        ],
+                      ),
                     );
                   }).toList(),
                 ),
@@ -317,11 +314,169 @@ class _AnalyticFragmentState extends State<AnalyticFragment> {
   }
 
   Widget _buildAgendaLastMonth() {
-    return const Column();
+    return Container(
+      padding: const EdgeInsets.symmetric(
+        horizontal: 24,
+        vertical: 20,
+      ),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(20),
+        color: AppColor.colorWhite,
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text(
+            'Your Agenda You Do Last Month',
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 14,
+              color: AppColor.textTitle,
+            ),
+          ),
+          const Gap(30),
+          Obx(() {
+            final state = analyticAgendaLastMonthController.state;
+            final statusRequest = state.statusRequest;
+
+            if (statusRequest == StatusRequest.init) {
+              return const SizedBox();
+            }
+
+            if (statusRequest == StatusRequest.loading) {
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            }
+
+            if (statusRequest == StatusRequest.failed) {
+              return ResponseFailed(message: state.message);
+            }
+
+            List<TimeData> agendas = state.agendas;
+
+            if (agendas.isEmpty) {
+              return const ResponseFailed(message: 'No Agenda Yet');
+            }
+
+            return Column(
+              children: [
+                AspectRatio(
+                  aspectRatio: 16 / 9,
+                  child: DChartLineT(
+                    groupList: [
+                      TimeGroup(
+                        id: 'id',
+                        data: agendas,
+                        color: AppColor.secondary,
+                      ),
+                    ],
+                    measureAxis: const MeasureAxis(
+                      showLine: true,
+                      numericViewport: NumericViewport(0, 5),
+                      numericTickProvider: NumericTickProvider(
+                        desiredTickCount: 6,
+                      ),
+                    ),
+                    layoutMargin: LayoutMargin(10, 0, 0, 10),
+                    domainAxis: const DomainAxis(
+                      minimumPaddingBetweenLabels: 20,
+                    ),
+                    configRenderLine: const ConfigRenderLine(
+                      includeArea: true,
+                      includePoints: true,
+                    ),
+                  ),
+                ),
+              ],
+            );
+          })
+        ],
+      ),
+    );
   }
 
   Widget _buildExpenseLastMonth() {
-    return const Column();
+    return Container(
+      padding: const EdgeInsets.symmetric(
+        horizontal: 24,
+        vertical: 20,
+      ),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(20),
+        color: AppColor.colorWhite,
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text(
+            'Your Expense Last Month',
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 14,
+              color: AppColor.textTitle,
+            ),
+          ),
+          const Gap(30),
+          Obx(() {
+            final state = analyticAgendaLastMonthController.state;
+            final statusRequest = state.statusRequest;
+
+            if (statusRequest == StatusRequest.init) {
+              return const SizedBox();
+            }
+
+            if (statusRequest == StatusRequest.loading) {
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            }
+
+            if (statusRequest == StatusRequest.failed) {
+              return ResponseFailed(message: state.message);
+            }
+
+            List<TimeData> agendas = state.agendas;
+
+            if (agendas.isEmpty) {
+              return const ResponseFailed(message: 'No Expense Yet');
+            }
+
+            return Column(
+              children: [
+                AspectRatio(
+                  aspectRatio: 16 / 9,
+                  child: DChartComboT(
+                    groupList: [
+                      TimeGroup(
+                        id: 'id',
+                        data: agendas,
+                        color: AppColor.secondary,
+                      ),
+                    ],
+                    measureAxis: const MeasureAxis(
+                      showLine: true,
+                      numericViewport: NumericViewport(0, 5),
+                      numericTickProvider: NumericTickProvider(
+                        desiredTickCount: 6,
+                      ),
+                    ),
+                    layoutMargin: LayoutMargin(10, 0, 0, 10),
+                    domainAxis: const DomainAxis(
+                      minimumPaddingBetweenLabels: 20,
+                    ),
+                    configRenderLine: const ConfigRenderLine(
+                      includeArea: true,
+                      includePoints: true,
+                    ),
+                  ),
+                ),
+              ],
+            );
+          })
+        ],
+      ),
+    );
   }
 
   @override
@@ -339,6 +494,7 @@ class _AnalyticFragmentState extends State<AnalyticFragment> {
         _buildAgendaLastMonth(),
         const Gap(34),
         _buildExpenseLastMonth(),
+        const Gap(128),
       ],
     );
   }
