@@ -12,6 +12,17 @@ class ButtonPrimary extends _CustomButton {
         );
 }
 
+class ButtonThird extends _CustomButton {
+  const ButtonThird({
+    super.key,
+    required super.onPressed,
+    required super.title,
+  }) : super(
+          color: Colors.white,
+          titleColor: AppColor.primary,
+        );
+}
+
 class ButtonSecondary extends _CustomButton {
   const ButtonSecondary({
     super.key,

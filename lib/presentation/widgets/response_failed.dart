@@ -18,7 +18,7 @@ class ResponseFailed extends StatelessWidget {
         aspectRatio: 16 / 9,
         child: Container(
           decoration: BoxDecoration(
-            color: AppColor.textWhite,
+            color: AppColor.colorWhite,
             borderRadius: BorderRadius.circular(20),
           ),
           child: Column(

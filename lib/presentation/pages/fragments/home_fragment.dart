@@ -13,6 +13,7 @@ import 'package:self_management/presentation/controllers/home/agenda_today_contr
 import 'package:self_management/presentation/controllers/home/expense_today_controller.dart';
 import 'package:self_management/presentation/controllers/home/mood_today_controller.dart';
 import 'package:self_management/presentation/pages/agendas/all_agenda_page.dart';
+import 'package:self_management/presentation/pages/agendas/detail_agenda_page.dart';
 import 'package:self_management/presentation/pages/chat_ai_page.dart';
 import 'package:self_management/presentation/pages/choose_mood_page.dart';
 import 'package:self_management/presentation/pages/profile_page.dart';
@@ -83,6 +84,14 @@ class _HomeFragmentState extends State<HomeFragment> {
 
   Future<void> _goToExpenseAll() async {
     await Navigator.pushReplacementNamed(context, AllExpensePage.routeName);
+  }
+
+  Future<void> _goToDetailAgenda() async {
+    await Navigator.pushReplacementNamed(context, DetailAgendaPage.routeName);
+  }
+
+  Future<void> _goToDetailExpense() async {
+    await Navigator.pushReplacementNamed(context, DetailAgendaPage.routeName);
   }
 
   Widget _buildProfile() {
@@ -172,7 +181,7 @@ class _HomeFragmentState extends State<HomeFragment> {
       height: 90,
       margin: const EdgeInsets.only(right: 20),
       decoration: BoxDecoration(
-        color: AppColor.textWhite,
+        color: AppColor.colorWhite,
         borderRadius: BorderRadius.circular(20),
       ),
       alignment: Alignment.center,
@@ -218,191 +227,176 @@ class _HomeFragmentState extends State<HomeFragment> {
     );
   }
 
-  Widget _cardAgendaToday(AgendaModel agenda) {
-    return Container(
-      margin: const EdgeInsets.only(bottom: 20),
-      width: double.infinity,
-      decoration: BoxDecoration(
-        color: AppColor.textWhite,
-        borderRadius: BorderRadius.circular(20),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          crossAxisAlignment: CrossAxisAlignment.center,
+  Widget _cardExpenseToday(ExpenseModal expense) {
+    return GestureDetector(
+      onTap: _goToDetailExpense,
+      child: Container(
+        margin: const EdgeInsets.only(bottom: 20),
+        padding: const EdgeInsets.all(20),
+        decoration: BoxDecoration(
+          color: AppColor.colorWhite,
+          borderRadius: BorderRadius.circular(20),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Expanded(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    agenda.title,
-                    style: const TextStyle(
-                      color: AppColor.textTitle,
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
+            Row(
+              children: [
+                Text(
+                  expense.title,
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: AppColor.textTitle,
+                  ),
+                ),
+                const Gap(10),
+                Chip(
+                  label: Text(formatRupiah(expense.expense)),
+                  labelStyle: const TextStyle(
+                    fontWeight: FontWeight.normal,
+                    fontSize: 14,
+                    color: AppColor.colorWhite,
+                  ),
+                  visualDensity: const VisualDensity(vertical: -4),
+                  backgroundColor: Colors.blue,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(30),
+                    side: const BorderSide(
+                      color: Colors.blue,
+                      width: 1,
                     ),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
                   ),
-                  const SizedBox(height: 12),
-                  Row(
-                    children: [
-                      Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 8,
-                          vertical: 4,
-                        ),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(12),
-                          color: AppColor.primary,
-                        ),
-                        child: Text(
-                          DateFormat('HH:mm').format(agenda.startEvent),
-                          style: const TextStyle(
-                            color: AppColor.textTitle,
-                            fontSize: 12,
-                          ),
-                        ),
-                      ),
-                      const SizedBox(width: 8),
-                      Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 8,
-                          vertical: 4,
-                        ),
-                        decoration: BoxDecoration(
-                          border: Border.all(color: AppColor.primary),
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: Text(
-                          agenda.category,
-                          style: const TextStyle(
-                            color: AppColor.textTitle,
-                            fontSize: 12,
-                          ),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
-                    ],
+                ),
+              ],
+            ),
+            const Gap(16),
+            Row(
+              children: [
+                Chip(
+                  label: Text(
+                    DateFormat.yMd().add_jm().format(expense.dateExpense),
                   ),
-                ],
-              ),
-            ),
-            const SizedBox(width: 8),
-            const ImageIcon(
-              AssetImage('assets/images/arrow_right.png'),
-              color: AppColor.primary,
-              size: 20,
-            ),
+                  labelStyle: const TextStyle(
+                    fontWeight: FontWeight.normal,
+                    fontSize: 14,
+                    color: AppColor.textTitle,
+                  ),
+                  visualDensity: const VisualDensity(vertical: -4),
+                  backgroundColor: AppColor.primary,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(30),
+                    side: const BorderSide(
+                      color: AppColor.primary,
+                      width: 1,
+                    ),
+                  ),
+                ),
+                const Gap(10),
+                Chip(
+                  label: Text(
+                    expense.category,
+                  ),
+                  labelStyle: const TextStyle(
+                    fontWeight: FontWeight.normal,
+                    fontSize: 14,
+                    color: AppColor.textTitle,
+                  ),
+                  visualDensity: const VisualDensity(vertical: -4),
+                  backgroundColor: AppColor.colorWhite,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(30),
+                    side: const BorderSide(
+                      color: AppColor.primary,
+                      width: 1,
+                    ),
+                  ),
+                ),
+                const Spacer(),
+                const ImageIcon(
+                  AssetImage('assets/images/arrow_right.png'),
+                  color: AppColor.primary,
+                  size: 20,
+                ),
+              ],
+            )
           ],
         ),
       ),
     );
   }
 
-  Widget _cardExpenseToday(ExpenseModal expense) {
-    return Container(
-      margin: const EdgeInsets.only(bottom: 20),
-      width: double.infinity,
-      decoration: BoxDecoration(
-        color: AppColor.textWhite,
-        borderRadius: BorderRadius.circular(20),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          crossAxisAlignment: CrossAxisAlignment.center,
+  Widget _cardAgendaToday(AgendaModel agenda) {
+    return GestureDetector(
+      onTap: _goToDetailAgenda,
+      child: Container(
+        margin: const EdgeInsets.only(bottom: 20),
+        padding: const EdgeInsets.all(20),
+        decoration: BoxDecoration(
+          color: AppColor.colorWhite,
+          borderRadius: BorderRadius.circular(20),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Expanded(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    expense.title,
-                    style: const TextStyle(
-                      color: AppColor.textTitle,
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                    ),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  const SizedBox(height: 12),
-                  Row(
-                    children: [
-                      Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 8,
-                          vertical: 4,
-                        ),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(12),
-                          border: Border.all(color: AppColor.secondary),
-                        ),
-                        child: Text(
-                          formatRupiah(expense.expense),
-                          style: const TextStyle(color: Colors.blue),
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
-                      const SizedBox(width: 8),
-                      Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 8,
-                          vertical: 4,
-                        ),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(12),
-                          color: AppColor.primary,
-                        ),
-                        child: Text(
-                          DateFormat.yMd().add_jm().format(expense.dateExpense),
-                          style: const TextStyle(color: AppColor.textTitle),
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
-                      const SizedBox(width: 8),
-                    ],
-                  ),
-                  const Gap(10),
-                  Row(
-                    children: [
-                      Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 8,
-                          vertical: 4,
-                        ),
-                        decoration: BoxDecoration(
-                          border: Border.all(color: AppColor.primary),
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: Text(
-                          expense.category,
-                          style: const TextStyle(
-                            color: AppColor.textTitle,
-                            fontSize: 12,
-                          ),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
-                    ],
-                  )
-                ],
+            Text(
+              agenda.title,
+              style: const TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+                color: AppColor.textTitle,
               ),
             ),
-            const SizedBox(width: 8),
-            const ImageIcon(
-              AssetImage('assets/images/arrow_right.png'),
-              color: AppColor.primary,
-              size: 20,
-            ),
+            const Gap(16),
+            Row(
+              children: [
+                Chip(
+                  label: Text(
+                    DateFormat('H:mm').format(agenda.startEvent),
+                  ),
+                  labelStyle: const TextStyle(
+                    fontWeight: FontWeight.normal,
+                    fontSize: 14,
+                    color: AppColor.textTitle,
+                  ),
+                  visualDensity: const VisualDensity(vertical: -4),
+                  backgroundColor: AppColor.primary,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(30),
+                    side: const BorderSide(
+                      color: AppColor.primary,
+                      width: 1,
+                    ),
+                  ),
+                ),
+                const Gap(10),
+                Chip(
+                  label: Text(
+                    agenda.category,
+                  ),
+                  labelStyle: const TextStyle(
+                    fontWeight: FontWeight.normal,
+                    fontSize: 14,
+                    color: AppColor.textTitle,
+                  ),
+                  visualDensity: const VisualDensity(vertical: -4),
+                  backgroundColor: AppColor.colorWhite,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(30),
+                    side: const BorderSide(
+                      color: AppColor.primary,
+                      width: 1,
+                    ),
+                  ),
+                ),
+                const Spacer(),
+                const ImageIcon(
+                  AssetImage('assets/images/arrow_right.png'),
+                  color: AppColor.primary,
+                  size: 20,
+                ),
+              ],
+            )
           ],
         ),
       ),
@@ -429,7 +423,7 @@ class _HomeFragmentState extends State<HomeFragment> {
               _buildProfile(),
               IconButton.filled(
                 constraints: BoxConstraints.tight(const Size(48, 48)),
-                color: AppColor.textWhite,
+                color: AppColor.colorWhite,
                 style: const ButtonStyle(
                   overlayColor: WidgetStatePropertyAll(AppColor.secondary),
                 ),
@@ -570,17 +564,9 @@ class _HomeFragmentState extends State<HomeFragment> {
                 margin: EdgeInsets.symmetric(horizontal: 20),
               );
             }
-            return SizedBox(
-              height: list.length * 125.0,
-              child: ListView.builder(
-                itemCount: list.length,
-                physics: const BouncingScrollPhysics(),
-                scrollDirection: Axis.vertical,
-                itemBuilder: (context, index) {
-                  AgendaModel agenda = list[index];
-                  return _cardAgendaToday(agenda);
-                },
-              ),
+
+            return Column(
+              children: list.map((agenda) => _cardAgendaToday(agenda)).toList(),
             );
           })
         ],
@@ -648,17 +634,10 @@ class _HomeFragmentState extends State<HomeFragment> {
                 margin: EdgeInsets.symmetric(horizontal: 20),
               );
             }
-            return SizedBox(
-              height: list.length * 160.0,
-              child: ListView.builder(
-                itemCount: list.length,
-                physics: const BouncingScrollPhysics(),
-                scrollDirection: Axis.vertical,
-                itemBuilder: (context, index) {
-                  ExpenseModal expense = list[index];
-                  return _cardExpenseToday(expense);
-                },
-              ),
+
+            return Column(
+              children:
+                  list.map((expense) => _cardExpenseToday(expense)).toList(),
             );
           })
         ],
@@ -670,18 +649,25 @@ class _HomeFragmentState extends State<HomeFragment> {
   Widget build(BuildContext context) {
     return RefreshIndicator.adaptive(
       onRefresh: () async => referesh(),
-      child: ListView(
-        padding: const EdgeInsets.all(0),
-        children: [
-          _buildHeaderHome(),
-          const Gap(36),
-          _buildMoodToday(),
-          const Gap(36),
-          _buildAgendaToday(),
-          const Gap(36),
-          _buildExpenseToday(),
-          const Gap(140),
-        ],
+      child: SingleChildScrollView(
+        physics: const AlwaysScrollableScrollPhysics(),
+        child: Container(
+          constraints: BoxConstraints(
+            minHeight: MediaQuery.of(context).size.height,
+          ),
+          child: Column(
+            children: [
+              _buildHeaderHome(),
+              const Gap(36),
+              _buildMoodToday(),
+              const Gap(36),
+              _buildAgendaToday(),
+              const Gap(36),
+              _buildExpenseToday(),
+              const Gap(140),
+            ],
+          ),
+        ),
       ),
     );
   }
