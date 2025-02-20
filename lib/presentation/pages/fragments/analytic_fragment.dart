@@ -37,6 +37,15 @@ class _AnalyticFragmentState extends State<AnalyticFragment> {
     super.dispose();
   }
 
+  String formatRupiah(double amount) {
+    final formatCurrency = NumberFormat.currency(
+      locale: 'id_ID',
+      symbol: 'Rp ',
+      decimalDigits: 0,
+    );
+    return formatCurrency.format(amount);
+  }
+
   referesh() async {
     final user = await Session.getUser();
     int userId = user!.id;
@@ -132,7 +141,11 @@ class _AnalyticFragmentState extends State<AnalyticFragment> {
                   aspectRatio: 16 / 9,
                   child: DChartLineT(
                     groupList: [
-                      TimeGroup(id: 'id', data: moods, color: AppColor.primary),
+                      TimeGroup(
+                        id: 'id',
+                        data: moods,
+                        color: AppColor.primary,
+                      ),
                     ],
                     measureAxis: const MeasureAxis(
                       showLine: true,
@@ -143,7 +156,7 @@ class _AnalyticFragmentState extends State<AnalyticFragment> {
                     ),
                     layoutMargin: LayoutMargin(10, 0, 0, 10),
                     domainAxis: DomainAxis(
-                      minimumPaddingBetweenLabels: 20,
+                      minimumPaddingBetweenLabels: 5,
                       labelAnchor: LabelAnchor.after,
                       tickLabelFormatterT: (domain) {
                         return DateFormat('H:mm').format(domain);
@@ -195,6 +208,10 @@ class _AnalyticFragmentState extends State<AnalyticFragment> {
   }
 
   Widget _buildMoodLastMonth() {
+    final now = DateTime.now();
+    final startViewPort = DateTime(now.year, now.month, 1);
+    final lastDay = DateUtils.getDaysInMonth(now.year, now.month);
+    final endViewPort = DateTime(now.year, now.month, lastDay);
     return Container(
       padding: const EdgeInsets.symmetric(
         horizontal: 24,
@@ -261,8 +278,16 @@ class _AnalyticFragmentState extends State<AnalyticFragment> {
                       ),
                     ),
                     layoutMargin: LayoutMargin(10, 0, 0, 10),
-                    domainAxis: const DomainAxis(
-                      minimumPaddingBetweenLabels: 20,
+                    domainAxis: DomainAxis(
+                      minimumPaddingBetweenLabels: 10,
+                      timeViewport: TimeViewport(
+                        startViewPort,
+                        endViewPort,
+                      ),
+                      labelAnchor: LabelAnchor.after,
+                      tickLabelFormatterT: (domain) {
+                        return DateFormat('d').format(domain);
+                      },
                     ),
                     configRenderLine: const ConfigRenderLine(
                       includeArea: true,
@@ -314,6 +339,10 @@ class _AnalyticFragmentState extends State<AnalyticFragment> {
   }
 
   Widget _buildAgendaLastMonth() {
+    final now = DateTime.now();
+    final startViewPort = DateTime(now.year, now.month, 1);
+    final lastDay = DateUtils.getDaysInMonth(now.year, now.month);
+    final endViewPort = DateTime(now.year, now.month, lastDay);
     return Container(
       padding: const EdgeInsets.symmetric(
         horizontal: 24,
@@ -379,8 +408,16 @@ class _AnalyticFragmentState extends State<AnalyticFragment> {
                       ),
                     ),
                     layoutMargin: LayoutMargin(10, 0, 0, 10),
-                    domainAxis: const DomainAxis(
-                      minimumPaddingBetweenLabels: 20,
+                    domainAxis: DomainAxis(
+                      minimumPaddingBetweenLabels: 10,
+                      timeViewport: TimeViewport(
+                        startViewPort,
+                        endViewPort,
+                      ),
+                      labelAnchor: LabelAnchor.after,
+                      tickLabelFormatterT: (domain) {
+                        return DateFormat('d').format(domain);
+                      },
                     ),
                     configRenderLine: const ConfigRenderLine(
                       includeArea: true,
@@ -397,6 +434,10 @@ class _AnalyticFragmentState extends State<AnalyticFragment> {
   }
 
   Widget _buildExpenseLastMonth() {
+    final now = DateTime.now();
+    final startViewPort = DateTime(now.year, now.month, 1);
+    final lastDay = DateUtils.getDaysInMonth(now.year, now.month);
+    final endViewPort = DateTime(now.year, now.month, lastDay);
     return Container(
       padding: const EdgeInsets.symmetric(
         horizontal: 24,
@@ -419,7 +460,7 @@ class _AnalyticFragmentState extends State<AnalyticFragment> {
           ),
           const Gap(30),
           Obx(() {
-            final state = analyticAgendaLastMonthController.state;
+            final state = analyticExpensesLastMonthController.state;
             final statusRequest = state.statusRequest;
 
             if (statusRequest == StatusRequest.init) {
@@ -436,9 +477,9 @@ class _AnalyticFragmentState extends State<AnalyticFragment> {
               return ResponseFailed(message: state.message);
             }
 
-            List<TimeData> agendas = state.agendas;
+            List<TimeData> expenses = state.expenses;
 
-            if (agendas.isEmpty) {
+            if (expenses.isEmpty) {
               return const ResponseFailed(message: 'No Expense Yet');
             }
 
@@ -450,7 +491,7 @@ class _AnalyticFragmentState extends State<AnalyticFragment> {
                     groupList: [
                       TimeGroup(
                         id: 'id',
-                        data: agendas,
+                        data: expenses,
                         color: AppColor.secondary,
                       ),
                     ],
@@ -462,8 +503,16 @@ class _AnalyticFragmentState extends State<AnalyticFragment> {
                       ),
                     ),
                     layoutMargin: LayoutMargin(10, 0, 0, 10),
-                    domainAxis: const DomainAxis(
-                      minimumPaddingBetweenLabels: 20,
+                    domainAxis: DomainAxis(
+                      minimumPaddingBetweenLabels: 10,
+                      timeViewport: TimeViewport(
+                        startViewPort,
+                        endViewPort,
+                      ),
+                      labelAnchor: LabelAnchor.after,
+                      tickLabelFormatterT: (domain) {
+                        return DateFormat('d').format(domain);
+                      },
                     ),
                     configRenderLine: const ConfigRenderLine(
                       includeArea: true,
