@@ -10,6 +10,7 @@ import 'package:self_management/common/enums.dart';
 import 'package:self_management/data/models/agenda_model.dart';
 import 'package:self_management/presentation/controllers/agenda/all/all_agenda_controller.dart';
 import 'package:self_management/presentation/controllers/agenda/all/select_agenda_controller.dart';
+import 'package:self_management/presentation/pages/agendas/add_agenda_page.dart';
 import 'package:self_management/presentation/widgets/response_failed.dart';
 
 import '../../../core/session.dart';
@@ -48,7 +49,9 @@ class _AllAgendaPageState extends State<AllAgendaPage> {
     super.initState();
   }
 
-  Future<void> _goToAddAgenda() async {}
+  Future<void> _goToAddAgenda() async {
+    await Navigator.pushReplacementNamed(context, AddAgendaPage.routeName);
+  }
 
   Future<void> _goToDetailAgenda(int id) async {}
 
@@ -85,7 +88,7 @@ class _AllAgendaPageState extends State<AllAgendaPage> {
             icon: const ImageIcon(
               AssetImage('assets/images/add_agenda.png'),
               size: 24,
-              color: AppColor.colorWhite,
+              color: AppColor.primary,
             ),
           ),
         ],
