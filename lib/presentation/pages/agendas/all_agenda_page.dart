@@ -11,6 +11,7 @@ import 'package:self_management/data/models/agenda_model.dart';
 import 'package:self_management/presentation/controllers/agenda/all/all_agenda_controller.dart';
 import 'package:self_management/presentation/controllers/agenda/all/select_agenda_controller.dart';
 import 'package:self_management/presentation/pages/agendas/add_agenda_page.dart';
+import 'package:self_management/presentation/pages/agendas/detail_agenda_page.dart';
 import 'package:self_management/presentation/widgets/response_failed.dart';
 
 import '../../../core/session.dart';
@@ -53,7 +54,13 @@ class _AllAgendaPageState extends State<AllAgendaPage> {
     await Navigator.pushReplacementNamed(context, AddAgendaPage.routeName);
   }
 
-  Future<void> _goToDetailAgenda(int id) async {}
+  Future<void> _goToDetailAgenda(int id) async {
+    Navigator.popAndPushNamed(
+      context,
+      DetailAgendaPage.routeName,
+      arguments: id,
+    );
+  }
 
   void _selectAgenda(AgendaModel agenda) {
     selectAgendaController.state = agenda;

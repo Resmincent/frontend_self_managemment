@@ -3,17 +3,17 @@ import 'package:get/get.dart';
 import 'package:self_management/common/enums.dart';
 import 'package:self_management/data/datasources/agenda_remote_data_source.dart';
 
-class DetailAgendaController extends GetxController {
-  final _state = DetailAgendaState(
+class DeleteAgendaController extends GetxController {
+  final _state = DeleteAgendaState(
     statusRequest: StatusRequest.init,
     message: '',
   ).obs;
 
-  DetailAgendaState get state => _state.value;
+  DeleteAgendaState get state => _state.value;
 
-  set state(DetailAgendaState value) => _state.value = value;
+  set state(DeleteAgendaState value) => _state.value = value;
 
-  Future<DetailAgendaState> executeRequest(int id) async {
+  Future<DeleteAgendaState> executeRequest(int id) async {
     state = state.copyWith(
       statusRequest: StatusRequest.loading,
     );
@@ -28,23 +28,23 @@ class DetailAgendaController extends GetxController {
     return state;
   }
 
-  static delete() => Get.delete<DetailAgendaController>(force: true);
+  static delete() => Get.delete<DeleteAgendaController>(force: true);
 }
 
-class DetailAgendaState {
+class DeleteAgendaState {
   final StatusRequest statusRequest;
   final String message;
 
-  DetailAgendaState({
+  DeleteAgendaState({
     required this.statusRequest,
     required this.message,
   });
 
-  DetailAgendaState copyWith({
+  DeleteAgendaState copyWith({
     StatusRequest? statusRequest,
     String? message,
   }) {
-    return DetailAgendaState(
+    return DeleteAgendaState(
       statusRequest: statusRequest ?? this.statusRequest,
       message: message ?? this.message,
     );

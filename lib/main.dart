@@ -16,7 +16,6 @@ import 'package:self_management/presentation/pages/profile_page.dart';
 import 'package:self_management/presentation/pages/register_page.dart';
 import 'package:self_management/presentation/pages/solutions/add_solution_page.dart';
 import 'package:self_management/presentation/pages/solutions/detail_solution_page.dart';
-import 'package:self_management/presentation/pages/solutions/self_solution_page.dart';
 import 'package:self_management/presentation/pages/solutions/update_solution_page.dart';
 
 void main() {
@@ -71,7 +70,10 @@ class MyApp extends StatelessWidget {
         //Agenda
         AllAgendaPage.routeName: (context) => const AllAgendaPage(),
         AddAgendaPage.routeName: (context) => const AddAgendaPage(),
-        DetailAgendaPage.routeName: (context) => const DetailAgendaPage(),
+        DetailAgendaPage.routeName: (context) {
+          int agendaId = ModalRoute.settingsOf(context)?.arguments as int;
+          return DetailAgendaPage(agendaId: agendaId);
+        },
 
         //Expense
         AllExpensePage.routeName: (context) => const AllExpensePage(),
@@ -79,7 +81,6 @@ class MyApp extends StatelessWidget {
         DetailExpensePage.routeName: (context) => const DetailExpensePage(),
 
         //Solution
-        SelfSolutionPage.routeName: (context) => const SelfSolutionPage(),
         AddSolutionPage.routeName: (context) => const AddSolutionPage(),
         DetailSolutionPage.routeName: (context) => const DetailSolutionPage(),
         UpdateSolutionPage.routeName: (context) => const UpdateSolutionPage(),

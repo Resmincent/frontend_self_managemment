@@ -45,11 +45,16 @@ class _HomeFragmentState extends State<HomeFragment> {
   referesh() async {
     final user = await Session.getUser();
     int userId = user!.id;
-    Future.wait([
-      moodTodayController.fetch(userId),
-      agendaTodayController.fetch(userId),
-      expenseTodayController.fetch(userId),
-    ]);
+    moodTodayController.fetch(userId);
+    agendaTodayController.fetch(userId);
+    expenseTodayController.fetch(userId);
+  }
+
+  refereshAgenda() {
+    Session.getUser().then((user) {
+      int userId = user!.id;
+      agendaTodayController.fetch(userId);
+    });
   }
 
   @override
@@ -86,8 +91,17 @@ class _HomeFragmentState extends State<HomeFragment> {
     await Navigator.pushReplacementNamed(context, AllExpensePage.routeName);
   }
 
-  Future<void> _goToDetailAgenda() async {
-    await Navigator.pushReplacementNamed(context, DetailAgendaPage.routeName);
+  Future<void> _goToDetailAgenda(int id) async {
+    Navigator.popAndPushNamed(
+      context,
+      DetailAgendaPage.routeName,
+      arguments: id,
+    ).then((value) {
+      if (value == null) return;
+      if (value == 'refresh_agenda') {
+        refereshAgenda();
+      }
+    });
   }
 
   Future<void> _goToDetailExpense() async {
@@ -99,29 +113,22 @@ class _HomeFragmentState extends State<HomeFragment> {
       children: [
         GestureDetector(
           onTap: _goToProfile,
-          child: ClipOval(
-            child: Image.asset(
-              'assets/images/profile.png',
-              width: 48,
-              height: 48,
-            ),
+          child: FutureBuilder(
+            future: Session.getUser(),
+            builder: (context, snapshot) {
+              UserModel? user = snapshot.data;
+              String name = user?.name ?? '';
+              return Text(
+                'Hi, $name',
+                style: const TextStyle(
+                  fontSize: 26,
+                  height: 1.2,
+                  fontWeight: FontWeight.bold,
+                  color: AppColor.textTitle,
+                ),
+              );
+            },
           ),
-        ),
-        const Gap(16),
-        FutureBuilder(
-          future: Session.getUser(),
-          builder: (context, snapshot) {
-            UserModel? user = snapshot.data;
-            String name = user?.name ?? '';
-            return Text(
-              'Hi, $name',
-              style: const TextStyle(
-                fontWeight: FontWeight.normal,
-                fontSize: 18,
-                color: AppColor.textTitle,
-              ),
-            );
-          },
         ),
       ],
     );
@@ -212,12 +219,12 @@ class _HomeFragmentState extends State<HomeFragment> {
                 'Your Mood..',
                 style: TextStyle(
                   fontSize: 14,
-                  color: AppColor.textTitle,
+                  color: AppColor.primary,
                 ),
               ),
               ImageIcon(
                 AssetImage('assets/images/arrow_right.png'),
-                color: AppColor.textTitle,
+                color: AppColor.primary,
                 size: 20,
               )
             ],
@@ -328,7 +335,7 @@ class _HomeFragmentState extends State<HomeFragment> {
 
   Widget _cardAgendaToday(AgendaModel agenda) {
     return GestureDetector(
-      onTap: _goToDetailAgenda,
+      onTap: () => _goToDetailAgenda(agenda.id),
       child: Container(
         margin: const EdgeInsets.only(bottom: 20),
         padding: const EdgeInsets.all(20),
@@ -423,9 +430,9 @@ class _HomeFragmentState extends State<HomeFragment> {
               _buildProfile(),
               IconButton.filled(
                 constraints: BoxConstraints.tight(const Size(48, 48)),
-                color: AppColor.colorWhite,
+                color: AppColor.secondary,
                 style: const ButtonStyle(
-                  overlayColor: WidgetStatePropertyAll(AppColor.secondary),
+                  overlayColor: WidgetStatePropertyAll(AppColor.colorWhite),
                 ),
                 onPressed: _goToChatAI,
                 icon: const ImageIcon(

@@ -14,7 +14,7 @@ class DetailAgendaController extends GetxController {
 
   set state(DetailAgendaState value) => _state.value = value;
 
-  Future<DetailAgendaState> executeRequest(int id) async {
+  Future<DetailAgendaState> fetch(int id) async {
     state = state.copyWith(
       statusRequest: StatusRequest.loading,
     );

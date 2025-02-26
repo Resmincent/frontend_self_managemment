@@ -47,21 +47,21 @@ class _ProfilePageState extends State<ProfilePage> {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Container(
-              width: 120,
-              height: 120,
-              decoration: BoxDecoration(
-                image: const DecorationImage(
-                  image: AssetImage('assets/images/profile.png'),
-                ),
-                shape: BoxShape.circle,
-                border: Border.all(
-                  color: AppColor.primary,
-                  width: 4,
-                ),
-              ),
-            ),
-            const Gap(16),
+            // Container(
+            //   width: 120,
+            //   height: 120,
+            //   decoration: BoxDecoration(
+            //     image: const DecorationImage(
+            //       image: AssetImage('assets/images/profile.png'),
+            //     ),
+            //     shape: BoxShape.circle,
+            //     border: Border.all(
+            //       color: AppColor.primary,
+            //       width: 4,
+            //     ),
+            //   ),
+            // ),
+            // const Gap(16),
             Text(
               name,
               style: const TextStyle(
@@ -141,7 +141,7 @@ class _ProfilePageState extends State<ProfilePage> {
             child: BottomClipPointer(),
           ),
           Positioned(
-            top: 210,
+            top: 315,
             left: 0,
             right: 0,
             child: _buildProfile(),
