@@ -43,7 +43,7 @@ class _ChooseMoodPageState extends State<ChooseMoodPage> {
   }
 
   Future<void> _goToDashboard() async {
-    await Navigator.pushReplacementNamed(context, '/dashboard');
+    await Navigator.pushNamed(context, '/dashboard');
   }
 
   Future<void> choose() async {

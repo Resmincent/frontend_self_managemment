@@ -30,13 +30,18 @@ class SolutionModel {
 
   factory SolutionModel.fromJson(Map<String, dynamic> json) {
     return SolutionModel(
-        id: json['id'],
-        userId: json['user_id'],
-        summary: json['summary'],
-        problem: json['problem'],
-        reference: List<String>.from((json['reference'] as String).split(', ')),
-        solution: json['solution'],
-        createdAt: DateTime.parse(json['created_at']));
+      id: json['id'] ?? 0,
+      userId: json['user_id'] ?? 0,
+      summary: json['summary'] ?? '',
+      problem: json['problem'] ?? '',
+      reference: json['reference'] != null
+          ? List<String>.from((json['reference'] as String).split(', '))
+          : [],
+      solution: json['solution'] ?? '',
+      createdAt: json['created_at'] != null
+          ? DateTime.parse(json['created_at'])
+          : DateTime.now(),
+    );
   }
 
   Map<String, String> toJsonRequest() {

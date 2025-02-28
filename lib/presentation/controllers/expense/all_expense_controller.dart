@@ -1,74 +1,58 @@
-import 'package:calendar_view/calendar_view.dart';
 import 'package:get/get.dart';
 
 import 'package:self_management/common/enums.dart';
-import 'package:self_management/data/datasources/agenda_remote_data_source.dart';
+import 'package:self_management/data/datasources/expense_remote_data_source.dart';
+import 'package:self_management/data/models/expense_modal.dart';
 
-class AllController extends GetxController {
-  final _state = AllAgendaState(
+class AllExpenseController extends GetxController {
+  final _state = AllExpenseState(
     statusRequest: StatusRequest.init,
     message: '',
-    list: [],
+    expenses: [],
   ).obs;
 
-  AllAgendaState get state => _state.value;
+  AllExpenseState get state => _state.value;
 
-  set state(AllAgendaState value) => _state.value = value;
+  set state(AllExpenseState value) => _state.value = value;
 
   Future fetch(int userId) async {
     state = state.copyWith(statusRequest: StatusRequest.loading);
 
-    final (success, message, data) = await AgendaRemoteDataSource.all(userId);
-
-    if (!success) {
-      state = state.copyWith(
-        statusRequest: StatusRequest.failed,
-        message: message,
-      );
-
-      return;
-    }
-
-    List<CalendarEventData> list = data!.map((value) {
-      return CalendarEventData(
-        title: value.title,
-        date: value.startEvent,
-        endDate: value.endEvent,
-        startTime: value.startEvent,
-        endTime: value.endEvent,
-        event: value,
-      );
-    }).toList();
+    final (success, message, expenses) =
+        await ExpenseRemoteDataSource.all(userId);
 
     state = state.copyWith(
-        statusRequest: StatusRequest.success, list: list, message: message);
+      statusRequest: success ? StatusRequest.success : StatusRequest.failed,
+      message: message,
+      expenses: expenses ?? [],
+    );
 
     return state;
   }
 
-  static delete() => Get.delete<AllController>(force: true);
+  static delete() => Get.delete<AllExpenseController>(force: true);
 }
 
-class AllAgendaState {
+class AllExpenseState {
   final StatusRequest statusRequest;
   final String message;
-  final List<CalendarEventData> list;
+  final List<ExpenseModal> expenses;
 
-  AllAgendaState({
+  AllExpenseState({
     required this.statusRequest,
     required this.message,
-    required this.list,
+    required this.expenses,
   });
 
-  AllAgendaState copyWith({
+  AllExpenseState copyWith({
     StatusRequest? statusRequest,
     String? message,
-    List<CalendarEventData>? list,
+    List<ExpenseModal>? expenses,
   }) {
-    return AllAgendaState(
+    return AllExpenseState(
       statusRequest: statusRequest ?? this.statusRequest,
       message: message ?? this.message,
-      list: list ?? this.list,
+      expenses: expenses ?? this.expenses,
     );
   }
 }

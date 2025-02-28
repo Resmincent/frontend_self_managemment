@@ -86,8 +86,8 @@ class _DetailAgendaPageState extends State<DetailAgendaPage> {
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           IconButton(
-            onPressed: () async {
-              await Navigator.pushReplacementNamed(context, '/all-agenda');
+            onPressed: () {
+              Navigator.pop(context);
             },
             icon: const ImageIcon(
               AssetImage('assets/images/arrow_left.png'),

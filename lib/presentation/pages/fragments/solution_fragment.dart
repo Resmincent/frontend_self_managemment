@@ -1,15 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
+import 'package:self_management/data/models/solution_model.dart';
 import 'package:self_management/presentation/controllers/solution_controller.dart';
 import 'package:self_management/presentation/pages/solutions/add_solution_page.dart';
+import 'package:self_management/presentation/pages/solutions/update_solution_page.dart';
 
 import '../../../common/app_color.dart';
+import '../../../common/enums.dart';
 import '../../../core/session.dart';
+import '../../widgets/response_failed.dart';
 
 class SolutionFragment extends StatefulWidget {
   const SolutionFragment({super.key});
 
+  static const routeName = "/solution";
   @override
   State<SolutionFragment> createState() => _SolutionFragmentState();
 }
@@ -18,17 +23,36 @@ class _SolutionFragmentState extends State<SolutionFragment> {
   final solutionController = Get.put(SolutionController());
   final searchController = TextEditingController();
 
-  refresh() async {
-    final user = await Session.getUser();
-    int userId = user!.id;
-    solutionController.fetch(userId);
+  refresh() {
+    Session.getUser().then((user) {
+      int userId = user!.id;
+      solutionController.fetch(userId);
+    });
   }
 
   Future<void> _goToAddSolution() async {
-    await Navigator.pushReplacementNamed(context, AddSolutionPage.routeName);
+    await Navigator.pushNamed(context, AddSolutionPage.routeName);
+    refresh();
   }
 
-  void search() {}
+  Future<void> _goToUpdateSolution(SolutionModel solution) async {
+    await Navigator.pushNamed(context, UpdateSolutionPage.routeName);
+  }
+
+  Future<void> _goToDetailSolution(int id) async {
+    await Navigator.pushNamed(context, AddSolutionPage.routeName);
+  }
+
+  void search() {
+    final query = searchController.text;
+
+    if (query == '') return;
+
+    Session.getUser().then((user) {
+      int userId = user!.id;
+      solutionController.search(userId, query);
+    });
+  }
 
   @override
   void initState() {
@@ -98,11 +122,13 @@ class _SolutionFragmentState extends State<SolutionFragment> {
         suffixIcon: GestureDetector(
           onTap: search,
           child: const UnconstrainedBox(
-            alignment: Alignment(-0.5, 0),
-            child: ImageIcon(
-              AssetImage('assets/images/search.png'),
-              color: AppColor.colorWhite,
-              size: 24,
+            child: Padding(
+              padding: EdgeInsets.only(right: 16),
+              child: ImageIcon(
+                AssetImage('assets/images/search.png'),
+                color: AppColor.colorWhite,
+                size: 24,
+              ),
             ),
           ),
         ),
@@ -125,30 +151,145 @@ class _SolutionFragmentState extends State<SolutionFragment> {
     );
   }
 
+  Widget _buildList() {
+    return Obx(() {
+      final state = solutionController.state;
+      final statusRequest = state.statusRequest;
+
+      if (statusRequest == StatusRequest.init) {
+        return const SizedBox();
+      }
+
+      if (statusRequest == StatusRequest.loading) {
+        return const SizedBox(
+          height: 200,
+          child: Center(
+            child: CircularProgressIndicator(),
+          ),
+        );
+      }
+
+      if (statusRequest == StatusRequest.failed) {
+        return SizedBox(
+          height: 200,
+          child: ResponseFailed(
+            message: state.message,
+            margin: const EdgeInsets.symmetric(horizontal: 20),
+          ),
+        );
+      }
+
+      final list = state.solutions;
+
+      if (list.isEmpty) {
+        return const SizedBox(
+          height: 200,
+          child: ResponseFailed(
+            message: 'No Solution Yet',
+            margin: EdgeInsets.symmetric(horizontal: 20),
+          ),
+        );
+      }
+
+      return Expanded(
+        child: ListView.builder(
+          itemCount: list.length,
+          padding: const EdgeInsets.fromLTRB(0, 16, 0, 0),
+          itemBuilder: (context, index) {
+            SolutionModel solution = list[index];
+            return _buildCardSolution(solution);
+          },
+        ),
+      );
+    });
+  }
+
+  Widget _buildCardSolution(SolutionModel solution) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 20),
+      child: GestureDetector(
+        onTap: () => _goToDetailSolution(solution.id),
+        child: Stack(
+          children: [
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.all(20),
+              decoration: BoxDecoration(
+                color: AppColor.colorWhite,
+                borderRadius: BorderRadius.circular(20),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(right: 55),
+                    child: Text(
+                      solution.problem,
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 1,
+                      style: const TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold,
+                        color: AppColor.textTitle,
+                      ),
+                    ),
+                  ),
+                  const Gap(10),
+                  Text(
+                    solution.solution,
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 1,
+                    style: const TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.normal,
+                      color: AppColor.textBody,
+                    ),
+                  )
+                ],
+              ),
+            ),
+            Positioned(
+              right: 0,
+              top: 0,
+              width: 46,
+              height: 36,
+              child: FloatingActionButton(
+                elevation: 0,
+                onPressed: () => _goToUpdateSolution(solution),
+                heroTag: 'solution-item-${solution.id}',
+                backgroundColor: AppColor.primary,
+                shape: const RoundedRectangleBorder(
+                  borderRadius: BorderRadius.only(
+                    topRight: Radius.circular(20),
+                    bottomLeft: Radius.circular(20),
+                  ),
+                ),
+                child: const ImageIcon(
+                  AssetImage('assets/images/update_solution.png'),
+                  color: AppColor.colorWhite,
+                  size: 24,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    return RefreshIndicator.adaptive(
-      onRefresh: () async => refresh,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20),
-        child: SingleChildScrollView(
-          physics: const AlwaysScrollableScrollPhysics(),
-          child: Container(
-            constraints: BoxConstraints(
-              minHeight: MediaQuery.of(context).size.height,
-            ),
-            child: Column(
-              children: [
-                const Gap(55),
-                _buildHeaderSolution(),
-                const Gap(30),
-                _buildButtonSearch(),
-                const Gap(30),
-                // _buildList(),
-              ],
-            ),
-          ),
-        ),
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20),
+      child: Column(
+        children: [
+          const Gap(55),
+          _buildHeaderSolution(),
+          const Gap(30),
+          _buildButtonSearch(),
+          const Gap(16),
+          _buildList(),
+        ],
       ),
     );
   }

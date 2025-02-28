@@ -72,23 +72,23 @@ class _HomeFragmentState extends State<HomeFragment> {
   }
 
   Future<void> _goToChatAI() async {
-    await Navigator.pushReplacementNamed(context, ChatAiPage.routeName);
+    await Navigator.pushNamed(context, ChatAiPage.routeName);
   }
 
   Future<void> _goToProfile() async {
-    await Navigator.pushReplacementNamed(context, ProfilePage.routeName);
+    await Navigator.pushNamed(context, ProfilePage.routeName);
   }
 
   Future<void> _goToMood() async {
-    await Navigator.pushReplacementNamed(context, ChooseMoodPage.routeName);
+    await Navigator.pushNamed(context, ChooseMoodPage.routeName);
   }
 
   Future<void> _goToAgendaAll() async {
-    await Navigator.pushReplacementNamed(context, AllAgendaPage.routeName);
+    await Navigator.pushNamed(context, AllAgendaPage.routeName);
   }
 
   Future<void> _goToExpenseAll() async {
-    await Navigator.pushReplacementNamed(context, AllExpensePage.routeName);
+    await Navigator.pushNamed(context, AllExpensePage.routeName);
   }
 
   Future<void> _goToDetailAgenda(int id) async {
@@ -105,7 +105,7 @@ class _HomeFragmentState extends State<HomeFragment> {
   }
 
   Future<void> _goToDetailExpense() async {
-    await Navigator.pushReplacementNamed(context, DetailAgendaPage.routeName);
+    await Navigator.pushNamed(context, DetailAgendaPage.routeName);
   }
 
   Widget _buildProfile() {

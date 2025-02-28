@@ -51,11 +51,11 @@ class _AllAgendaPageState extends State<AllAgendaPage> {
   }
 
   Future<void> _goToAddAgenda() async {
-    await Navigator.pushReplacementNamed(context, AddAgendaPage.routeName);
+    await Navigator.pushNamed(context, AddAgendaPage.routeName);
   }
 
   Future<void> _goToDetailAgenda(int id) async {
-    Navigator.popAndPushNamed(
+    Navigator.pushNamed(
       context,
       DetailAgendaPage.routeName,
       arguments: id,

@@ -73,11 +73,6 @@ class _AddAgendaPageState extends State<AddAgendaPage> {
     ));
   }
 
-  Future<void> _goToAllAgenda() async {
-    await Navigator.pushNamedAndRemoveUntil(
-        context, '/all-agenda', (route) => false);
-  }
-
   Future<void> addNow() async {
     final title = titleController.text;
     final category = categoryController.text;
@@ -148,9 +143,9 @@ class _AddAgendaPageState extends State<AddAgendaPage> {
     if (state.statusRequest == StatusRequest.success) {
       allAgendaController.fetch(userId);
       Info.success(state.message);
-      Future.delayed(Duration(milliseconds: 500), () {
-        Navigator.pushNamedAndRemoveUntil(
-            context, '/all-agenda', (route) => false);
+      Future.delayed(const Duration(milliseconds: 500), () {
+        if (!mounted) return;
+        Navigator.pop(context);
       });
       return;
     }
@@ -169,8 +164,8 @@ class _AddAgendaPageState extends State<AddAgendaPage> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           IconButton(
-            onPressed: () async {
-              await Navigator.pushReplacementNamed(context, '/all-agenda');
+            onPressed: () {
+              Navigator.pop(context);
             },
             icon: const ImageIcon(
               AssetImage('assets/images/arrow_left.png'),
