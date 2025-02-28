@@ -14,7 +14,7 @@ class DetailExpenseController extends GetxController {
 
   set state(DetailExpenseState value) => _state.value = value;
 
-  Future<DetailExpenseState> executeRequest(int id) async {
+  Future<DetailExpenseState> fetch(int id) async {
     state = state.copyWith(
       statusRequest: StatusRequest.loading,
     );

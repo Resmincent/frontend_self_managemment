@@ -20,6 +20,7 @@ import 'package:self_management/presentation/pages/profile_page.dart';
 import 'package:self_management/presentation/widgets/response_failed.dart';
 
 import '../expenses/all_expense_page.dart';
+import '../expenses/detail_expense_page.dart';
 
 class HomeFragment extends StatefulWidget {
   const HomeFragment({super.key});
@@ -42,7 +43,7 @@ class _HomeFragmentState extends State<HomeFragment> {
     return formatCurrency.format(amount);
   }
 
-  referesh() async {
+  refresh() async {
     final user = await Session.getUser();
     int userId = user!.id;
     moodTodayController.fetch(userId);
@@ -50,16 +51,23 @@ class _HomeFragmentState extends State<HomeFragment> {
     expenseTodayController.fetch(userId);
   }
 
-  refereshAgenda() {
+  refreshAgenda() {
     Session.getUser().then((user) {
       int userId = user!.id;
       agendaTodayController.fetch(userId);
     });
   }
 
+  refreshExpense() {
+    Session.getUser().then((user) {
+      int userId = user!.id;
+      expenseTodayController.fetch(userId);
+    });
+  }
+
   @override
   void initState() {
-    referesh();
+    refresh();
     super.initState();
   }
 
@@ -92,20 +100,29 @@ class _HomeFragmentState extends State<HomeFragment> {
   }
 
   Future<void> _goToDetailAgenda(int id) async {
-    Navigator.popAndPushNamed(
+    await Navigator.popAndPushNamed(
       context,
       DetailAgendaPage.routeName,
       arguments: id,
     ).then((value) {
       if (value == null) return;
       if (value == 'refresh_agenda') {
-        refereshAgenda();
+        refreshAgenda();
       }
     });
   }
 
-  Future<void> _goToDetailExpense() async {
-    await Navigator.pushNamed(context, DetailAgendaPage.routeName);
+  Future<void> _goToDetailExpense(int id) async {
+    await Navigator.popAndPushNamed(
+      context,
+      DetailExpensePage.routeName,
+      arguments: id,
+    ).then((value) {
+      if (value == null) return;
+      if (value == 'refresh_expense') {
+        refreshExpense();
+      }
+    });
   }
 
   Widget _buildProfile() {
@@ -236,7 +253,7 @@ class _HomeFragmentState extends State<HomeFragment> {
 
   Widget _cardExpenseToday(ExpenseModal expense) {
     return GestureDetector(
-      onTap: _goToDetailExpense,
+      onTap: () => _goToDetailExpense(expense.id),
       child: Container(
         margin: const EdgeInsets.only(bottom: 20),
         padding: const EdgeInsets.all(20),
@@ -282,7 +299,7 @@ class _HomeFragmentState extends State<HomeFragment> {
               children: [
                 Chip(
                   label: Text(
-                    DateFormat.yMd().add_jm().format(expense.dateExpense),
+                    DateFormat('MM/d/y').format(expense.dateExpense),
                   ),
                   labelStyle: const TextStyle(
                     fontWeight: FontWeight.normal,
@@ -655,7 +672,7 @@ class _HomeFragmentState extends State<HomeFragment> {
   @override
   Widget build(BuildContext context) {
     return RefreshIndicator.adaptive(
-      onRefresh: () async => referesh(),
+      onRefresh: () async => refresh(),
       child: SingleChildScrollView(
         physics: const AlwaysScrollableScrollPhysics(),
         child: Container(

@@ -78,8 +78,10 @@ class MyApp extends StatelessWidget {
         //Expense
         AllExpensePage.routeName: (context) => const AllExpensePage(),
         AddExpensePage.routeName: (context) => const AddExpensePage(),
-        DetailExpensePage.routeName: (context) => const DetailExpensePage(),
-
+        DetailExpensePage.routeName: (context) {
+          int expenseId = ModalRoute.settingsOf(context)?.arguments as int;
+          return DetailExpensePage(expenseId: expenseId);
+        },
         //Solution
         AddSolutionPage.routeName: (context) => const AddSolutionPage(),
         DetailSolutionPage.routeName: (context) => const DetailSolutionPage(),

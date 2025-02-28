@@ -45,7 +45,11 @@ class _AllExpensePageState extends State<AllExpensePage> {
   }
 
   Future<void> _goToDetailExpense(int id) async {
-    await Navigator.pushNamed(context, DetailExpensePage.routeName);
+    await Navigator.popAndPushNamed(
+      context,
+      DetailExpensePage.routeName,
+      arguments: id,
+    );
   }
 
   @override
@@ -61,39 +65,36 @@ class _AllExpensePageState extends State<AllExpensePage> {
   }
 
   Widget _buildHeaderSolution() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 10),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          IconButton(
-            onPressed: () async {
-              await Navigator.pushReplacementNamed(context, '/dashboard');
-            },
-            icon: const ImageIcon(
-              AssetImage('assets/images/arrow_left.png'),
-              size: 24,
-              color: AppColor.primary,
-            ),
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        IconButton(
+          onPressed: () async {
+            await Navigator.pushReplacementNamed(context, '/dashboard');
+          },
+          icon: const ImageIcon(
+            AssetImage('assets/images/arrow_left.png'),
+            size: 24,
+            color: AppColor.primary,
           ),
-          const Text(
-            'All Expense',
-            style: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
-              color: AppColor.primary,
-            ),
+        ),
+        const Text(
+          'All Expense',
+          style: TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.bold,
+            color: AppColor.primary,
           ),
-          IconButton(
-            onPressed: _goToAddExpense,
-            icon: const ImageIcon(
-              AssetImage('assets/images/add_agenda.png'),
-              size: 24,
-              color: AppColor.primary,
-            ),
+        ),
+        IconButton(
+          onPressed: _goToAddExpense,
+          icon: const ImageIcon(
+            AssetImage('assets/images/add_agenda.png'),
+            size: 24,
+            color: AppColor.primary,
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 
@@ -173,7 +174,7 @@ class _AllExpensePageState extends State<AllExpensePage> {
                     color: AppColor.textTitle,
                   ),
                 ),
-                const Gap(10),
+                const Gap(20),
                 Chip(
                   label: Text(formatRupiah(expense.expense)),
                   labelStyle: const TextStyle(
@@ -195,27 +196,8 @@ class _AllExpensePageState extends State<AllExpensePage> {
             ),
             const Gap(16),
             Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Chip(
-                  label: Text(
-                    DateFormat.yMd().add_jm().format(expense.dateExpense),
-                  ),
-                  labelStyle: const TextStyle(
-                    fontWeight: FontWeight.normal,
-                    fontSize: 14,
-                    color: AppColor.textTitle,
-                  ),
-                  visualDensity: const VisualDensity(vertical: -4),
-                  backgroundColor: AppColor.primary,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30),
-                    side: const BorderSide(
-                      color: AppColor.primary,
-                      width: 1,
-                    ),
-                  ),
-                ),
-                const Gap(10),
                 Chip(
                   label: Text(
                     expense.category,
@@ -235,11 +217,24 @@ class _AllExpensePageState extends State<AllExpensePage> {
                     ),
                   ),
                 ),
-                const Spacer(),
-                const ImageIcon(
-                  AssetImage('assets/images/arrow_right.png'),
-                  color: AppColor.primary,
-                  size: 20,
+                Chip(
+                  label: Text(
+                    DateFormat('MM/dd/yy').format(expense.dateExpense),
+                  ),
+                  labelStyle: const TextStyle(
+                    fontWeight: FontWeight.normal,
+                    fontSize: 14,
+                    color: AppColor.textTitle,
+                  ),
+                  visualDensity: const VisualDensity(vertical: -4),
+                  backgroundColor: AppColor.primary,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(30),
+                    side: const BorderSide(
+                      color: AppColor.primary,
+                      width: 1,
+                    ),
+                  ),
                 ),
               ],
             )
@@ -250,28 +245,121 @@ class _AllExpensePageState extends State<AllExpensePage> {
   }
 
   Widget _buildCardExpenseMonth() {
-    return const SizedBox();
+    final now = DateTime.now();
+    final currentMonth = DateFormat('MMMM').format(now);
+
+    return Obx(() {
+      final state = allExpenseController.state;
+      final list = state.expenses;
+
+      double totalMonthExpense = 0;
+      for (var expense in list) {
+        if (expense.dateExpense.month == now.month &&
+            expense.dateExpense.year == now.year) {
+          totalMonthExpense += expense.expense;
+        }
+      }
+
+      return Container(
+        width: double.infinity,
+        height: 65,
+        decoration: BoxDecoration(
+          color: AppColor.primary,
+          borderRadius: BorderRadius.circular(20),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                currentMonth,
+                style: const TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  color: AppColor.colorWhite,
+                ),
+              ),
+              Text(
+                formatRupiah(totalMonthExpense),
+                style: const TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  color: AppColor.colorWhite,
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+    });
   }
 
   Widget _buildCardExpenseDay() {
-    return const SizedBox();
+    final now = DateTime.now();
+
+    return Obx(() {
+      final state = allExpenseController.state;
+      final list = state.expenses;
+
+      double totalDayExpense = 0;
+      for (var expense in list) {
+        if (expense.dateExpense.day == now.day &&
+            expense.dateExpense.month == now.month &&
+            expense.dateExpense.year == now.year) {
+          totalDayExpense += expense.expense;
+        }
+      }
+
+      return Container(
+        width: double.infinity,
+        height: 65,
+        decoration: BoxDecoration(
+          border: Border.all(color: AppColor.primary),
+          borderRadius: BorderRadius.circular(20),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const ImageIcon(
+                AssetImage('assets/images/dollar.png'),
+                size: 44,
+                color: AppColor.primary,
+              ),
+              Text(
+                formatRupiah(totalDayExpense),
+                style: const TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  color: AppColor.primary,
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20),
-      child: Column(
-        children: [
-          const Gap(55),
-          _buildHeaderSolution(),
-          const Gap(30),
-          _buildCardExpenseMonth(),
-          const Gap(10),
-          _buildCardExpenseDay(),
-          const Gap(30),
-          _buildList(),
-        ],
+    return Scaffold(
+      body: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 20),
+        child: Column(
+          children: [
+            const Gap(55),
+            _buildHeaderSolution(),
+            const Gap(30),
+            _buildCardExpenseMonth(),
+            const Gap(10),
+            _buildCardExpenseDay(),
+            const Gap(20),
+            _buildList(),
+          ],
+        ),
       ),
     );
   }
