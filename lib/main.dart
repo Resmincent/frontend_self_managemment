@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:self_management/common/app_color.dart';
 import 'package:self_management/core/session.dart';
+import 'package:self_management/data/models/solution_model.dart';
 import 'package:self_management/presentation/pages/agendas/add_agenda_page.dart';
 import 'package:self_management/presentation/pages/agendas/all_agenda_page.dart';
 import 'package:self_management/presentation/pages/agendas/detail_agenda_page.dart';
@@ -84,8 +85,15 @@ class MyApp extends StatelessWidget {
         },
         //Solution
         AddSolutionPage.routeName: (context) => const AddSolutionPage(),
-        DetailSolutionPage.routeName: (context) => const DetailSolutionPage(),
-        UpdateSolutionPage.routeName: (context) => const UpdateSolutionPage(),
+        DetailSolutionPage.routeName: (context) {
+          int solutionId = ModalRoute.settingsOf(context)?.arguments as int;
+          return DetailSolutionPage(solutionId: solutionId);
+        },
+        UpdateSolutionPage.routeName: (context) {
+          SolutionModel solution =
+              ModalRoute.settingsOf(context)?.arguments as SolutionModel;
+          return UpdateSolutionPage(solution: solution);
+        },
 
         //Choose mood
         ChooseMoodPage.routeName: (context) => const ChooseMoodPage(),

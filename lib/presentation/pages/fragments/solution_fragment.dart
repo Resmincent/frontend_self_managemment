@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:self_management/data/models/solution_model.dart';
 import 'package:self_management/presentation/controllers/solution_controller.dart';
 import 'package:self_management/presentation/pages/solutions/add_solution_page.dart';
+import 'package:self_management/presentation/pages/solutions/detail_solution_page.dart';
 import 'package:self_management/presentation/pages/solutions/update_solution_page.dart';
 
 import '../../../common/app_color.dart';
@@ -36,11 +37,13 @@ class _SolutionFragmentState extends State<SolutionFragment> {
   }
 
   Future<void> _goToUpdateSolution(SolutionModel solution) async {
-    await Navigator.pushNamed(context, UpdateSolutionPage.routeName);
+    await Navigator.pushNamed(context, UpdateSolutionPage.routeName,
+        arguments: solution);
   }
 
   Future<void> _goToDetailSolution(int id) async {
-    await Navigator.pushNamed(context, AddSolutionPage.routeName);
+    await Navigator.pushNamed(context, DetailSolutionPage.routeName,
+        arguments: id);
   }
 
   void search() {
@@ -289,6 +292,7 @@ class _SolutionFragmentState extends State<SolutionFragment> {
           _buildButtonSearch(),
           const Gap(16),
           _buildList(),
+          const Gap(140)
         ],
       ),
     );
