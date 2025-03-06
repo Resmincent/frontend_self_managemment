@@ -1,4 +1,5 @@
 import 'package:d_chart/d_chart.dart';
+import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 
 import 'package:self_management/common/enums.dart';
@@ -53,7 +54,9 @@ class AnalyticMoodLastMonthController extends GetxController {
             ));
           }
         } catch (e) {
-          print('Error processing mood entry: $e');
+          if (kDebugMode) {
+            print('Error processing mood entry: $e');
+          }
           continue;
         }
       }
@@ -67,7 +70,9 @@ class AnalyticMoodLastMonthController extends GetxController {
 
       return state;
     } catch (e, stackTrace) {
-      print('Error in fetch: $e\n$stackTrace');
+      if (kDebugMode) {
+        print('Error in fetch: $e\n$stackTrace');
+      }
       state = state.copyWith(
         statusRequest: StatusRequest.failed,
         message: 'An unexpected error occurred',

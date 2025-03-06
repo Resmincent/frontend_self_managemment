@@ -121,7 +121,7 @@ class _AddSolutionPageState extends State<AddSolutionPage> {
             ),
           ),
           const Text(
-            'Tambah Solusi',
+            'Add Solution',
             style: TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.bold,
