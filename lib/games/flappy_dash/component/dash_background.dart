@@ -2,8 +2,8 @@ import 'package:flame/components.dart';
 import 'package:flame/parallax.dart';
 import 'package:get/get.dart';
 
-import '../../presentation/controllers/game_controller.dart';
-import '../flappy_dash/flappy_dash_game.dart';
+import '../../../presentation/controllers/game_controller.dart';
+import '../flappy_dash_game.dart';
 
 class DashBackground extends ParallaxComponent<FlappyDashGame> {
   final GameController gameController = Get.find<GameController>();

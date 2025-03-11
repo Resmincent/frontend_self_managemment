@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../../presentation/controllers/game_controller.dart';
+import '../../../presentation/controllers/game_controller.dart';
 
 class TopScore extends StatelessWidget {
   const TopScore({super.key});

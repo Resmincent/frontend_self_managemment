@@ -1,10 +1,10 @@
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../presentation/controllers/game_controller.dart';
-import 'flappy_dash/flappy_dash_game.dart';
-import 'flappy_dash/tap_to_play.dart';
-import 'flappy_dash/top_score.dart';
+import '../../presentation/controllers/game_controller.dart';
+import 'flappy_dash_game.dart';
+import 'widget/tap_to_play.dart';
+import 'widget/top_score.dart';
 import 'widget/game_over_widget.dart';
 
 class FlappyDashPage extends StatefulWidget {

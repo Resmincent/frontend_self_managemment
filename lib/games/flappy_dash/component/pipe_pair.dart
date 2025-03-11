@@ -1,9 +1,9 @@
 import 'package:flame/components.dart';
 import 'package:get/get.dart';
-import 'package:self_management/games/component/hidden_coin.dart';
-import 'package:self_management/games/component/pipe.dart';
+import 'package:self_management/games/flappy_dash/component/hidden_coin.dart';
+import 'package:self_management/games/flappy_dash/component/pipe.dart';
 
-import '../../presentation/controllers/game_controller.dart';
+import '../../../presentation/controllers/game_controller.dart';
 
 class PipePair extends PositionComponent {
   PipePair({

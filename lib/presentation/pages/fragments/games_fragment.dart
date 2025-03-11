@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
-import 'package:self_management/games/flappy_dash_page.dart';
+import 'package:self_management/games/flappy_dash/flappy_dash_page.dart';
 
 import '../../../common/app_color.dart';
 import '../../../games/audio_helper.dart';

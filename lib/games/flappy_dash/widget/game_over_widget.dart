@@ -3,7 +3,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../../presentation/controllers/game_controller.dart';
+import '../../../presentation/controllers/game_controller.dart';
 
 class GameOverWidget extends StatelessWidget {
   const GameOverWidget({super.key});

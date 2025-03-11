@@ -3,11 +3,11 @@ import 'dart:ui';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:get/get.dart';
-import 'package:self_management/games/component/hidden_coin.dart';
-import 'package:self_management/games/component/pipe.dart';
+import 'package:self_management/games/flappy_dash/component/hidden_coin.dart';
+import 'package:self_management/games/flappy_dash/component/pipe.dart';
 
-import '../../presentation/controllers/game_controller.dart';
-import '../flappy_dash/flappy_dash_game.dart';
+import '../../../presentation/controllers/game_controller.dart';
+import '../flappy_dash_game.dart';
 
 class Dash extends PositionComponent
     with CollisionCallbacks, HasGameRef<FlappyDashGame> {

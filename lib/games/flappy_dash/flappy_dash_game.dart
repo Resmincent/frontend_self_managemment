@@ -7,7 +7,7 @@ import 'package:get/get.dart';
 
 import '../../presentation/controllers/game_controller.dart';
 import '../audio_helper.dart';
-import '../component/flappy_dash_root_component.dart';
+import 'component/flappy_dash_root_component.dart';
 import '../service_locator.dart';
 
 class FlappyDashGame extends FlameGame<FlappyDashWorld>

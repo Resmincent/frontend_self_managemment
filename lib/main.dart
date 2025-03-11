@@ -12,7 +12,7 @@ import 'package:self_management/presentation/pages/dashboard_page.dart';
 import 'package:self_management/presentation/pages/expenses/add_expense_page.dart';
 import 'package:self_management/presentation/pages/expenses/all_expense_page.dart';
 import 'package:self_management/presentation/pages/expenses/detail_expense_page.dart';
-import 'package:self_management/games/flappy_dash_page.dart';
+import 'package:self_management/games/flappy_dash/flappy_dash_page.dart';
 import 'package:self_management/presentation/pages/login_page.dart';
 import 'package:self_management/presentation/pages/profile_page.dart';
 import 'package:self_management/presentation/pages/register_page.dart';
