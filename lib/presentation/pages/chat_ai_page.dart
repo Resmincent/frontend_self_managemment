@@ -196,7 +196,7 @@ class _ChatAiPageState extends State<ChatAiPage> {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            if (chatAIController.noImage)
+            if (chatAIController.noImage && xFile.path.isNotEmpty)
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: ClipRRect(

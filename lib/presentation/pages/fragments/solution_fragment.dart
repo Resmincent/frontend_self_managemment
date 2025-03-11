@@ -86,7 +86,7 @@ class _SolutionFragmentState extends State<SolutionFragment> {
             ),
             Gap(10),
             Text(
-              'Cek and solve your problem',
+              'Find and Play the fun games',
               style: TextStyle(
                 fontSize: 14,
                 fontWeight: FontWeight.normal,

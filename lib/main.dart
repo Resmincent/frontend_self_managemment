@@ -12,6 +12,7 @@ import 'package:self_management/presentation/pages/dashboard_page.dart';
 import 'package:self_management/presentation/pages/expenses/add_expense_page.dart';
 import 'package:self_management/presentation/pages/expenses/all_expense_page.dart';
 import 'package:self_management/presentation/pages/expenses/detail_expense_page.dart';
+import 'package:self_management/games/flappy_dash_page.dart';
 import 'package:self_management/presentation/pages/login_page.dart';
 import 'package:self_management/presentation/pages/profile_page.dart';
 import 'package:self_management/presentation/pages/register_page.dart';
@@ -19,7 +20,11 @@ import 'package:self_management/presentation/pages/solutions/add_solution_page.d
 import 'package:self_management/presentation/pages/solutions/detail_solution_page.dart';
 import 'package:self_management/presentation/pages/solutions/update_solution_page.dart';
 
-void main() {
+import 'games/service_locator.dart';
+
+void main() async {
+  await setupServiceLocator();
+
   WidgetsFlutterBinding.ensureInitialized();
   runApp(const MyApp());
 }
@@ -103,6 +108,9 @@ class MyApp extends StatelessWidget {
 
         //Profile
         ProfilePage.routeName: (context) => const ProfilePage(),
+
+        //Games
+        FlappyDashPage.routeName: (context) => const FlappyDashPage(),
       },
     );
   }
