@@ -21,6 +21,8 @@ import 'package:self_management/presentation/pages/solutions/detail_solution_pag
 import 'package:self_management/presentation/pages/solutions/update_solution_page.dart';
 
 import 'games/service_locator.dart';
+import 'games/snake/snake_game_page.dart';
+import 'presentation/pages/pomodoro_timer_page.dart';
 
 void main() async {
   await setupServiceLocator();
@@ -106,11 +108,15 @@ class MyApp extends StatelessWidget {
         //chat ai
         ChatAiPage.routeName: (context) => const ChatAiPage(),
 
+        //Pomodoro Timer
+        PomodoroTimerPage.routeName: (context) => const PomodoroTimerPage(),
+
         //Profile
         ProfilePage.routeName: (context) => const ProfilePage(),
 
         //Games
         FlappyDashPage.routeName: (context) => const FlappyDashPage(),
+        SnakeGamePage.routeName: (context) => const SnakeGamePage(),
       },
     );
   }

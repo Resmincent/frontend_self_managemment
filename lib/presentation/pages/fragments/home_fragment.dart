@@ -16,6 +16,7 @@ import 'package:self_management/presentation/pages/agendas/all_agenda_page.dart'
 import 'package:self_management/presentation/pages/agendas/detail_agenda_page.dart';
 import 'package:self_management/presentation/pages/chat_ai_page.dart';
 import 'package:self_management/presentation/pages/choose_mood_page.dart';
+import 'package:self_management/presentation/pages/pomodoro_timer_page.dart';
 import 'package:self_management/presentation/pages/profile_page.dart';
 import 'package:self_management/presentation/widgets/response_failed.dart';
 
@@ -83,6 +84,10 @@ class _HomeFragmentState extends State<HomeFragment> {
     await Navigator.pushNamed(context, ChatAiPage.routeName);
   }
 
+  Future<void> _goToPomodoroTimer() async {
+    await Navigator.pushNamed(context, PomodoroTimerPage.routeName);
+  }
+
   Future<void> _goToProfile() async {
     await Navigator.pushNamed(context, ProfilePage.routeName);
   }
@@ -138,7 +143,7 @@ class _HomeFragmentState extends State<HomeFragment> {
               return Text(
                 'Hi, $name',
                 style: const TextStyle(
-                  fontSize: 26,
+                  fontSize: 22,
                   height: 1.2,
                   fontWeight: FontWeight.bold,
                   color: AppColor.textTitle,
@@ -266,12 +271,15 @@ class _HomeFragmentState extends State<HomeFragment> {
           children: [
             Row(
               children: [
-                Text(
-                  expense.title,
-                  style: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                    color: AppColor.textTitle,
+                Expanded(
+                  child: Text(
+                    expense.title,
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      color: AppColor.textTitle,
+                    ),
                   ),
                 ),
                 const Gap(10),
@@ -445,17 +453,29 @@ class _HomeFragmentState extends State<HomeFragment> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               _buildProfile(),
-              IconButton.filled(
-                constraints: BoxConstraints.tight(const Size(48, 48)),
-                color: AppColor.secondary,
-                style: const ButtonStyle(
-                  overlayColor: WidgetStatePropertyAll(AppColor.colorWhite),
-                ),
-                onPressed: _goToChatAI,
-                icon: const ImageIcon(
-                  AssetImage('assets/images/chat-ai.png'),
-                  size: 24,
-                ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  IconButton(
+                    color: AppColor.secondary,
+                    onPressed: _goToPomodoroTimer,
+                    icon: const ImageIcon(
+                      AssetImage('assets/images/tomato.png'),
+                    ),
+                  ),
+                  IconButton.filled(
+                    constraints: BoxConstraints.tight(const Size(48, 48)),
+                    color: AppColor.secondary,
+                    style: const ButtonStyle(
+                      overlayColor: WidgetStatePropertyAll(AppColor.colorWhite),
+                    ),
+                    onPressed: _goToChatAI,
+                    icon: const ImageIcon(
+                      AssetImage('assets/images/chat-ai.png'),
+                      size: 24,
+                    ),
+                  ),
+                ],
               ),
             ],
           ),

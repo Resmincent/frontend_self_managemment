@@ -1,8 +1,6 @@
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame/game.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
 import '../../presentation/controllers/game_controller.dart';
@@ -22,20 +20,6 @@ class FlappyDashGame extends FlameGame<FlappyDashWorld>
         );
 
   final GameController gameController = Get.find<GameController>();
-
-  @override
-  KeyEventResult onKeyEvent(
-    KeyEvent event,
-    Set<LogicalKeyboardKey> keysPressed,
-  ) {
-    final isKeyDown = event is KeyDownEvent;
-    final isSpace = keysPressed.contains(LogicalKeyboardKey.space);
-    if (isSpace && isKeyDown) {
-      world.onSpaceDown();
-      return KeyEventResult.handled;
-    }
-    return KeyEventResult.ignored;
-  }
 }
 
 class FlappyDashWorld extends World

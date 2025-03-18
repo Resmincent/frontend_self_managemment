@@ -250,7 +250,7 @@ class _AllAgendaPageState extends State<AllAgendaPage> {
         initialDay: DateTime.now(),
         startDay: WeekDays.sunday,
         startHour: 5,
-        endHour: 20,
+        endHour: 24,
         showVerticalLines: false,
         backgroundColor: Colors.transparent,
         heightPerMinute: 1,

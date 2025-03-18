@@ -64,7 +64,7 @@ class _AllExpensePageState extends State<AllExpensePage> {
     super.dispose();
   }
 
-  Widget _buildHeaderSolution() {
+  Widget _buildHeaderExpenses() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -132,16 +132,16 @@ class _AllExpensePageState extends State<AllExpensePage> {
         return const SizedBox(
           height: 200,
           child: ResponseFailed(
-            message: 'No Solution Yet',
+            message: 'No Expenses Yet',
             margin: EdgeInsets.symmetric(horizontal: 20),
           ),
         );
       }
 
-      return Expanded(
+      return Flexible(
         child: ListView.builder(
           itemCount: list.length,
-          padding: const EdgeInsets.only(top: 16),
+          padding: const EdgeInsets.only(top: 16, bottom: 24),
           itemBuilder: (context, index) {
             ExpenseModal expense = list[index];
             return _cardExpenseToday(expense);
@@ -166,12 +166,15 @@ class _AllExpensePageState extends State<AllExpensePage> {
           children: [
             Row(
               children: [
-                Text(
-                  expense.title,
-                  style: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                    color: AppColor.textTitle,
+                Expanded(
+                  child: Text(
+                    expense.title,
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      color: AppColor.textTitle,
+                    ),
                   ),
                 ),
                 const Gap(20),
@@ -346,19 +349,21 @@ class _AllExpensePageState extends State<AllExpensePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20),
-        child: Column(
-          children: [
-            const Gap(55),
-            _buildHeaderSolution(),
-            const Gap(30),
-            _buildCardExpenseMonth(),
-            const Gap(10),
-            _buildCardExpenseDay(),
-            const Gap(20),
-            _buildList(),
-          ],
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          child: Column(
+            children: [
+              const Gap(16),
+              _buildHeaderExpenses(),
+              const Gap(20),
+              _buildCardExpenseMonth(),
+              const Gap(10),
+              _buildCardExpenseDay(),
+              const Gap(16),
+              _buildList(),
+            ],
+          ),
         ),
       ),
     );

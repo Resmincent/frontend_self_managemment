@@ -9,6 +9,8 @@ import 'package:self_management/common/constans.dart';
 import 'package:self_management/common/logging.dart';
 import 'package:self_management/data/models/item_chat_model.dart';
 
+import '../../common/info.dart';
+
 class ChatAiController extends GetxController {
   late final GenerativeModel _model;
   late final ChatSession _chatSession;
@@ -26,13 +28,24 @@ class ChatAiController extends GetxController {
   bool get noImage => image.path == '';
 
   pickImage() async {
-    final pickedImage = await ImagePicker().pickImage(
-      source: ImageSource.gallery,
-    );
+    try {
+      final pickedImage = await ImagePicker().pickImage(
+        source: ImageSource.gallery,
+      );
 
-    if (pickedImage == null) return;
+      if (pickedImage == null) return;
 
-    _image.value = pickedImage;
+      // Validate that the file exists
+      if (!File(pickedImage.path).existsSync()) {
+        Info.failed('Image file not found');
+        return;
+      }
+
+      _image.value = pickedImage;
+    } catch (e) {
+      fdLog.title('Chat Ai Controller - pickImage', e.toString());
+      Info.failed('Failed to pick image');
+    }
   }
 
   setupModel() {
@@ -44,16 +57,20 @@ class ChatAiController extends GetxController {
     _chatSession = _model.startChat();
   }
 
+  // In ChatAiController class
   Future<String?> sendMessage(String messageFromUser) async {
     _loading.value = true;
 
     try {
-      Image? imageSelected = noImage
-          ? null
-          : Image.file(
-              File(image.path),
-              fit: BoxFit.fitHeight,
-            );
+      // Check if image exists and is valid before proceeding
+      Image? imageSelected;
+      if (!noImage && File(image.path).existsSync()) {
+        imageSelected = Image.file(
+          File(image.path),
+          fit: BoxFit.fitHeight,
+        );
+      }
+
       final itemChatUser = ItemChatModel(
         image: imageSelected,
         text: messageFromUser,
@@ -61,25 +78,36 @@ class ChatAiController extends GetxController {
       );
       _list.add(itemChatUser);
 
-      final GenerateContentResponse responseAi;
+      late GenerateContentResponse responseAi;
 
       if (noImage) {
         final contentOnlyText = Content.text(messageFromUser);
         responseAi = await _chatSession.sendMessage(contentOnlyText);
       } else {
-        Uint8List bytes = await image.readAsBytes();
-        final contentWithImage = [
-          Content.multi(
-            [
-              TextPart(messageFromUser),
-              DataPart(
-                image.mimeType!,
-                bytes,
-              ),
-            ],
-          )
-        ];
-        responseAi = await _model.generateContent(contentWithImage);
+        try {
+          Uint8List bytes = await image.readAsBytes();
+          // Make sure mime type exists or provide a fallback
+          String mimeType = image.mimeType ?? 'image/jpeg';
+
+          final contentWithImage = [
+            Content.multi(
+              [
+                TextPart(messageFromUser),
+                DataPart(
+                  mimeType,
+                  bytes,
+                ),
+              ],
+            )
+          ];
+          responseAi = await _model.generateContent(contentWithImage);
+        } catch (imageError) {
+          // If image processing fails, fall back to text-only
+          fdLog.title('Chat Ai Controller - Image Processing Error',
+              imageError.toString());
+          final contentOnlyText = Content.text(messageFromUser);
+          responseAi = await _chatSession.sendMessage(contentOnlyText);
+        }
       }
 
       final messageFromAi = responseAi.text;
@@ -88,14 +116,16 @@ class ChatAiController extends GetxController {
         text: messageFromAi,
         fromUser: false,
       );
-      list.add(itemChatAi);
+      _list.add(itemChatAi);
 
       return messageFromAi;
     } catch (e) {
       fdLog.title('Chat Ai Controller - sendMessage', e.toString());
+      // Add more user-friendly error handling here
       return null;
     } finally {
       _loading.value = false;
+      // Make sure to reset the image properly
       _image.value = XFile('');
     }
   }

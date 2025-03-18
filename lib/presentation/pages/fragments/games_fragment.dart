@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'package:self_management/games/flappy_dash/flappy_dash_page.dart';
+import 'package:self_management/games/snake/snake_game_page.dart';
 
 import '../../../common/app_color.dart';
 import '../../../games/audio_helper.dart';
@@ -46,26 +47,14 @@ class _GamesFragmentState extends State<GamesFragment> {
         icon: Icons.flight,
         onTap: _goToFlappyDash,
       ),
-      // Add more games here
       Game(
-        title: 'Memory Cards',
-        description: 'Train your memory with card matching',
+        title: 'Snake Game',
+        description: 'Test your reflexes with this fun game!',
         icon: Icons.grid_view_rounded,
         onTap: () {
-          // Navigate to memory game
-          // Navigator.pushNamed(context, MemoryGamePage.routeName);
+          Navigator.pushNamed(context, SnakeGamePage.routeName);
         },
       ),
-      Game(
-        title: 'Number Puzzle',
-        description: 'Solve the sliding puzzle challenge',
-        icon: Icons.extension,
-        onTap: () {
-          // Navigate to puzzle game
-          // Navigator.pushNamed(context, PuzzleGamePage.routeName);
-        },
-      ),
-      // You can add more games as needed
     ];
   }
 

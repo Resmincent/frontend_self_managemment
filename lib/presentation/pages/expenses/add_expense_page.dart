@@ -32,7 +32,7 @@ class _AddExpensePageState extends State<AddExpensePage> {
 
   final descController = TextEditingController();
   final categoryController =
-      TextEditingController(text: Constans.categories.first);
+      TextEditingController(text: Constans.expenseCategory.first);
   final dateExpenseController = TextEditingController(
     text: DateFormat('yyyy-MM-dd HH:mm').format(DateTime.now()),
   );
@@ -97,10 +97,6 @@ class _AddExpensePageState extends State<AddExpensePage> {
 
     if (DateTime.tryParse(dateExpense) == null) {
       Info.failed('Date not valid');
-    }
-
-    if (description.isEmpty) {
-      Info.failed('Description must be filled');
     }
 
     final startDate = DateTime.parse(dateExpense);
@@ -214,7 +210,7 @@ class _AddExpensePageState extends State<AddExpensePage> {
         const Gap(16),
         DropdownButtonFormField(
           value: categoryController.text,
-          items: Constans.categories.map((e) {
+          items: Constans.expenseCategory.map((e) {
             return DropdownMenuItem<String>(
               value: e,
               child: Text(
@@ -296,6 +292,7 @@ class _AddExpensePageState extends State<AddExpensePage> {
         ),
         const Gap(16),
         TextFormField(
+          keyboardType: TextInputType.number,
           controller: expenseController,
           style: const TextStyle(
             fontSize: 14,
