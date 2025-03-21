@@ -175,7 +175,7 @@ class _AnalyticFragmentState extends State<AnalyticFragment> {
                   shrinkWrap: true,
                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 3,
-                    mainAxisExtent: 24,
+                    mainAxisExtent: 30,
                   ),
                   children: groupLevels.map((value) {
                     int level = value['level'];
@@ -302,7 +302,7 @@ class _AnalyticFragmentState extends State<AnalyticFragment> {
                   shrinkWrap: true,
                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 3,
-                    mainAxisExtent: 24,
+                    mainAxisExtent: 30,
                   ),
                   children: groupLevels.map((value) {
                     int level = value['level'];
