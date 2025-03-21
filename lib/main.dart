@@ -8,6 +8,7 @@ import 'package:self_management/presentation/pages/agendas/all_agenda_page.dart'
 import 'package:self_management/presentation/pages/agendas/detail_agenda_page.dart';
 import 'package:self_management/presentation/pages/chat_ai_page.dart';
 import 'package:self_management/presentation/pages/choose_mood_page.dart';
+import 'package:self_management/presentation/pages/classify_image_page.dart';
 import 'package:self_management/presentation/pages/dashboard_page.dart';
 import 'package:self_management/presentation/pages/expenses/add_expense_page.dart';
 import 'package:self_management/presentation/pages/expenses/all_expense_page.dart';
@@ -104,6 +105,7 @@ class MyApp extends StatelessWidget {
 
         //Choose mood
         ChooseMoodPage.routeName: (context) => const ChooseMoodPage(),
+        ClassifyImagePage.routeName: (context) => const ClassifyImagePage(),
 
         //chat ai
         ChatAiPage.routeName: (context) => const ChatAiPage(),

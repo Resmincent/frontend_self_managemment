@@ -47,21 +47,6 @@ class _ProfilePageState extends State<ProfilePage> {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            // Container(
-            //   width: 120,
-            //   height: 120,
-            //   decoration: BoxDecoration(
-            //     image: const DecorationImage(
-            //       image: AssetImage('assets/images/profile.png'),
-            //     ),
-            //     shape: BoxShape.circle,
-            //     border: Border.all(
-            //       color: AppColor.primary,
-            //       width: 4,
-            //     ),
-            //   ),
-            // ),
-            // const Gap(16),
             Text(
               name,
               style: const TextStyle(

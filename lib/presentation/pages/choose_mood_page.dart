@@ -9,6 +9,7 @@ import 'package:self_management/core/session.dart';
 import 'package:self_management/data/models/user_model.dart';
 import 'package:self_management/presentation/controllers/choose_mood_controller.dart';
 import 'package:self_management/presentation/controllers/home/mood_today_controller.dart';
+import 'package:self_management/presentation/pages/classify_image_page.dart';
 import 'package:self_management/presentation/widgets/custom_button.dart';
 
 class ChooseMoodPage extends StatefulWidget {
@@ -44,6 +45,10 @@ class _ChooseMoodPageState extends State<ChooseMoodPage> {
 
   Future<void> _goToDashboard() async {
     await Navigator.pushNamed(context, '/dashboard');
+  }
+
+  Future<void> _goToClassify() async {
+    await Navigator.pushNamed(context, ClassifyImagePage.routeName);
   }
 
   Future<void> choose() async {
@@ -153,9 +158,31 @@ class _ChooseMoodPageState extends State<ChooseMoodPage> {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 20),
       width: double.infinity,
-      child: ButtonPrimary(
-        onPressed: choose,
-        title: 'Choose',
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Expanded(
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 12),
+              child: ButtonPrimary(
+                onPressed: choose,
+                title: 'Choose',
+              ),
+            ),
+          ),
+          IconButton.filled(
+              constraints: BoxConstraints.tight(const Size(52, 52)),
+              color: AppColor.secondary,
+              style: const ButtonStyle(
+                overlayColor: WidgetStatePropertyAll(AppColor.colorWhite),
+              ),
+              onPressed: _goToClassify,
+              icon: const Icon(
+                Icons.face,
+                size: 38,
+                color: AppColor.colorWhite,
+              )),
+        ],
       ),
     );
   }
