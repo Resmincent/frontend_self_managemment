@@ -16,7 +16,7 @@ import 'package:self_management/presentation/pages/agendas/all_agenda_page.dart'
 import 'package:self_management/presentation/pages/agendas/detail_agenda_page.dart';
 import 'package:self_management/presentation/pages/chat_ai_page.dart';
 import 'package:self_management/presentation/pages/choose_mood_page.dart';
-import 'package:self_management/presentation/pages/pomodoro_timer_page.dart';
+import 'package:self_management/presentation/pages/pomodoro/pomodoro_timer_page.dart';
 import 'package:self_management/presentation/pages/profile_page.dart';
 import 'package:self_management/presentation/widgets/response_failed.dart';
 

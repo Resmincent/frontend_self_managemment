@@ -7,11 +7,11 @@ class EmotionClassifier {
   Interpreter? _interpreter;
   static const int inputSize = 48;
   static const List<String> emotions = [
-    'Angry',
-    'Sad',
-    'Neutral',
-    'Disgust',
-    'Happy'
+    'angry',
+    'disgust',
+    'happy',
+    'neutral',
+    'sad'
   ];
 
   // Load the TFLite model
@@ -47,8 +47,12 @@ class EmotionClassifier {
       for (int y = 0; y < inputSize; y++) {
         for (int x = 0; x < inputSize; x++) {
           final pixel = grayscaleImage.getPixel(x, y);
-          final luminance = (img.getLuminance(pixel) / 255.0);
-          inputBuffer[pixelIndex++] = luminance;
+          final r = img.getRed(pixel);
+          final g = img.getGreen(pixel);
+          final b = img.getBlue(pixel);
+          final luminance = (0.2989 * r + 0.5870 * g + 0.1140 * b) / 255.0;
+          final normalizedLuminance = luminance * 2.0 - 1.0;
+          inputBuffer[pixelIndex++] = normalizedLuminance;
         }
       }
 
@@ -68,9 +72,9 @@ class EmotionClassifier {
     try {
       final input = preprocessImage(imageFile);
 
-      // Reshape input
+      // Reshape input to match model's expected input shape
       final inputShape = [1, inputSize, inputSize, 1];
-      final Float32List reshapedInput = Float32List(1 * inputSize * inputSize);
+      final reshapedInput = Float32List(1 * inputSize * inputSize);
       for (int i = 0; i < input.length; i++) {
         reshapedInput[i] = input[i];
       }
@@ -89,13 +93,14 @@ class EmotionClassifier {
       final maxIndex = resultList
           .indexWhere((e) => e == resultList.reduce((a, b) => a > b ? a : b));
 
-      if (resultList[maxIndex] < 0.4) {
-        print(
-            "Low confidence: ${resultList[maxIndex]}, prediction might be incorrect.");
+      final confidence = resultList[maxIndex];
+      if (confidence < 0.4) {
+        print("Low confidence: $confidence, prediction might be incorrect.");
+        throw Exception('Confidence too low for reliable prediction.');
       }
 
       print(
-          "Predicted emotion: ${emotions[maxIndex]} with confidence: ${resultList[maxIndex]}");
+          "Predicted emotion: ${emotions[maxIndex]} with confidence: $confidence");
       return emotions[maxIndex];
     } catch (e) {
       print('Error during classification: $e');

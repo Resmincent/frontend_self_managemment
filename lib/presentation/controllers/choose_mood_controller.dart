@@ -75,8 +75,6 @@ class ChooseMoodController extends GetxController {
     return state;
   }
 
-  static void delete() => Get.delete<ChooseMoodController>(force: true);
-
   Future<ChooseMoodState> classifyImageAndSave(int userId) async {
     state = state.copyWith(statusRequest: StatusRequest.loading);
 
@@ -85,15 +83,15 @@ class ChooseMoodController extends GetxController {
         throw Exception('No image selected.');
       }
 
-// Classify image
+      // Classify image
       final emotion = await _classifier.classifyImage(_image.value!);
       _predictedEmotion.value = emotion;
 
-// Map emotion to level
+      // Map emotion to level
       final int moodLevel = _mapEmotionToLevel(emotion);
       level = moodLevel;
 
-// Save to database
+      // Save to database
       final mood = MoodModel(
         level: moodLevel,
         createdAt: DateTime.now(),
@@ -123,23 +121,25 @@ class ChooseMoodController extends GetxController {
     return state;
   }
 
-// Map emotion to mood level
+  // Map emotion to mood level
   int _mapEmotionToLevel(String emotion) {
     switch (emotion.toLowerCase()) {
-      case 'happy':
-        return 5;
-      case 'neutral':
-        return 3;
       case 'sad':
         return 2;
-      case 'angry':
-        return 1;
+      case 'neutral':
+        return 3;
+      case 'happy':
+        return 5;
       case 'disgust':
         return 4;
+      case 'angry':
+        return 1;
       default:
         return 3; // Default to neutral
     }
   }
+
+  static void delete() => Get.delete<ChooseMoodController>(force: true);
 }
 
 class ChooseMoodState {

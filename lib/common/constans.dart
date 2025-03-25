@@ -18,4 +18,6 @@ class Constans {
     'Work'
   ];
   static const googleAIAPIKey = String.fromEnvironment('GOOGLE_AI_API_KEY');
+
+  static const int sessionsBeforeLongBreak = 4;
 }

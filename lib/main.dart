@@ -23,7 +23,7 @@ import 'package:self_management/presentation/pages/solutions/update_solution_pag
 
 import 'games/service_locator.dart';
 import 'games/snake/snake_game_page.dart';
-import 'presentation/pages/pomodoro_timer_page.dart';
+import 'presentation/pages/pomodoro/pomodoro_timer_page.dart';
 
 void main() async {
   await setupServiceLocator();
