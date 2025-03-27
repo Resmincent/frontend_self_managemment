@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:hive/hive.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:self_management/common/app_color.dart';
 import 'package:self_management/core/session.dart';
 import 'package:self_management/data/models/solution_model.dart';
@@ -17,6 +19,8 @@ import 'package:self_management/games/flappy_dash/flappy_dash_page.dart';
 import 'package:self_management/presentation/pages/login_page.dart';
 import 'package:self_management/presentation/pages/profile_page.dart';
 import 'package:self_management/presentation/pages/register_page.dart';
+import 'package:self_management/presentation/pages/safe_place/add_safe_place_page.dart';
+import 'package:self_management/presentation/pages/safe_place/detail_safe_place_page.dart';
 import 'package:self_management/presentation/pages/solutions/add_solution_page.dart';
 import 'package:self_management/presentation/pages/solutions/detail_solution_page.dart';
 import 'package:self_management/presentation/pages/solutions/update_solution_page.dart';
@@ -27,7 +31,6 @@ import 'presentation/pages/pomodoro/pomodoro_timer_page.dart';
 
 void main() async {
   await setupServiceLocator();
-
   WidgetsFlutterBinding.ensureInitialized();
   runApp(const MyApp());
 }
@@ -119,6 +122,13 @@ class MyApp extends StatelessWidget {
         //Games
         FlappyDashPage.routeName: (context) => const FlappyDashPage(),
         SnakeGamePage.routeName: (context) => const SnakeGamePage(),
+
+        //SafePlace
+        AddSafePlacePage.routeName: (context) => const AddSafePlacePage(),
+        DetailSafePlacePage.routeName: (context) {
+          int safePlaceId = ModalRoute.settingsOf(context)?.arguments as int;
+          return DetailSafePlacePage(safePlaceId: safePlaceId);
+        },
       },
     );
   }
