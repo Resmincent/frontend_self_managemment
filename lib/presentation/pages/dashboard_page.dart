@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:self_management/common/app_color.dart';
 import 'package:self_management/presentation/pages/fragments/analytic_fragment.dart';
-import 'package:self_management/presentation/pages/fragments/games_fragment.dart';
+// import 'package:self_management/presentation/pages/fragments/games_fragment.dart';
 import 'package:self_management/presentation/pages/fragments/home_fragment.dart';
 import 'package:self_management/presentation/pages/fragments/solution_fragment.dart';
+
+import 'fragments/safe_place_fragement.dart';
 
 class DashboardPage extends StatefulWidget {
   const DashboardPage({super.key});
@@ -36,9 +38,14 @@ class _DashboardPageState extends State<DashboardPage> {
     },
     {
       'iconType': 'material',
-      'icon': Icons.tv_rounded,
-      'view': const GamesFragment(),
+      'icon': Icons.place_outlined,
+      'view': const SafePlaceFragement(),
     }
+    // {
+    //   'iconType': 'material',
+    //   'icon': Icons.tv_rounded,
+    //   'view': const GamesFragment(),
+    // }
   ];
 
   Widget _buildIcon(Map<String, dynamic> menuItem, bool isActive) {
@@ -51,6 +58,7 @@ class _DashboardPageState extends State<DashboardPage> {
       return Icon(
         menuItem['icon'],
         color: isActive ? Colors.white : AppColor.primary,
+        size: 30,
       );
     }
   }

@@ -30,6 +30,8 @@ class AllSafePlaceController extends GetxController {
 
     return state;
   }
+
+  static delete() => Get.delete<AllSafePlaceController>(force: true);
 }
 
 class AllSafePlaceState {
