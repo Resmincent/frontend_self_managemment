@@ -1,35 +1,35 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
-import 'package:self_management/data/models/safe_place_model.dart';
-import 'package:self_management/presentation/controllers/safe_place/all_safe_place_controller.dart';
+import 'package:self_management/data/models/journal_model.dart';
+import 'package:self_management/presentation/controllers/journal/all_safe_place_controller.dart';
 
 import '../../../common/app_color.dart';
 import '../../../common/enums.dart';
 import '../../../common/info.dart';
 import '../../../core/session.dart';
-import '../../controllers/safe_place/add_safe_place_controller.dart';
+import '../../controllers/journal/add_journal_controller.dart';
 import '../../widgets/custom_button.dart';
 import '../../widgets/custom_input.dart';
 
-class AddSafePlacePage extends StatefulWidget {
-  const AddSafePlacePage({super.key});
+class AddJournalPage extends StatefulWidget {
+  const AddJournalPage({super.key});
 
   static const routeName = "/add-safe-place";
 
   @override
-  State<AddSafePlacePage> createState() => _AddSafePlacePageState();
+  State<AddJournalPage> createState() => _AddJournalPageState();
 }
 
-class _AddSafePlacePageState extends State<AddSafePlacePage> {
-  final addSafePlaceController = Get.put(AddSafePlaceController());
-  final allSafePlaceController = Get.put(AllSafePlaceController());
+class _AddJournalPageState extends State<AddJournalPage> {
+  final addJournalController = Get.put(AddJournalController());
+  final allJournalController = Get.put(AllJournalController());
 
   final titleController = TextEditingController();
   String selectedType = 'journal'; // Default type
   final descController = TextEditingController();
 
-  Future<void> addSafePlace() async {
+  Future<void> addJournal() async {
     final title = titleController.text;
     final type = selectedType; // Use the selected type
     final content = descController.text;
@@ -46,7 +46,7 @@ class _AddSafePlacePageState extends State<AddSafePlacePage> {
 
     int userId = (await Session.getUser())!.id;
 
-    final safePlace = SafePlaceModel(
+    final journal = JournalModel(
       id: 0,
       userId: userId,
       title: title,
@@ -55,7 +55,7 @@ class _AddSafePlacePageState extends State<AddSafePlacePage> {
       createdAt: DateTime.now(),
     );
 
-    final state = await addSafePlaceController.executeRequest(safePlace);
+    final state = await addJournalController.executeRequest(journal);
 
     if (state.statusRequest == StatusRequest.failed) {
       Info.failed(state.message);
@@ -63,7 +63,7 @@ class _AddSafePlacePageState extends State<AddSafePlacePage> {
     }
 
     if (state.statusRequest == StatusRequest.success) {
-      allSafePlaceController.fetch(userId);
+      allJournalController.fetch(userId);
       Info.success(state.message);
       Future.delayed(const Duration(milliseconds: 500), () {
         if (!mounted) return;
@@ -74,7 +74,7 @@ class _AddSafePlacePageState extends State<AddSafePlacePage> {
 
   @override
   void dispose() {
-    AddSafePlaceController.delete();
+    AddJournalController.delete();
     super.dispose();
   }
 
@@ -221,7 +221,7 @@ class _AddSafePlacePageState extends State<AddSafePlacePage> {
 
   Widget _buildAddButton() {
     return Obx(() {
-      final state = addSafePlaceController.state;
+      final state = addJournalController.state;
       final statusRequest = state.statusRequest;
 
       if (statusRequest == StatusRequest.loading) {
@@ -230,7 +230,7 @@ class _AddSafePlacePageState extends State<AddSafePlacePage> {
         );
       }
       return ButtonPrimary(
-        onPressed: addSafePlace,
+        onPressed: addJournal,
         title: 'Add now',
       );
     });

@@ -1,25 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
-import 'package:self_management/data/models/safe_place_model.dart';
-import 'package:self_management/presentation/controllers/safe_place/all_safe_place_controller.dart';
-import 'package:self_management/presentation/pages/safe_place/add_safe_place_page.dart';
-import 'package:self_management/presentation/pages/safe_place/detail_safe_place_page.dart';
+import 'package:self_management/data/models/journal_model.dart';
+import 'package:self_management/presentation/controllers/journal/all_safe_place_controller.dart';
+import 'package:self_management/presentation/pages/journals/add_journal_page.dart';
+import 'package:self_management/presentation/pages/journals/detail_journal_page.dart';
 
 import '../../../common/app_color.dart';
 import '../../../common/enums.dart';
 import '../../../core/session.dart';
 import '../../widgets/response_failed.dart';
 
-class SafePlaceFragement extends StatefulWidget {
-  const SafePlaceFragement({super.key});
+class JournalFragement extends StatefulWidget {
+  const JournalFragement({super.key});
 
   @override
-  State<SafePlaceFragement> createState() => _SafePlaceFragementState();
+  State<JournalFragement> createState() => _JournalFragementState();
 }
 
-class _SafePlaceFragementState extends State<SafePlaceFragement> {
-  final safePlaceController = Get.put(AllSafePlaceController());
+class _JournalFragementState extends State<JournalFragement> {
+  final journalController = Get.put(AllJournalController());
 
   @override
   void initState() {
@@ -29,28 +29,28 @@ class _SafePlaceFragementState extends State<SafePlaceFragement> {
 
   @override
   void dispose() {
-    AllSafePlaceController.delete();
+    AllJournalController.delete();
     super.dispose();
   }
 
   refresh() {
     Session.getUser().then((user) {
       int userId = user!.id;
-      safePlaceController.fetch(userId);
+      journalController.fetch(userId);
     });
   }
 
-  Future<void> _goToAddSafePlace() async {
-    await Navigator.pushNamed(context, AddSafePlacePage.routeName);
+  Future<void> _goToAddJournal() async {
+    await Navigator.pushNamed(context, AddJournalPage.routeName);
     refresh();
   }
 
-  Future<void> _goToDetailSafePlace(int id) async {
-    await Navigator.pushNamed(context, DetailSafePlacePage.routeName,
+  Future<void> _goToDetailJournal(int id) async {
+    await Navigator.pushNamed(context, DetailJournalPage.routeName,
         arguments: id);
   }
 
-  Widget _buildHeaderSafePlace() {
+  Widget _buildHeaderJournal() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -58,7 +58,7 @@ class _SafePlaceFragementState extends State<SafePlaceFragement> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Safe Place',
+              'Journal',
               style: TextStyle(
                 fontSize: 22,
                 fontWeight: FontWeight.bold,
@@ -67,7 +67,7 @@ class _SafePlaceFragementState extends State<SafePlaceFragement> {
             ),
             Gap(10),
             Text(
-              'Find a safe place to share your problem',
+              'Write your daily journal here',
               style: TextStyle(
                 fontSize: 14,
                 fontWeight: FontWeight.normal,
@@ -82,7 +82,7 @@ class _SafePlaceFragementState extends State<SafePlaceFragement> {
           style: const ButtonStyle(
             overlayColor: WidgetStatePropertyAll(AppColor.secondary),
           ),
-          onPressed: _goToAddSafePlace,
+          onPressed: _goToAddJournal,
           icon: const ImageIcon(
             AssetImage('assets/images/add_solution.png'),
             size: 24,
@@ -95,7 +95,7 @@ class _SafePlaceFragementState extends State<SafePlaceFragement> {
 
   Widget _buildList() {
     return Obx(() {
-      final state = safePlaceController.state;
+      final state = journalController.state;
       final statusRequest = state.statusRequest;
 
       if (statusRequest == StatusRequest.init) {
@@ -121,7 +121,7 @@ class _SafePlaceFragementState extends State<SafePlaceFragement> {
         );
       }
 
-      final list = state.safePlaces;
+      final list = state.journals;
 
       if (list.isEmpty) {
         return const SizedBox(
@@ -138,19 +138,19 @@ class _SafePlaceFragementState extends State<SafePlaceFragement> {
           itemCount: list.length,
           padding: const EdgeInsets.fromLTRB(0, 16, 0, 0),
           itemBuilder: (context, index) {
-            SafePlaceModel safePlaceModel = list[index];
-            return _buildCardSafePlace(safePlaceModel);
+            JournalModel journalModel = list[index];
+            return _buildCardJournal(journalModel);
           },
         ),
       );
     });
   }
 
-  Widget _buildCardSafePlace(SafePlaceModel safePlaceModel) {
+  Widget _buildCardJournal(JournalModel journalModel) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 20),
       child: GestureDetector(
-        onTap: () => _goToDetailSafePlace(safePlaceModel.id),
+        onTap: () => _goToDetailJournal(journalModel.id),
         child: Stack(
           children: [
             Container(
@@ -166,8 +166,8 @@ class _SafePlaceFragementState extends State<SafePlaceFragement> {
                   Padding(
                     padding: const EdgeInsets.only(right: 55),
                     child: Text(
-                      safePlaceModel.title.isNotEmpty
-                          ? safePlaceModel.title
+                      journalModel.title.isNotEmpty
+                          ? journalModel.title
                           : 'Content',
                       overflow: TextOverflow.ellipsis,
                       maxLines: 1,
@@ -180,7 +180,7 @@ class _SafePlaceFragementState extends State<SafePlaceFragement> {
                   ),
                   const Gap(10),
                   Text(
-                    safePlaceModel.content,
+                    journalModel.content,
                     overflow: TextOverflow.ellipsis,
                     maxLines: 1,
                     style: const TextStyle(
@@ -198,7 +198,7 @@ class _SafePlaceFragementState extends State<SafePlaceFragement> {
               width: 46,
               height: 36,
               child: Text(
-                safePlaceModel.type,
+                journalModel.category,
                 style: const TextStyle(
                   fontSize: 12,
                   fontWeight: FontWeight.bold,
@@ -219,7 +219,7 @@ class _SafePlaceFragementState extends State<SafePlaceFragement> {
       child: Column(
         children: [
           const Gap(55),
-          _buildHeaderSafePlace(),
+          _buildHeaderJournal(),
           const Gap(30),
           _buildList(),
           const Gap(140)

@@ -6,7 +6,7 @@ import 'package:self_management/presentation/pages/fragments/analytic_fragment.d
 import 'package:self_management/presentation/pages/fragments/home_fragment.dart';
 import 'package:self_management/presentation/pages/fragments/solution_fragment.dart';
 
-import 'fragments/safe_place_fragement.dart';
+import 'fragments/journal_fragement.dart';
 
 class DashboardPage extends StatefulWidget {
   const DashboardPage({super.key});
@@ -38,8 +38,8 @@ class _DashboardPageState extends State<DashboardPage> {
     },
     {
       'iconType': 'material',
-      'icon': Icons.place_outlined,
-      'view': const SafePlaceFragement(),
+      'icon': Icons.my_library_books_outlined,
+      'view': const JournalFragement(),
     }
     // {
     //   'iconType': 'material',

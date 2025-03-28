@@ -1,24 +1,24 @@
 import 'package:get/get.dart';
 
 import 'package:self_management/common/enums.dart';
-import 'package:self_management/data/datasources/safe_place_remote_data_source.dart';
+import 'package:self_management/data/datasources/journal_remote_data_source.dart';
 
-class DeleteSafePlaceController extends GetxController {
-  final _state = DeleteSafePlaceState(
+class DeleteJournalController extends GetxController {
+  final _state = DeleteJournalState(
     statusRequest: StatusRequest.init,
     message: '',
   ).obs;
 
-  DeleteSafePlaceState get state => _state.value;
+  DeleteJournalState get state => _state.value;
 
-  set state(DeleteSafePlaceState value) => _state.value = value;
+  set state(DeleteJournalState value) => _state.value = value;
 
-  Future<DeleteSafePlaceState> executeRequest(int id) async {
+  Future<DeleteJournalState> executeRequest(int id) async {
     state = state.copyWith(
       statusRequest: StatusRequest.loading,
     );
 
-    final (success, message) = await SafePlaceRemoteDataSource.delete(id);
+    final (success, message) = await JournalRemoteDataSource.delete(id);
 
     state = state.copyWith(
       statusRequest: success ? StatusRequest.success : StatusRequest.failed,
@@ -28,23 +28,23 @@ class DeleteSafePlaceController extends GetxController {
     return state;
   }
 
-  static delete() => Get.delete<DeleteSafePlaceController>(force: true);
+  static delete() => Get.delete<DeleteJournalController>(force: true);
 }
 
-class DeleteSafePlaceState {
+class DeleteJournalState {
   final StatusRequest statusRequest;
   final String message;
 
-  DeleteSafePlaceState({
+  DeleteJournalState({
     required this.statusRequest,
     required this.message,
   });
 
-  DeleteSafePlaceState copyWith({
+  DeleteJournalState copyWith({
     StatusRequest? statusRequest,
     String? message,
   }) {
-    return DeleteSafePlaceState(
+    return DeleteJournalState(
       statusRequest: statusRequest ?? this.statusRequest,
       message: message ?? this.message,
     );

@@ -1,19 +1,17 @@
-class SafePlaceModel {
+class JournalModel {
   final int id;
   final int userId;
-  final String type;
+  final String category;
   final String title;
   final String content;
-  final String filePath;
   final DateTime createdAt;
 
-  SafePlaceModel({
+  JournalModel({
     required this.id,
     required this.userId,
-    required this.type,
+    required this.category,
     required this.title,
     required this.content,
-    required this.filePath,
     required this.createdAt,
   });
 
@@ -21,22 +19,20 @@ class SafePlaceModel {
     return {
       'id': id,
       'user_id': userId,
-      'type': type,
+      'category': category,
       'title': title,
       'content': content,
-      'file_path': filePath,
       'created_at': createdAt.toIso8601String()
     };
   }
 
-  factory SafePlaceModel.fromJson(Map<String, dynamic> json) {
-    return SafePlaceModel(
+  factory JournalModel.fromJson(Map<String, dynamic> json) {
+    return JournalModel(
       id: json['id'] ?? 0,
       userId: json['user_id'] ?? 0,
-      type: json['type'] ?? 0,
+      category: json['category'] ?? 0,
       title: json['title'] ?? 0,
       content: json['content'] ?? 0,
-      filePath: json['file_path'] ?? 0,
       createdAt: json['created_at'] != null
           ? DateTime.parse(json['created_at'])
           : DateTime.now(),
@@ -47,10 +43,9 @@ class SafePlaceModel {
     return {
       'id': id.toString(),
       'user_id': userId.toString(),
-      'type': type.toString(),
+      'category': category.toString(),
       'title': title.toString(),
       'content': content.toString(),
-      'file_path': filePath.toString(),
       'created_at': createdAt.toIso8601String(),
     };
   }
