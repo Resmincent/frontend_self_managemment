@@ -49,7 +49,7 @@ class JournalRemoteDataSource {
 
       if (response.statusCode == 200) {
         Map data = Map.from(resBody['data']);
-        List journalRaw = data['safe_places'];
+        List journalRaw = data['journals'];
         List<JournalModel> journals = journalRaw
             .map(
               (e) => JournalModel.fromJson(e),

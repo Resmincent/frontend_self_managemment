@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'package:self_management/data/models/journal_model.dart';
-import 'package:self_management/presentation/controllers/journal/all_safe_place_controller.dart';
+import 'package:self_management/presentation/controllers/journal/all_journal_controller.dart';
 import 'package:self_management/presentation/pages/journals/add_journal_page.dart';
 import 'package:self_management/presentation/pages/journals/detail_journal_page.dart';
 
@@ -14,17 +14,31 @@ import '../../widgets/response_failed.dart';
 class JournalFragement extends StatefulWidget {
   const JournalFragement({super.key});
 
+  static const routeName = '/journal';
+
   @override
   State<JournalFragement> createState() => _JournalFragementState();
 }
 
 class _JournalFragementState extends State<JournalFragement> {
   final journalController = Get.put(AllJournalController());
+  final searchController = TextEditingController();
 
   @override
   void initState() {
     refresh();
     super.initState();
+  }
+
+  void search() {
+    final query = searchController.text;
+
+    if (query == '') return;
+
+    Session.getUser().then((user) {
+      int userId = user!.id;
+      journalController.search(userId, query);
+    });
   }
 
   @override
@@ -67,7 +81,7 @@ class _JournalFragementState extends State<JournalFragement> {
             ),
             Gap(10),
             Text(
-              'Write your daily journal here',
+              'Write your journal here',
               style: TextStyle(
                 fontSize: 14,
                 fontWeight: FontWeight.normal,
@@ -76,20 +90,80 @@ class _JournalFragementState extends State<JournalFragement> {
             ),
           ],
         ),
-        IconButton.filled(
-          constraints: BoxConstraints.tight(const Size(48, 48)),
-          color: AppColor.colorWhite,
-          style: const ButtonStyle(
-            overlayColor: WidgetStatePropertyAll(AppColor.secondary),
-          ),
-          onPressed: _goToAddJournal,
-          icon: const ImageIcon(
-            AssetImage('assets/images/add_solution.png'),
-            size: 24,
-            color: AppColor.colorWhite,
-          ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            IconButton.filled(
+              constraints: BoxConstraints.tight(const Size(48, 48)),
+              color: AppColor.colorWhite,
+              style: const ButtonStyle(
+                overlayColor: WidgetStatePropertyAll(AppColor.secondary),
+              ),
+              onPressed: () {},
+              icon: const Icon(
+                Icons.task_alt_outlined,
+                size: 24,
+              ),
+            ),
+            const Gap(12),
+            IconButton.filled(
+              constraints: BoxConstraints.tight(const Size(48, 48)),
+              color: AppColor.colorWhite,
+              style: const ButtonStyle(
+                overlayColor: WidgetStatePropertyAll(AppColor.secondary),
+              ),
+              onPressed: _goToAddJournal,
+              icon: const ImageIcon(
+                AssetImage('assets/images/add_solution.png'),
+                size: 24,
+                color: AppColor.colorWhite,
+              ),
+            ),
+          ],
         ),
       ],
+    );
+  }
+
+  Widget _buildButtonSearch() {
+    return TextFormField(
+      controller: searchController,
+      style: const TextStyle(
+        fontSize: 14,
+        fontWeight: FontWeight.normal,
+        color: AppColor.colorWhite,
+      ),
+      cursorColor: AppColor.secondary,
+      decoration: InputDecoration(
+        suffixIcon: GestureDetector(
+          onTap: search,
+          child: const UnconstrainedBox(
+            child: Padding(
+              padding: EdgeInsets.only(right: 16),
+              child: ImageIcon(
+                AssetImage('assets/images/search.png'),
+                color: AppColor.colorWhite,
+                size: 24,
+              ),
+            ),
+          ),
+        ),
+        fillColor: AppColor.primary,
+        filled: true,
+        isDense: true,
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: 24,
+          vertical: 20,
+        ),
+        border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(20),
+            borderSide: BorderSide.none),
+        hintText: 'Search your journal..',
+        hintStyle: const TextStyle(
+          fontSize: 14,
+          color: AppColor.colorWhite,
+        ),
+      ),
     );
   }
 
@@ -195,9 +269,10 @@ class _JournalFragementState extends State<JournalFragement> {
             Positioned(
               right: 10,
               top: 10,
-              width: 46,
+              width: 70,
               height: 36,
               child: Text(
+                textAlign: TextAlign.right,
                 journalModel.category,
                 style: const TextStyle(
                   fontSize: 12,
@@ -221,6 +296,8 @@ class _JournalFragementState extends State<JournalFragement> {
           const Gap(55),
           _buildHeaderJournal(),
           const Gap(30),
+          _buildButtonSearch(),
+          const Gap(16),
           _buildList(),
           const Gap(140)
         ],

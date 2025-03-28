@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'package:self_management/data/models/journal_model.dart';
-import 'package:self_management/presentation/controllers/journal/all_safe_place_controller.dart';
+import 'package:self_management/presentation/controllers/journal/all_journal_controller.dart';
 
 import '../../../common/app_color.dart';
+import '../../../common/constans.dart';
 import '../../../common/enums.dart';
 import '../../../common/info.dart';
 import '../../../core/session.dart';
@@ -26,17 +27,22 @@ class _AddJournalPageState extends State<AddJournalPage> {
   final allJournalController = Get.put(AllJournalController());
 
   final titleController = TextEditingController();
-  String selectedType = 'journal'; // Default type
   final descController = TextEditingController();
+  final categoryController =
+      TextEditingController(text: Constans.typeJournal.first);
 
   Future<void> addJournal() async {
     final title = titleController.text;
-    final type = selectedType; // Use the selected type
+    final category = categoryController.text;
     final content = descController.text;
 
     if (title.isEmpty) {
       Info.failed('Title must be filled');
       return;
+    }
+
+    if (category.isEmpty) {
+      Info.failed('Category must be filled');
     }
 
     if (content.isEmpty) {
@@ -50,7 +56,7 @@ class _AddJournalPageState extends State<AddJournalPage> {
       id: 0,
       userId: userId,
       title: title,
-      type: type, // Use the selected type
+      category: category,
       content: content,
       createdAt: DateTime.now(),
     );
@@ -95,7 +101,7 @@ class _AddJournalPageState extends State<AddJournalPage> {
             ),
           ),
           const Text(
-            'Add Safe Place',
+            'Add Journal',
             style: TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.bold,
@@ -149,8 +155,8 @@ class _AddJournalPageState extends State<AddJournalPage> {
         ),
         const Gap(16),
         DropdownButtonFormField<String>(
-          value: selectedType,
-          items: ['journal', 'audio'].map((e) {
+          value: categoryController.text,
+          items: Constans.typeJournal.map((e) {
             return DropdownMenuItem<String>(
               value: e,
               child: Text(
@@ -165,9 +171,7 @@ class _AddJournalPageState extends State<AddJournalPage> {
           }).toList(),
           onChanged: (value) {
             if (value == null) return;
-            setState(() {
-              selectedType = value;
-            });
+            categoryController.text = value;
           },
           icon: const ImageIcon(
             AssetImage('assets/images/category.png'),
@@ -203,7 +207,7 @@ class _AddJournalPageState extends State<AddJournalPage> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const Text(
-          'Content ...',
+          'Content',
           style: TextStyle(
               fontWeight: FontWeight.bold,
               fontSize: 16,
@@ -212,8 +216,8 @@ class _AddJournalPageState extends State<AddJournalPage> {
         const Gap(16),
         CustomInput(
           controller: descController,
-          hintText: 'Write your safe place details...',
-          maxLines: 3,
+          hintText: 'Write your journal details...',
+          maxLines: 10,
         ),
       ],
     );
