@@ -149,14 +149,14 @@ class _AnalyticFragmentState extends State<AnalyticFragment> {
                     ],
                     measureAxis: const MeasureAxis(
                       showLine: true,
-                      numericViewport: NumericViewport(0, 5),
+                      numericViewport: NumericViewport(0, 7),
                       numericTickProvider: NumericTickProvider(
-                        desiredTickCount: 6,
+                        desiredTickCount: 8,
                       ),
                     ),
                     layoutMargin: LayoutMargin(10, 0, 0, 10),
                     domainAxis: DomainAxis(
-                      minimumPaddingBetweenLabels: 5,
+                      minimumPaddingBetweenLabels: 7,
                       labelAnchor: LabelAnchor.after,
                       tickLabelFormatterT: (domain) {
                         return DateFormat('H:mm').format(domain);
@@ -272,9 +272,9 @@ class _AnalyticFragmentState extends State<AnalyticFragment> {
                     ],
                     measureAxis: const MeasureAxis(
                       showLine: true,
-                      numericViewport: NumericViewport(0, 5),
+                      numericViewport: NumericViewport(0, 7),
                       numericTickProvider: NumericTickProvider(
-                        desiredTickCount: 6,
+                        desiredTickCount: 8,
                       ),
                     ),
                     layoutMargin: LayoutMargin(10, 0, 0, 10),

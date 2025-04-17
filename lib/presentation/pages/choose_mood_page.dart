@@ -117,7 +117,7 @@ class _ChooseMoodPageState extends State<ChooseMoodPage> {
       child: PageView.builder(
         controller: PageController(initialPage: 2, viewportFraction: 0.65),
         physics: const BouncingScrollPhysics(),
-        itemCount: 5,
+        itemCount: 7,
         onPageChanged: (index) {
           setState(() {
             chooseMood.level = index + 1;

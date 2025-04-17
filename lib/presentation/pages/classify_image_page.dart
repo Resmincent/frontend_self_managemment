@@ -3,18 +3,18 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:self_management/common/enums.dart';
-import 'package:self_management/presentation/controllers/choose_mood_controller.dart';
-import '../../common/app_color.dart';
-import '../../common/info.dart';
-import '../../core/session.dart';
-import '../../data/models/user_model.dart';
-import '../controllers/home/mood_today_controller.dart';
+import 'package:image/image.dart' as img;
+
+import 'package:self_management/common/app_color.dart';
+import 'package:self_management/common/info.dart';
+import 'package:self_management/core/session.dart';
+import 'package:self_management/data/models/user_model.dart';
+import 'package:self_management/presentation/controllers/classify_mood_controller.dart';
+import 'package:self_management/presentation/controllers/home/mood_today_controller.dart';
 import '../widgets/custom_button.dart';
 
 class ClassifyImagePage extends StatefulWidget {
   const ClassifyImagePage({super.key});
-
   static const routeName = '/classify-image';
 
   @override
@@ -22,9 +22,9 @@ class ClassifyImagePage extends StatefulWidget {
 }
 
 class _ClassifyImagePageState extends State<ClassifyImagePage> {
-  final ChooseMoodController _chooseMoodController =
-      Get.put(ChooseMoodController());
-  final moodTodayController = Get.put(MoodTodayController());
+  final ClassifyMood _classifyMoodController = Get.put(ClassifyMood());
+  final MoodTodayController _moodTodayController =
+      Get.put(MoodTodayController());
 
   File? _selectedImage;
   UserModel? user;
@@ -37,11 +37,13 @@ class _ClassifyImagePageState extends State<ClassifyImagePage> {
         user = value;
       });
     });
+
+    _classifyMoodController.loadModel();
   }
 
   @override
   void dispose() {
-    ChooseMoodController.delete();
+    ClassifyMood.delete();
     super.dispose();
   }
 
@@ -58,23 +60,24 @@ class _ClassifyImagePageState extends State<ClassifyImagePage> {
         _selectedImage = File(pickedFile.path);
       });
 
-      // Set the image in the controller
-      _chooseMoodController.setImage(_selectedImage!);
+      final bytes = await pickedFile.readAsBytes();
+      final decoded = img.decodeImage(bytes);
+      if (decoded != null) {
+        await _classifyMoodController.classifyImageBytes(bytes);
+      }
     }
   }
 
   Future<void> _classifyAndSaveMood() async {
     if (_selectedImage != null && user != null) {
-      final result = await _chooseMoodController.classifyImageAndSave(user!.id);
-
-      if (result.statusRequest == StatusRequest.success) {
-        Info.success(result.message);
-        moodTodayController.fetch(user!.id);
-
+      final result = await _classifyMoodController.submitMood(user!.id);
+      if (result.$1) {
+        Info.success(result.$2);
+        _moodTodayController.fetch(user!.id);
         await _goToDashboard();
         Get.back();
       } else {
-        Info.failed(result.message);
+        Info.failed(result.$2);
       }
     } else {
       Get.snackbar("Error", "Please select an image first.");
@@ -174,37 +177,43 @@ class _ClassifyImagePageState extends State<ClassifyImagePage> {
               ),
             ],
           ),
-          const Gap(40),
+          const Gap(30),
+          Obx(() {
+            final emotion = _classifyMoodController.predictedEmotion.value;
+            final confidence =
+                _classifyMoodController.predictedConfidence.value;
+            return emotion.isNotEmpty
+                ? Column(
+                    children: [
+                      Text(
+                        'Detected Emotion: $emotion',
+                        style: const TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: AppColor.textTitle,
+                        ),
+                      ),
+                      const Gap(8),
+                      Text(
+                        'Confidence: ${(confidence * 100).toStringAsFixed(2)}%',
+                        style: const TextStyle(
+                          fontSize: 14,
+                          color: Colors.grey,
+                        ),
+                      ),
+                    ],
+                  )
+                : const SizedBox.shrink();
+          }),
+          const Gap(20),
           Obx(
             () => ButtonPrimary(
-              onPressed: () {
-                _chooseMoodController.state.statusRequest ==
-                        StatusRequest.loading
-                    ? null
-                    : _classifyAndSaveMood();
-              },
-              title: _chooseMoodController.state.statusRequest ==
-                      StatusRequest.loading
-                  ? 'Processing...'
-                  : 'Analyze Mood',
+              onPressed: _classifyMoodController.isModelLoaded.value
+                  ? _classifyAndSaveMood
+                  : null,
+              title: 'Analyze Mood',
             ),
           ),
-          // Display detected emotion if available
-          // Obx(
-          //   () => _chooseMoodController.predictedEmotion != null
-          //       ? Padding(
-          //           padding: const EdgeInsets.only(top: 20),
-          //           child: Text(
-          //             'Detected emotion: ${_chooseMoodController.predictedEmotion}',
-          //             style: const TextStyle(
-          //               fontSize: 16,
-          //               fontWeight: FontWeight.bold,
-          //               color: AppColor.textTitle,
-          //             ),
-          //           ),
-          //         )
-          //       : const SizedBox.shrink(),
-          // ),
         ],
       ),
     );
@@ -247,6 +256,11 @@ class _ClassifyImagePageState extends State<ClassifyImagePage> {
 
   @override
   Widget build(BuildContext context) {
+    if (user == null) {
+      return const Scaffold(
+        body: Center(child: CircularProgressIndicator()),
+      );
+    }
     return Scaffold(
       backgroundColor: AppColor.secondary,
       body: SafeArea(

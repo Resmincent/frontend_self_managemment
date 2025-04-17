@@ -82,7 +82,7 @@ flutter:
     - assets/images/
     - assets/audios/
     - assets/images/background/
-    - assets/models/emotion_model.tflite
+    - assets/models/model_v2_final.tflite
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

@@ -54,7 +54,7 @@ class _CustomButton extends StatelessWidget {
     required this.titleColor,
   });
 
-  final void Function() onPressed;
+  final void Function()? onPressed;
   final String title;
   final Color color;
   final Color titleColor;
