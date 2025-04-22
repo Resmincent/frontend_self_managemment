@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:self_management/common/app_color.dart';
 import 'package:self_management/core/session.dart';
+import 'package:self_management/data/models/journal_model.dart';
 import 'package:self_management/data/models/solution_model.dart';
 import 'package:self_management/presentation/pages/agendas/add_agenda_page.dart';
 import 'package:self_management/presentation/pages/agendas/all_agenda_page.dart';
@@ -25,6 +26,7 @@ import 'package:self_management/presentation/pages/solutions/update_solution_pag
 
 import 'games/service_locator.dart';
 import 'games/snake/snake_game_page.dart';
+import 'presentation/pages/journals/update_journal_page.dart';
 import 'presentation/pages/pomodoro/pomodoro_timer_page.dart';
 
 void main() async {
@@ -126,6 +128,11 @@ class MyApp extends StatelessWidget {
         DetailJournalPage.routeName: (context) {
           int journalId = ModalRoute.settingsOf(context)?.arguments as int;
           return DetailJournalPage(journalId: journalId);
+        },
+        UpdateJournalPage.routeName: (context) {
+          JournalModel journal =
+              ModalRoute.settingsOf(context)?.arguments as JournalModel;
+          return UpdateJournalPage(journal: journal);
         },
       },
     );

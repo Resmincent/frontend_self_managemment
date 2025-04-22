@@ -1,37 +1,54 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
+import 'package:self_management/common/app_color.dart';
+import 'package:self_management/common/enums.dart';
+import 'package:self_management/core/session.dart';
 import 'package:self_management/data/models/journal_model.dart';
 import 'package:self_management/presentation/controllers/journal/all_journal_controller.dart';
+import 'package:self_management/presentation/controllers/journal/update_journal_controller.dart';
+import 'package:self_management/presentation/widgets/custom_input.dart';
 
-import '../../../common/app_color.dart';
 import '../../../common/constans.dart';
-import '../../../common/enums.dart';
 import '../../../common/info.dart';
-import '../../../core/session.dart';
-import '../../controllers/journal/add_journal_controller.dart';
 import '../../widgets/custom_button.dart';
-import '../../widgets/custom_input.dart';
 
-class AddJournalPage extends StatefulWidget {
-  const AddJournalPage({super.key});
+class UpdateJournalPage extends StatefulWidget {
+  const UpdateJournalPage({super.key, required this.journal});
 
-  static const routeName = "/add-journal";
+  final JournalModel journal;
+
+  static const routeName = "/update-journal";
 
   @override
-  State<AddJournalPage> createState() => _AddJournalPageState();
+  State<UpdateJournalPage> createState() => _UpdateJournalPageState();
 }
 
-class _AddJournalPageState extends State<AddJournalPage> {
-  final addJournalController = Get.put(AddJournalController());
+class _UpdateJournalPageState extends State<UpdateJournalPage> {
   final allJournalController = Get.put(AllJournalController());
+  final updateJournalController = Get.put(UpdateJournalController());
 
   final titleController = TextEditingController();
   final descController = TextEditingController();
   final categoryController =
       TextEditingController(text: Constans.typeJournal.first);
 
-  Future<void> addJournal() async {
+  @override
+  void initState() {
+    titleController.text = widget.journal.title;
+    descController.text = widget.journal.content;
+    categoryController.text = widget.journal.category;
+
+    super.initState();
+  }
+
+  @override
+  dispose() {
+    UpdateJournalController.delete();
+    super.dispose();
+  }
+
+  Future<void> updateJournal() async {
     final title = titleController.text;
     final category = categoryController.text;
     final content = descController.text;
@@ -53,16 +70,15 @@ class _AddJournalPageState extends State<AddJournalPage> {
     int userId = (await Session.getUser())!.id;
 
     final journal = JournalModel(
-      id: 0,
+      id: userId,
       userId: userId,
-      title: title,
       category: category,
+      title: title,
       content: content,
-      createdAt: DateTime.now(),
+      createdAt: widget.journal.createdAt,
     );
 
-    final state = await addJournalController.executeRequest(journal);
-
+    final state = await updateJournalController.executeRequest(journal);
     if (state.statusRequest == StatusRequest.failed) {
       Info.failed(state.message);
       return;
@@ -76,12 +92,6 @@ class _AddJournalPageState extends State<AddJournalPage> {
         Navigator.pop(context);
       });
     }
-  }
-
-  @override
-  void dispose() {
-    AddJournalController.delete();
-    super.dispose();
   }
 
   Widget _buildHeader() {
@@ -225,7 +235,7 @@ class _AddJournalPageState extends State<AddJournalPage> {
 
   Widget _buildAddButton() {
     return Obx(() {
-      final state = addJournalController.state;
+      final state = updateJournalController.state;
       final statusRequest = state.statusRequest;
 
       if (statusRequest == StatusRequest.loading) {
@@ -234,8 +244,8 @@ class _AddJournalPageState extends State<AddJournalPage> {
         );
       }
       return ButtonPrimary(
-        onPressed: addJournal,
-        title: 'Add now',
+        onPressed: updateJournal,
+        title: 'Update Changes',
       );
     });
   }
