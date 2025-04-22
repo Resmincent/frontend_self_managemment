@@ -19,13 +19,14 @@ class EmotionClassifier {
   Interpreter? _interpreter;
 
   static const List<String> emotionLabels = [
-    'angry', // 0
-    'disgusted', // 1
-    'fearful', // 2
-    'happy', // 3
-    'neutral', // 4
-    'sad', // 5
-    'surprised' // 6
+    '', // 0 - dummy entry
+    'angry', // 1
+    'disgusted', // 2
+    'fearful', // 3
+    'happy', // 4
+    'neutral', // 5
+    'sad', // 6
+    'surprised' // 7
   ];
 
   Future<void> loadModel() async {
@@ -57,13 +58,14 @@ class EmotionClassifier {
 
     final predictions = output[0];
     final maxValue = predictions.reduce((a, b) => a > b ? a : b);
-    final index = predictions.indexOf(maxValue);
+    final rawIndex = predictions.indexOf(maxValue);
+    final index = rawIndex + 1; // geser agar mulai dari 1
     final label = emotionLabels[index];
 
     debugPrint("=== Emotion Probabilities ===");
-    for (int i = 0; i < emotionLabels.length; i++) {
+    for (int i = 0; i < predictions.length; i++) {
       debugPrint(
-          "${emotionLabels[i]}: ${(predictions[i] * 100).toStringAsFixed(2)}%");
+          "${emotionLabels[i + 1]}: ${(predictions[i] * 100).toStringAsFixed(2)}%");
     }
 
     return EmotionResult(
