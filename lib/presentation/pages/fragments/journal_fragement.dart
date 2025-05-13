@@ -289,18 +289,20 @@ class _JournalFragementState extends State<JournalFragement> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20),
-      child: Column(
-        children: [
-          const Gap(55),
-          _buildHeaderJournal(),
-          const Gap(30),
-          _buildButtonSearch(),
-          const Gap(16),
-          _buildList(),
-          const Gap(140)
-        ],
+    return Material(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 20),
+        child: Column(
+          children: [
+            const Gap(55),
+            _buildHeaderJournal(),
+            const Gap(30),
+            _buildButtonSearch(),
+            const Gap(16),
+            _buildList(),
+            const Gap(140)
+          ],
+        ),
       ),
     );
   }

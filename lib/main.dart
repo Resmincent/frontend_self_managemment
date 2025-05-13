@@ -17,6 +17,7 @@ import 'package:self_management/presentation/pages/expenses/detail_expense_page.
 import 'package:self_management/games/flappy_dash/flappy_dash_page.dart';
 import 'package:self_management/presentation/pages/login_page.dart';
 import 'package:self_management/presentation/pages/profile_page.dart';
+import 'package:self_management/presentation/pages/recomedation_page.dart';
 import 'package:self_management/presentation/pages/register_page.dart';
 import 'package:self_management/presentation/pages/journals/add_journal_page.dart';
 import 'package:self_management/presentation/pages/journals/detail_journal_page.dart';
@@ -26,6 +27,7 @@ import 'package:self_management/presentation/pages/solutions/update_solution_pag
 
 import 'games/service_locator.dart';
 import 'games/snake/snake_game_page.dart';
+import 'presentation/pages/fragments/solution_fragment.dart';
 import 'presentation/pages/journals/update_journal_page.dart';
 import 'presentation/pages/pomodoro/pomodoro_timer_page.dart';
 
@@ -105,6 +107,7 @@ class MyApp extends StatelessWidget {
               ModalRoute.settingsOf(context)?.arguments as SolutionModel;
           return UpdateSolutionPage(solution: solution);
         },
+        SolutionFragment.routeName: (context) => const SolutionFragment(),
 
         //Choose mood
         ChooseMoodPage.routeName: (context) => const ChooseMoodPage(),
@@ -134,6 +137,11 @@ class MyApp extends StatelessWidget {
               ModalRoute.settingsOf(context)?.arguments as JournalModel;
           return UpdateJournalPage(journal: journal);
         },
+
+        RecomedationPage.routeName: (context) {
+          final emotion = ModalRoute.of(context)?.settings.arguments as String;
+          return RecomedationPage(emotion: emotion);
+        }
       },
     );
   }

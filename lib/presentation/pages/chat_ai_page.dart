@@ -214,8 +214,8 @@ class _ChatAiPageState extends State<ChatAiPage> {
                   child: CustomInput(
                     controller: promptChatController,
                     hintText: 'Input prompt..',
-                    suffixIcon: 'assets/images/image.png',
-                    suffixOnTap: () => chatAIController.pickImage(),
+                    // suffixIcon: 'assets/images/image.png',
+                    // suffixOnTap: () => chatAIController.pickImage(),
                   ),
                 ),
                 const Gap(16),

@@ -11,6 +11,7 @@ import 'package:self_management/core/session.dart';
 import 'package:self_management/data/models/user_model.dart';
 import 'package:self_management/presentation/controllers/classify_mood_controller.dart';
 import 'package:self_management/presentation/controllers/home/mood_today_controller.dart';
+import 'package:self_management/presentation/pages/recomedation_page.dart';
 import '../widgets/custom_button.dart';
 
 class ClassifyImagePage extends StatefulWidget {
@@ -47,10 +48,6 @@ class _ClassifyImagePageState extends State<ClassifyImagePage> {
     super.dispose();
   }
 
-  Future<void> _goToDashboard() async {
-    await Navigator.pushNamed(context, '/dashboard');
-  }
-
   Future<void> _pickImage(ImageSource source) async {
     final picker = ImagePicker();
     final pickedFile = await picker.pickImage(source: source);
@@ -74,8 +71,14 @@ class _ClassifyImagePageState extends State<ClassifyImagePage> {
       if (result.$1) {
         Info.success(result.$2);
         _moodTodayController.fetch(user!.id);
-        await _goToDashboard();
-        Get.back();
+
+        if (mounted) {
+          await Navigator.pushNamed(
+            context,
+            RecomedationPage.routeName,
+            arguments: _classifyMoodController.predictedEmotion.value,
+          );
+        }
       } else {
         Info.failed(result.$2);
       }
@@ -104,7 +107,7 @@ class _ClassifyImagePageState extends State<ClassifyImagePage> {
           ),
           const Gap(16),
           const Text(
-            'Classify Image',
+            'Detection Image',
             style: TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.bold,
