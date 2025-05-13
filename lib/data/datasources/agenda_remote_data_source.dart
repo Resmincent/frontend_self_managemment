@@ -32,6 +32,29 @@ class AgendaRemoteDataSource {
     }
   }
 
+  static Future<(bool, String)> update(AgendaModel agenda) async {
+    Uri url = Uri.parse('${API.baseUrl}/api/agendas/update.php');
+
+    try {
+      final response = await http.post(
+        url,
+        body: agenda.toJsonRequest(),
+      );
+
+      fdLog.response(response);
+      final resBody = jsonDecode(response.body);
+      String message = resBody['message'];
+      bool success = response.statusCode == 200;
+      return (success, message);
+    } catch (e) {
+      fdLog.title(
+        "AgendaRemoteDataSource - update",
+        e.toString(),
+      );
+      return (false, 'Something went wrong');
+    }
+  }
+
   static Future<(bool, String, List<AgendaModel>?)> all(int userId) async {
     Uri url = Uri.parse('${API.baseUrl}/api/agendas/all.php');
     try {

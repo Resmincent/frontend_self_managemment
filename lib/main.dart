@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:self_management/common/app_color.dart';
 import 'package:self_management/core/session.dart';
+import 'package:self_management/data/models/agenda_model.dart';
 import 'package:self_management/data/models/journal_model.dart';
 import 'package:self_management/data/models/solution_model.dart';
 import 'package:self_management/presentation/pages/agendas/add_agenda_page.dart';
 import 'package:self_management/presentation/pages/agendas/all_agenda_page.dart';
 import 'package:self_management/presentation/pages/agendas/detail_agenda_page.dart';
+import 'package:self_management/presentation/pages/agendas/update_agenda_page.dart';
 import 'package:self_management/presentation/pages/chat_ai_page.dart';
 import 'package:self_management/presentation/pages/choose_mood_page.dart';
 import 'package:self_management/presentation/pages/classify_image_page.dart';
@@ -87,6 +89,11 @@ class MyApp extends StatelessWidget {
         DetailAgendaPage.routeName: (context) {
           int agendaId = ModalRoute.settingsOf(context)?.arguments as int;
           return DetailAgendaPage(agendaId: agendaId);
+        },
+        UpdateAgendaPage.routeName: (context) {
+          AgendaModel agenda =
+              ModalRoute.settingsOf(context)?.arguments as AgendaModel;
+          return UpdateAgendaPage(agenda: agenda);
         },
 
         //Expense

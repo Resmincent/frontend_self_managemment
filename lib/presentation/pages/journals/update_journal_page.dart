@@ -70,7 +70,7 @@ class _UpdateJournalPageState extends State<UpdateJournalPage> {
     int userId = (await Session.getUser())!.id;
 
     final journal = JournalModel(
-      id: userId,
+      id: widget.journal.id,
       userId: userId,
       category: category,
       title: title,

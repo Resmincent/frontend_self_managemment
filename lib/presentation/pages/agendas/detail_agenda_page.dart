@@ -7,6 +7,7 @@ import 'package:self_management/common/app_color.dart';
 import 'package:self_management/common/info.dart';
 import 'package:self_management/data/models/agenda_model.dart';
 import 'package:self_management/presentation/controllers/agenda/delete_agenda_controller.dart';
+import 'package:self_management/presentation/pages/agendas/update_agenda_page.dart';
 import 'package:self_management/presentation/widgets/custom_button.dart';
 import 'package:self_management/presentation/widgets/response_failed.dart';
 
@@ -39,6 +40,11 @@ class _DetailAgendaPageState extends State<DetailAgendaPage> {
     DetailAgendaController.delete();
     DeleteAgendaController.delete();
     super.dispose();
+  }
+
+  Future<void> _goToUpdateAgenda(AgendaModel agenda) async {
+    await Navigator.pushNamed(context, UpdateAgendaPage.routeName,
+        arguments: agenda);
   }
 
   void deleteAgenda() async {
@@ -261,6 +267,16 @@ class _DetailAgendaPageState extends State<DetailAgendaPage> {
     );
   }
 
+  Widget _buildButtonUpdate(AgendaModel agenda) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20),
+      child: ButtonDelete(
+        onPressed: () => _goToUpdateAgenda(agenda),
+        title: 'Update Agenda',
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -319,6 +335,8 @@ class _DetailAgendaPageState extends State<DetailAgendaPage> {
                   _buildCardDescription(agenda.description ?? '-'),
                   const Gap(30),
                   _buildButtonDelete(agenda.id),
+                  const Gap(40),
+                  _buildButtonUpdate(agenda),
                 ],
               );
             },
