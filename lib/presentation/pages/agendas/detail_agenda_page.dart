@@ -270,7 +270,7 @@ class _DetailAgendaPageState extends State<DetailAgendaPage> {
   Widget _buildButtonUpdate(AgendaModel agenda) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20),
-      child: ButtonDelete(
+      child: ButtonPrimary(
         onPressed: () => _goToUpdateAgenda(agenda),
         title: 'Update Agenda',
       ),
@@ -335,7 +335,7 @@ class _DetailAgendaPageState extends State<DetailAgendaPage> {
                   _buildCardDescription(agenda.description ?? '-'),
                   const Gap(30),
                   _buildButtonDelete(agenda.id),
-                  const Gap(40),
+                  const Gap(20),
                   _buildButtonUpdate(agenda),
                 ],
               );

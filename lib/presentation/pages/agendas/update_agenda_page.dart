@@ -102,30 +102,37 @@ class _UpdateAgendaPageState extends State<UpdateAgendaPage> {
 
     if (title.isEmpty) {
       Info.failed('Title must be filled');
+      return;
     }
 
     if (category.isEmpty) {
       Info.failed('Category must be filled');
+      return;
     }
 
     if (startEvent.isEmpty) {
       Info.failed('Start Event must be filled');
+      return;
     }
 
     if (DateTime.tryParse(startEvent) == null) {
       Info.failed('Start Event not valid');
+      return;
     }
 
     if (endEvent.isEmpty) {
       Info.failed('End Event must be filled');
+      return;
     }
 
     if (DateTime.tryParse(endEvent) == null) {
       Info.failed('Start Event not valid');
+      return;
     }
 
     if (description.isEmpty) {
       Info.failed('Description must be filled');
+      return;
     }
 
     final startEventDate = DateTime.parse(startEvent);
@@ -161,8 +168,10 @@ class _UpdateAgendaPageState extends State<UpdateAgendaPage> {
     if (state.statusRequest == StatusRequest.success) {
       allAgendaController.fetch(userId);
       Info.success(state.message);
-      if (!mounted) return;
-      Navigator.pop(context);
+      Future.delayed(const Duration(milliseconds: 500), () {
+        if (!mounted) return;
+        Navigator.pop(context);
+      });
     }
   }
 
