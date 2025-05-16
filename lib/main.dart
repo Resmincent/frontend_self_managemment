@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:self_management/common/app_color.dart';
-import 'package:self_management/core/session.dart';
 import 'package:self_management/data/models/agenda_model.dart';
 import 'package:self_management/data/models/journal_model.dart';
 import 'package:self_management/data/models/solution_model.dart';
@@ -26,6 +26,7 @@ import 'package:self_management/presentation/pages/journals/detail_journal_page.
 import 'package:self_management/presentation/pages/solutions/add_solution_page.dart';
 import 'package:self_management/presentation/pages/solutions/detail_solution_page.dart';
 import 'package:self_management/presentation/pages/solutions/update_solution_page.dart';
+import 'package:self_management/presentation/pages/splash_screen_page.dart';
 
 import 'games/service_locator.dart';
 import 'games/snake/snake_game_page.dart';
@@ -43,7 +44,7 @@ class MyApp extends StatelessWidget {
   const MyApp({super.key});
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return GetMaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         brightness: Brightness.light,
@@ -59,22 +60,7 @@ class MyApp extends StatelessWidget {
         textTheme: GoogleFonts.interTextTheme(),
         shadowColor: AppColor.primary.withOpacity(0.3),
       ),
-      home: FutureBuilder(
-        future: Session.getUser(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Scaffold(
-              body: Center(
-                child: CircularProgressIndicator(),
-              ),
-            );
-          }
-          if (snapshot.data == null) {
-            return const LoginPage();
-          }
-          return const DashboardPage();
-        },
-      ),
+      home: const SplashScreen(),
       routes: {
         //Dashboard
         DashboardPage.routeName: (context) => const DashboardPage(),

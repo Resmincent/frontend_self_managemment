@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:self_management/common/app_color.dart';
 import 'package:self_management/presentation/pages/fragments/analytic_fragment.dart';
-// import 'package:self_management/presentation/pages/fragments/games_fragment.dart';
 import 'package:self_management/presentation/pages/fragments/home_fragment.dart';
 import 'package:self_management/presentation/pages/fragments/solution_fragment.dart';
 
