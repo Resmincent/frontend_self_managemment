@@ -93,19 +93,19 @@ class _JournalFragementState extends State<JournalFragement> {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            IconButton.filled(
-              constraints: BoxConstraints.tight(const Size(48, 48)),
-              color: AppColor.colorWhite,
-              style: const ButtonStyle(
-                overlayColor: WidgetStatePropertyAll(AppColor.secondary),
-              ),
-              onPressed: () {},
-              icon: const Icon(
-                Icons.task_alt_outlined,
-                size: 24,
-              ),
-            ),
-            const Gap(12),
+            // IconButton.filled(
+            //   constraints: BoxConstraints.tight(const Size(48, 48)),
+            //   color: AppColor.colorWhite,
+            //   style: const ButtonStyle(
+            //     overlayColor: WidgetStatePropertyAll(AppColor.secondary),
+            //   ),
+            //   onPressed: () {},
+            //   icon: const Icon(
+            //     Icons.task_alt_outlined,
+            //     size: 24,
+            //   ),
+            // ),
+            // const Gap(12),
             IconButton.filled(
               constraints: BoxConstraints.tight(const Size(48, 48)),
               color: AppColor.colorWhite,
@@ -201,7 +201,7 @@ class _JournalFragementState extends State<JournalFragement> {
         return const SizedBox(
           height: 200,
           child: ResponseFailed(
-            message: 'No Solution Yet',
+            message: 'No Journal Yet',
             margin: EdgeInsets.symmetric(horizontal: 20),
           ),
         );
