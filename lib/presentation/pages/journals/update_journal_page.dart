@@ -60,6 +60,7 @@ class _UpdateJournalPageState extends State<UpdateJournalPage> {
 
     if (category.isEmpty) {
       Info.failed('Category must be filled');
+      return;
     }
 
     if (content.isEmpty) {

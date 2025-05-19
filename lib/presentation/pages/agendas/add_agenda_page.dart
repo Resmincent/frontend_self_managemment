@@ -82,30 +82,37 @@ class _AddAgendaPageState extends State<AddAgendaPage> {
 
     if (title.isEmpty) {
       Info.failed('Title must be filled');
+      return;
     }
 
     if (category.isEmpty) {
       Info.failed('Category must be filled');
+      return;
     }
 
     if (startEvent.isEmpty) {
       Info.failed('Start Event must be filled');
+      return;
     }
 
     if (DateTime.tryParse(startEvent) == null) {
       Info.failed('Start Event not valid');
+      return;
     }
 
     if (endEvent.isEmpty) {
       Info.failed('End Event must be filled');
+      return;
     }
 
     if (DateTime.tryParse(endEvent) == null) {
       Info.failed('Start Event not valid');
+      return;
     }
 
     if (description.isEmpty) {
       Info.failed('Description must be filled');
+      return;
     }
 
     final startEventDate = DateTime.parse(startEvent);

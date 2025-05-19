@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:self_management/core/session.dart';
-import 'package:self_management/presentation/pages/dashboard_page.dart';
 import 'package:self_management/presentation/pages/login_page.dart';
+
+import 'set_pin_page.dart';
+import 'verify_pin_page.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -24,12 +26,20 @@ class _SplashScreenState extends State<SplashScreen> {
     final user = await Session.getUser();
     final isExpired = await Session.isSessionExpired();
 
-    if (user == null) {
+    if (user == null || isExpired) {
+      // Belum login atau session habis → LoginPage
       Get.offAll(() => const LoginPage());
-    } else if (isExpired) {
-      Get.offAll(() => const LoginPage());
+      return;
+    }
+
+    final storedPin = await Session.getUserPin();
+
+    if (storedPin == null || storedPin.isEmpty) {
+      // Sudah login tapi belum set PIN → SetPinPage
+      Get.offAll(() => const SetPinPage());
     } else {
-      Get.offAll(() => const DashboardPage());
+      // Sudah login dan sudah ada PIN → Verifikasi PIN
+      Get.offAll(() => const VerifyPinPage());
     }
   }
 

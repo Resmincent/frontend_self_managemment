@@ -81,22 +81,27 @@ class _AddExpensePageState extends State<AddExpensePage> {
 
     if (title.isEmpty) {
       Info.failed('Title must be filled');
+      return;
     }
 
     if (expenseValue.isEmpty) {
       Info.failed('Expense must be filled');
+      return;
     }
 
     if (category.isEmpty) {
       Info.failed('Category must be filled');
+      return;
     }
 
     if (dateExpense.isEmpty) {
       Info.failed('Date must be filled');
+      return;
     }
 
     if (DateTime.tryParse(dateExpense) == null) {
       Info.failed('Date not valid');
+      return;
     }
 
     final startDate = DateTime.parse(dateExpense);
