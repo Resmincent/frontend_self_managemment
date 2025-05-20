@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/date_symbol_data_local.dart';
 import 'package:self_management/common/app_color.dart';
 import 'package:self_management/data/models/agenda_model.dart';
 import 'package:self_management/data/models/journal_model.dart';
@@ -17,6 +18,7 @@ import 'package:self_management/presentation/pages/expenses/add_expense_page.dar
 import 'package:self_management/presentation/pages/expenses/all_expense_page.dart';
 import 'package:self_management/presentation/pages/expenses/detail_expense_page.dart';
 import 'package:self_management/games/flappy_dash/flappy_dash_page.dart';
+import 'package:self_management/presentation/pages/incomes/add_income_page.dart';
 import 'package:self_management/presentation/pages/login_page.dart';
 import 'package:self_management/presentation/pages/profile_page.dart';
 import 'package:self_management/presentation/pages/recomedation_page.dart';
@@ -31,12 +33,16 @@ import 'package:self_management/presentation/pages/splash_screen_page.dart';
 import 'games/service_locator.dart';
 import 'games/snake/snake_game_page.dart';
 import 'presentation/pages/fragments/solution_fragment.dart';
+import 'presentation/pages/incomes/all_income_page.dart';
+import 'presentation/pages/incomes/detail_income_page.dart';
 import 'presentation/pages/journals/update_journal_page.dart';
 import 'presentation/pages/pomodoro/pomodoro_timer_page.dart';
 
 void main() async {
   await setupServiceLocator();
   WidgetsFlutterBinding.ensureInitialized();
+  await initializeDateFormatting('id_ID', null);
+
   runApp(const MyApp());
 }
 
@@ -134,7 +140,15 @@ class MyApp extends StatelessWidget {
         RecomedationPage.routeName: (context) {
           final emotion = ModalRoute.of(context)?.settings.arguments as String;
           return RecomedationPage(emotion: emotion);
-        }
+        },
+
+        //Income
+        AllIncomePage.routeName: (context) => const AllIncomePage(),
+        AddIncomePage.routeName: (context) => const AddIncomePage(),
+        DetailIncomePage.routeName: (context) {
+          int incomeId = ModalRoute.settingsOf(context)?.arguments as int;
+          return DetailIncomePage(incomeId: incomeId);
+        },
       },
     );
   }

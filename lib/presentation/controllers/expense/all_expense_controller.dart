@@ -15,6 +15,26 @@ class AllExpenseController extends GetxController {
 
   set state(AllExpenseState value) => _state.value = value;
 
+  final selectedMonth = DateTime.now().month.obs;
+  final selectedYear = DateTime.now().year.obs;
+
+  List<ExpenseModal> get filteredExpenses {
+    return state.expenses
+        .where((e) =>
+            e.dateExpense.month == selectedMonth.value &&
+            e.dateExpense.year == selectedYear.value)
+        .toList();
+  }
+
+  double get totalThisMonthExpense {
+    final list = filteredExpenses;
+    double total = 0;
+    for (var expense in list) {
+      total += expense.expense;
+    }
+    return total;
+  }
+
   Future fetch(int userId) async {
     state = state.copyWith(statusRequest: StatusRequest.loading);
 

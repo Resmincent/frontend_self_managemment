@@ -7,6 +7,7 @@ import 'package:self_management/common/enums.dart';
 import 'package:self_management/core/session.dart';
 import 'package:self_management/data/models/agenda_model.dart';
 import 'package:self_management/data/models/expense_modal.dart';
+import 'package:self_management/data/models/income_model.dart';
 import 'package:self_management/data/models/mood_model.dart';
 import 'package:self_management/data/models/user_model.dart';
 import 'package:self_management/presentation/controllers/home/agenda_today_controller.dart';
@@ -16,12 +17,15 @@ import 'package:self_management/presentation/pages/agendas/all_agenda_page.dart'
 import 'package:self_management/presentation/pages/agendas/detail_agenda_page.dart';
 import 'package:self_management/presentation/pages/chat_ai_page.dart';
 import 'package:self_management/presentation/pages/choose_mood_page.dart';
+import 'package:self_management/presentation/pages/incomes/all_income_page.dart';
 import 'package:self_management/presentation/pages/pomodoro/pomodoro_timer_page.dart';
 import 'package:self_management/presentation/pages/profile_page.dart';
 import 'package:self_management/presentation/widgets/response_failed.dart';
 
+import '../../controllers/home/income_today_controller.dart';
 import '../expenses/all_expense_page.dart';
 import '../expenses/detail_expense_page.dart';
+import '../incomes/detail_income_page.dart';
 
 class HomeFragment extends StatefulWidget {
   const HomeFragment({super.key});
@@ -34,6 +38,7 @@ class _HomeFragmentState extends State<HomeFragment> {
   final moodTodayController = Get.put(MoodTodayController());
   final agendaTodayController = Get.put(AgendaTodayController());
   final expenseTodayController = Get.put(ExpenseTodayController());
+  final incomeTodayController = Get.put(IncomeTodayController());
 
   String formatRupiah(double amount) {
     final formatCurrency = NumberFormat.currency(
@@ -50,6 +55,7 @@ class _HomeFragmentState extends State<HomeFragment> {
     moodTodayController.fetch(userId);
     agendaTodayController.fetch(userId);
     expenseTodayController.fetch(userId);
+    incomeTodayController.fetch(userId);
   }
 
   refreshAgenda() {
@@ -63,6 +69,13 @@ class _HomeFragmentState extends State<HomeFragment> {
     Session.getUser().then((user) {
       int userId = user!.id;
       expenseTodayController.fetch(userId);
+    });
+  }
+
+  refreshIncome() {
+    Session.getUser().then((user) {
+      int userId = user!.id;
+      incomeTodayController.fetch(userId);
     });
   }
 
@@ -104,6 +117,10 @@ class _HomeFragmentState extends State<HomeFragment> {
     await Navigator.pushNamed(context, AllExpensePage.routeName);
   }
 
+  Future<void> _goToIncomeAll() async {
+    await Navigator.pushNamed(context, AllIncomePage.routeName);
+  }
+
   Future<void> _goToDetailAgenda(int id) async {
     await Navigator.popAndPushNamed(
       context,
@@ -126,6 +143,19 @@ class _HomeFragmentState extends State<HomeFragment> {
       if (value == null) return;
       if (value == 'refresh_expense') {
         refreshExpense();
+      }
+    });
+  }
+
+  Future<void> _goToDetailIncome(int id) async {
+    await Navigator.popAndPushNamed(
+      context,
+      DetailIncomePage.routeName,
+      arguments: id,
+    ).then((value) {
+      if (value == null) return;
+      if (value == 'refresh_income') {
+        refreshIncome();
       }
     });
   }
@@ -358,6 +388,108 @@ class _HomeFragmentState extends State<HomeFragment> {
     );
   }
 
+  Widget _cardIncomeToday(IncomeModel income) {
+    return GestureDetector(
+      onTap: () => _goToDetailIncome(income.id),
+      child: Container(
+        margin: const EdgeInsets.only(bottom: 20),
+        padding: const EdgeInsets.all(20),
+        decoration: BoxDecoration(
+          color: AppColor.colorWhite,
+          borderRadius: BorderRadius.circular(20),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    income.title,
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      color: AppColor.textTitle,
+                    ),
+                  ),
+                ),
+                const Gap(10),
+                Chip(
+                  label: Text(formatRupiah(income.amount)),
+                  labelStyle: const TextStyle(
+                    fontWeight: FontWeight.normal,
+                    fontSize: 14,
+                    color: AppColor.colorWhite,
+                  ),
+                  visualDensity: const VisualDensity(vertical: -4),
+                  backgroundColor: Colors.blue,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(30),
+                    side: const BorderSide(
+                      color: Colors.blue,
+                      width: 1,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            const Gap(16),
+            Row(
+              children: [
+                Chip(
+                  label: Text(
+                    DateFormat('MM/d/y').format(income.dateIncome),
+                  ),
+                  labelStyle: const TextStyle(
+                    fontWeight: FontWeight.normal,
+                    fontSize: 14,
+                    color: AppColor.textTitle,
+                  ),
+                  visualDensity: const VisualDensity(vertical: -4),
+                  backgroundColor: AppColor.primary,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(30),
+                    side: const BorderSide(
+                      color: AppColor.primary,
+                      width: 1,
+                    ),
+                  ),
+                ),
+                const Gap(10),
+                Chip(
+                  label: Text(
+                    income.category,
+                  ),
+                  labelStyle: const TextStyle(
+                    fontWeight: FontWeight.normal,
+                    fontSize: 14,
+                    color: AppColor.textTitle,
+                  ),
+                  visualDensity: const VisualDensity(vertical: -4),
+                  backgroundColor: AppColor.colorWhite,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(30),
+                    side: const BorderSide(
+                      color: AppColor.primary,
+                      width: 1,
+                    ),
+                  ),
+                ),
+                const Spacer(),
+                const ImageIcon(
+                  AssetImage('assets/images/arrow_right.png'),
+                  color: AppColor.primary,
+                  size: 20,
+                ),
+              ],
+            )
+          ],
+        ),
+      ),
+    );
+  }
+
   Widget _cardAgendaToday(AgendaModel agenda) {
     return GestureDetector(
       onTap: () => _goToDetailAgenda(agenda.id),
@@ -479,7 +611,7 @@ class _HomeFragmentState extends State<HomeFragment> {
               ),
             ],
           ),
-          const Gap(26),
+          const Gap(16),
           _buildTitleMood(),
         ],
       ),
@@ -689,6 +821,76 @@ class _HomeFragmentState extends State<HomeFragment> {
     );
   }
 
+  Widget _buildIncomeToday() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Text(
+                'Your Income Today',
+                style: TextStyle(
+                  color: AppColor.textTitle,
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              TextButton(
+                onPressed: _goToIncomeAll,
+                child: const Text(
+                  'All Income',
+                  style: TextStyle(
+                    color: AppColor.primary,
+                    fontSize: 14,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              )
+            ],
+          ),
+          const Gap(24),
+          Obx(() {
+            final state = incomeTodayController.state;
+            final statusRequest = state.statusRequest;
+
+            if (statusRequest == StatusRequest.init) {
+              return const SizedBox();
+            }
+
+            if (statusRequest == StatusRequest.loading) {
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            }
+
+            if (statusRequest == StatusRequest.failed) {
+              return ResponseFailed(
+                message: state.message,
+                margin: const EdgeInsets.symmetric(horizontal: 20),
+              );
+            }
+
+            final list = state.incomes;
+
+            if (list.isEmpty) {
+              return const ResponseFailed(
+                message: 'No Income Yet',
+                margin: EdgeInsets.symmetric(horizontal: 20),
+              );
+            }
+
+            return Column(
+              children: list.map((income) => _cardIncomeToday(income)).toList(),
+            );
+          })
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return RefreshIndicator.adaptive(
@@ -702,12 +904,14 @@ class _HomeFragmentState extends State<HomeFragment> {
           child: Column(
             children: [
               _buildHeaderHome(),
-              const Gap(36),
+              const Gap(16),
               _buildMoodToday(),
-              const Gap(36),
+              const Gap(16),
               _buildAgendaToday(),
-              const Gap(36),
+              const Gap(16),
               _buildExpenseToday(),
+              const Gap(16),
+              _buildIncomeToday(),
               const Gap(140),
             ],
           ),

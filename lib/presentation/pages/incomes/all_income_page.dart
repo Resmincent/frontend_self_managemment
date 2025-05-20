@@ -2,25 +2,27 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import 'package:self_management/data/models/expense_modal.dart';
-import 'package:self_management/presentation/controllers/expense/all_expense_controller.dart';
-import 'package:self_management/presentation/pages/expenses/add_expense_page.dart';
-import 'package:self_management/presentation/pages/expenses/detail_expense_page.dart';
+import 'package:self_management/data/models/income_model.dart';
+import 'package:self_management/presentation/controllers/income/all_income_controller.dart';
+import 'package:self_management/presentation/pages/incomes/add_income_page.dart';
+import 'package:self_management/presentation/pages/incomes/detail_income_page.dart';
 
 import '../../../common/app_color.dart';
 import '../../../common/enums.dart';
 import '../../../core/session.dart';
+import '../../controllers/expense/all_expense_controller.dart';
 import '../../widgets/response_failed.dart';
 
-class AllExpensePage extends StatefulWidget {
-  const AllExpensePage({super.key});
+class AllIncomePage extends StatefulWidget {
+  const AllIncomePage({super.key});
 
-  static const routeName = "/all-expense";
+  static const String routeName = 'all-income';
   @override
-  State<AllExpensePage> createState() => _AllExpensePageState();
+  State<AllIncomePage> createState() => _AllIncomePageState();
 }
 
-class _AllExpensePageState extends State<AllExpensePage> {
+class _AllIncomePageState extends State<AllIncomePage> {
+  final allIncomeController = Get.put(AllIncomeController());
   final allExpenseController = Get.put(AllExpenseController());
 
   String formatRupiah(double amount) {
@@ -35,21 +37,9 @@ class _AllExpensePageState extends State<AllExpensePage> {
   refresh() {
     Session.getUser().then((user) {
       int userId = user!.id;
+      allIncomeController.fetch(userId);
       allExpenseController.fetch(userId);
     });
-  }
-
-  Future<void> _goToAddExpense() async {
-    await Navigator.pushNamed(context, AddExpensePage.routeName);
-    refresh();
-  }
-
-  Future<void> _goToDetailExpense(int id) async {
-    await Navigator.popAndPushNamed(
-      context,
-      DetailExpensePage.routeName,
-      arguments: id,
-    );
   }
 
   @override
@@ -60,11 +50,25 @@ class _AllExpensePageState extends State<AllExpensePage> {
 
   @override
   void dispose() {
+    AllIncomeController.delete();
     AllExpenseController.delete();
     super.dispose();
   }
 
-  Widget _buildHeaderExpenses() {
+  Future<void> _goToAddIncome() async {
+    await Navigator.pushNamed(context, AddIncomePage.routeName);
+    refresh();
+  }
+
+  Future<void> _goToDetailIncome(int id) async {
+    await Navigator.popAndPushNamed(
+      context,
+      DetailIncomePage.routeName,
+      arguments: id,
+    );
+  }
+
+  Widget _buildHeaderIncomes() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -79,7 +83,7 @@ class _AllExpensePageState extends State<AllExpensePage> {
           ),
         ),
         const Text(
-          'All Expense',
+          'All Incomes',
           style: TextStyle(
             fontSize: 16,
             fontWeight: FontWeight.bold,
@@ -87,7 +91,7 @@ class _AllExpensePageState extends State<AllExpensePage> {
           ),
         ),
         IconButton(
-          onPressed: _goToAddExpense,
+          onPressed: _goToAddIncome,
           icon: const ImageIcon(
             AssetImage('assets/images/add_agenda.png'),
             size: 24,
@@ -98,165 +102,76 @@ class _AllExpensePageState extends State<AllExpensePage> {
     );
   }
 
-  Widget _buildList() {
+  Widget _buildFilterMonthYear() {
     return Obx(() {
-      final state = allExpenseController.state;
-      final statusRequest = state.statusRequest;
-
-      if (statusRequest == StatusRequest.init) {
-        return const SizedBox();
-      }
-
-      if (statusRequest == StatusRequest.loading) {
-        return const SizedBox(
-          height: 200,
-          child: Center(
-            child: CircularProgressIndicator(),
+      return Row(
+        children: [
+          // Dropdown Bulan
+          Expanded(
+            child: DropdownButton<int>(
+              isExpanded: true,
+              value: allIncomeController.selectedMonth.value,
+              items: List.generate(12, (i) {
+                final month = i + 1;
+                final monthName =
+                    DateFormat.MMMM('id_ID').format(DateTime(0, month));
+                return DropdownMenuItem(
+                  value: month,
+                  child: Text(
+                    monthName,
+                    style: const TextStyle(
+                      color: AppColor.primary,
+                    ),
+                  ),
+                );
+              }),
+              onChanged: (val) {
+                if (val != null) {
+                  allIncomeController.selectedMonth.value = val;
+                }
+              },
+            ),
           ),
-        );
-      }
-
-      if (statusRequest == StatusRequest.failed) {
-        return SizedBox(
-          height: 200,
-          child: ResponseFailed(
-            message: state.message,
-            margin: const EdgeInsets.symmetric(horizontal: 20),
+          const Gap(16),
+          // Dropdown Tahun
+          Expanded(
+            child: DropdownButton<int>(
+              isExpanded: true,
+              value: allIncomeController.selectedYear.value,
+              items: List.generate(5, (i) {
+                final year = DateTime.now().year - i;
+                return DropdownMenuItem(
+                  value: year,
+                  child: Text(
+                    '$year',
+                    style: const TextStyle(
+                      color: AppColor.primary,
+                    ),
+                  ),
+                );
+              }),
+              onChanged: (val) {
+                if (val != null) {
+                  allIncomeController.selectedYear.value = val;
+                }
+              },
+            ),
           ),
-        );
-      }
-
-      final list = allExpenseController.filteredExpenses;
-
-      if (list.isEmpty) {
-        return const SizedBox(
-          height: 200,
-          child: ResponseFailed(
-            message: 'No Expenses Yet',
-            margin: EdgeInsets.symmetric(horizontal: 20),
-          ),
-        );
-      }
-
-      return Flexible(
-        child: ListView.builder(
-          itemCount: list.length,
-          padding: const EdgeInsets.only(top: 16, bottom: 24),
-          itemBuilder: (context, index) {
-            ExpenseModal expense = list[index];
-            return _cardExpenseToday(expense);
-          },
-        ),
+        ],
       );
     });
   }
 
-  Widget _cardExpenseToday(ExpenseModal expense) {
-    return GestureDetector(
-      onTap: () => _goToDetailExpense(expense.id),
-      child: Container(
-        margin: const EdgeInsets.only(bottom: 20),
-        padding: const EdgeInsets.all(20),
-        decoration: BoxDecoration(
-          color: AppColor.colorWhite,
-          borderRadius: BorderRadius.circular(20),
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                Expanded(
-                  child: Text(
-                    expense.title,
-                    overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                      color: AppColor.textTitle,
-                    ),
-                  ),
-                ),
-                const Gap(20),
-                Chip(
-                  label: Text(formatRupiah(expense.expense)),
-                  labelStyle: const TextStyle(
-                    fontWeight: FontWeight.normal,
-                    fontSize: 14,
-                    color: AppColor.colorWhite,
-                  ),
-                  visualDensity: const VisualDensity(vertical: -4),
-                  backgroundColor: Colors.blue,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30),
-                    side: const BorderSide(
-                      color: Colors.blue,
-                      width: 1,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            const Gap(16),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Chip(
-                  label: Text(
-                    expense.category,
-                  ),
-                  labelStyle: const TextStyle(
-                    fontWeight: FontWeight.normal,
-                    fontSize: 14,
-                    color: AppColor.textTitle,
-                  ),
-                  visualDensity: const VisualDensity(vertical: -4),
-                  backgroundColor: AppColor.colorWhite,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30),
-                    side: const BorderSide(
-                      color: AppColor.primary,
-                      width: 1,
-                    ),
-                  ),
-                ),
-                Chip(
-                  label: Text(
-                    DateFormat('MM/dd/yy').format(expense.dateExpense),
-                  ),
-                  labelStyle: const TextStyle(
-                    fontWeight: FontWeight.normal,
-                    fontSize: 14,
-                    color: AppColor.textTitle,
-                  ),
-                  visualDensity: const VisualDensity(vertical: -4),
-                  backgroundColor: AppColor.primary,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30),
-                    side: const BorderSide(
-                      color: AppColor.primary,
-                      width: 1,
-                    ),
-                  ),
-                ),
-              ],
-            )
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildCardExpenseMonth() {
+  Widget _buildCardIncomeMonth() {
     return Obx(() {
-      final selectedMonth = allExpenseController.selectedMonth.value;
-      final selectedYear = allExpenseController.selectedYear.value;
+      final selectedMonth = allIncomeController.selectedMonth.value;
+      final selectedYear = allIncomeController.selectedYear.value;
 
-      final list = allExpenseController.filteredExpenses;
+      final list = allIncomeController.filteredIncomes;
 
-      double totalMonthExpense = 0;
-      for (var expense in list) {
-        totalMonthExpense += expense.expense;
+      double totalMonthIncome = 0;
+      for (var incomes in list) {
+        totalMonthIncome += incomes.amount;
       }
 
       final monthName = DateFormat.MMMM('id_ID')
@@ -283,7 +198,7 @@ class _AllExpensePageState extends State<AllExpensePage> {
                 ),
               ),
               Text(
-                formatRupiah(totalMonthExpense),
+                formatRupiah(totalMonthIncome),
                 style: const TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
@@ -297,112 +212,190 @@ class _AllExpensePageState extends State<AllExpensePage> {
     });
   }
 
-  Widget _buildCardExpenseDay() {
-    final now = DateTime.now();
+  Widget _buildCardBalance() {
+    final totalIncome = allIncomeController.totalThisMonthIncome;
+    final totalExpense = allExpenseController.totalThisMonthExpense;
 
+    final balance = totalIncome - totalExpense;
+
+    return Container(
+      width: double.infinity,
+      height: 65,
+      decoration: BoxDecoration(
+        color: balance >= 0 ? Colors.green : Colors.red,
+        borderRadius: BorderRadius.circular(20),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 20),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            const Text(
+              'Balance',
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+                color: AppColor.colorWhite,
+              ),
+            ),
+            Text(
+              formatRupiah(balance),
+              style: const TextStyle(
+                  color: Colors.white, fontWeight: FontWeight.bold),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildList() {
     return Obx(() {
-      final state = allExpenseController.state;
-      final list = state.expenses;
+      final state = allIncomeController.state;
+      final statusRequest = state.statusRequest;
 
-      double totalDayExpense = 0;
-      for (var expense in list) {
-        if (expense.dateExpense.day == now.day &&
-            expense.dateExpense.month == now.month &&
-            expense.dateExpense.year == now.year) {
-          totalDayExpense += expense.expense;
-        }
+      if (statusRequest == StatusRequest.init) {
+        return const SizedBox();
       }
 
-      return Container(
-        width: double.infinity,
-        height: 65,
-        decoration: BoxDecoration(
-          border: Border.all(color: AppColor.primary),
-          borderRadius: BorderRadius.circular(20),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              const ImageIcon(
-                AssetImage('assets/images/dollar.png'),
-                size: 44,
-                color: AppColor.primary,
-              ),
-              Text(
-                formatRupiah(totalDayExpense),
-                style: const TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                  color: AppColor.primary,
-                ),
-              ),
-            ],
+      if (statusRequest == StatusRequest.loading) {
+        return const SizedBox(
+          height: 200,
+          child: Center(
+            child: CircularProgressIndicator(),
           ),
+        );
+      }
+
+      if (statusRequest == StatusRequest.failed) {
+        return SizedBox(
+          height: 200,
+          child: ResponseFailed(
+            message: state.message,
+            margin: const EdgeInsets.symmetric(horizontal: 20),
+          ),
+        );
+      }
+
+      final list = allIncomeController.filteredIncomes;
+
+      if (list.isEmpty) {
+        return const SizedBox(
+          height: 200,
+          child: ResponseFailed(
+            message: 'No Incomes Yet',
+            margin: EdgeInsets.symmetric(horizontal: 20),
+          ),
+        );
+      }
+
+      return Flexible(
+        child: ListView.builder(
+          itemCount: list.length,
+          padding: const EdgeInsets.only(top: 16, bottom: 24),
+          itemBuilder: (context, index) {
+            IncomeModel income = list[index];
+            return _cardIncomeToday(income);
+          },
         ),
       );
     });
   }
 
-  Widget _buildFilterMonthYear() {
-    return Obx(() {
-      return Row(
-        children: [
-          // Dropdown Bulan
-          Expanded(
-            child: DropdownButton<int>(
-              isExpanded: true,
-              value: allExpenseController.selectedMonth.value,
-              items: List.generate(12, (i) {
-                final month = i + 1;
-                final monthName =
-                    DateFormat.MMMM('id_ID').format(DateTime(0, month));
-                return DropdownMenuItem(
-                  value: month,
+  Widget _cardIncomeToday(IncomeModel income) {
+    return GestureDetector(
+      onTap: () => _goToDetailIncome(income.id),
+      child: Container(
+        margin: const EdgeInsets.only(bottom: 20),
+        padding: const EdgeInsets.all(20),
+        decoration: BoxDecoration(
+          color: AppColor.colorWhite,
+          borderRadius: BorderRadius.circular(20),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Expanded(
                   child: Text(
-                    monthName,
+                    income.title,
+                    overflow: TextOverflow.ellipsis,
                     style: const TextStyle(
-                      color: AppColor.primary,
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      color: AppColor.textTitle,
                     ),
                   ),
-                );
-              }),
-              onChanged: (val) {
-                if (val != null) {
-                  allExpenseController.selectedMonth.value = val;
-                }
-              },
-            ),
-          ),
-          const Gap(16),
-          // Dropdown Tahun
-          Expanded(
-            child: DropdownButton<int>(
-              isExpanded: true,
-              value: allExpenseController.selectedYear.value,
-              items: List.generate(5, (i) {
-                final year = DateTime.now().year - i;
-                return DropdownMenuItem(
-                  value: year,
-                  child: Text(
-                    '$year',
-                    style: const TextStyle(
-                      color: AppColor.primary,
+                ),
+                const Gap(20),
+                Chip(
+                  label: Text(formatRupiah(income.amount)),
+                  labelStyle: const TextStyle(
+                    fontWeight: FontWeight.normal,
+                    fontSize: 14,
+                    color: AppColor.colorWhite,
+                  ),
+                  visualDensity: const VisualDensity(vertical: -4),
+                  backgroundColor: Colors.blue,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(30),
+                    side: const BorderSide(
+                      color: Colors.blue,
+                      width: 1,
                     ),
                   ),
-                );
-              }),
-              onChanged: (val) {
-                if (val != null) {
-                  allExpenseController.selectedYear.value = val;
-                }
-              },
+                ),
+              ],
             ),
-          ),
-        ],
-      );
-    });
+            const Gap(16),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Chip(
+                  label: Text(
+                    income.category,
+                  ),
+                  labelStyle: const TextStyle(
+                    fontWeight: FontWeight.normal,
+                    fontSize: 14,
+                    color: AppColor.textTitle,
+                  ),
+                  visualDensity: const VisualDensity(vertical: -4),
+                  backgroundColor: AppColor.colorWhite,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(30),
+                    side: const BorderSide(
+                      color: AppColor.primary,
+                      width: 1,
+                    ),
+                  ),
+                ),
+                Chip(
+                  label: Text(
+                    DateFormat('MM/dd/yy').format(income.dateIncome),
+                  ),
+                  labelStyle: const TextStyle(
+                    fontWeight: FontWeight.normal,
+                    fontSize: 14,
+                    color: AppColor.textTitle,
+                  ),
+                  visualDensity: const VisualDensity(vertical: -4),
+                  backgroundColor: AppColor.primary,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(30),
+                    side: const BorderSide(
+                      color: AppColor.primary,
+                      width: 1,
+                    ),
+                  ),
+                ),
+              ],
+            )
+          ],
+        ),
+      ),
+    );
   }
 
   @override
@@ -414,13 +407,13 @@ class _AllExpensePageState extends State<AllExpensePage> {
           child: Column(
             children: [
               const Gap(16),
-              _buildHeaderExpenses(),
+              _buildHeaderIncomes(),
               const Gap(16),
               _buildFilterMonthYear(),
               const Gap(16),
-              _buildCardExpenseMonth(),
+              _buildCardIncomeMonth(),
               const Gap(10),
-              _buildCardExpenseDay(),
+              _buildCardBalance(),
               const Gap(16),
               _buildList(),
             ],
