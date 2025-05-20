@@ -50,7 +50,7 @@ class Session {
 
     final currentTime = DateTime.now().millisecondsSinceEpoch;
     final diff = currentTime - loginTime;
-    const sessionDuration = 72 * 60 * 60 * 1000; // 3 hari dalam milidetik
+    const sessionDuration = 168 * 60 * 60 * 1000; // 7 hari dalam milidetik
 
     return diff > sessionDuration;
   }

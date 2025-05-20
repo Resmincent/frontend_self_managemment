@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
+import 'package:number_pad_keyboard/number_pad_keyboard.dart';
 import 'package:self_management/core/session.dart';
 import 'package:self_management/presentation/pages/dashboard_page.dart';
-import 'package:self_management/presentation/widgets/input_pin.dart';
 
 import '../../common/app_color.dart';
 import '../../common/info.dart';
-import '../widgets/custom_button.dart';
 import '../widgets/top_clip_pointer.dart';
 
 class VerifyPinPage extends StatefulWidget {
@@ -18,11 +17,33 @@ class VerifyPinPage extends StatefulWidget {
 }
 
 class _VerifyPinPageState extends State<VerifyPinPage> {
-  final pinController = TextEditingController();
+  final pinControllers = List.generate(6, (_) => TextEditingController());
   final isLoading = false.obs;
 
+  void _addDigit(int digit) {
+    for (int i = 0; i < pinControllers.length; i++) {
+      if (pinControllers[i].text.isEmpty) {
+        setState(() {
+          pinControllers[i].text = digit.toString();
+        });
+        break;
+      }
+    }
+  }
+
+  void _backSpace() {
+    for (int i = pinControllers.length - 1; i >= 0; i--) {
+      if (pinControllers[i].text.isNotEmpty) {
+        setState(() {
+          pinControllers[i].text = '';
+        });
+        break;
+      }
+    }
+  }
+
   Future<void> _verifyPin() async {
-    final inputPin = pinController.text.trim();
+    final inputPin = pinControllers.map((controller) => controller.text).join();
 
     if (inputPin.isEmpty) {
       Info.failed('PIN is required');
@@ -92,23 +113,45 @@ class _VerifyPinPageState extends State<VerifyPinPage> {
       padding: const EdgeInsets.symmetric(horizontal: 20),
       child: Column(
         children: [
-          InputPin(
-            controller: pinController,
-            hintText: "Enter PIN",
-            icon: 'assets/images/password.png',
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: List.generate(6, (index) {
+              return Container(
+                margin: const EdgeInsets.symmetric(horizontal: 5),
+                width: 50,
+                height: 60,
+                child: TextFormField(
+                  controller: pinControllers[index],
+                  decoration: const InputDecoration(
+                    border: OutlineInputBorder(),
+                    filled: true,
+                    fillColor: Colors.transparent,
+                    counterText: "",
+                  ),
+                  readOnly: true,
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(fontSize: 24.0),
+                  obscureText: true,
+                  obscuringCharacter: '*',
+                ),
+              );
+            }),
           ),
-          const Gap(32),
-          Obx(() {
-            return isLoading.value
-                ? const CircularProgressIndicator()
-                : SizedBox(
-                    width: double.infinity,
-                    child: ButtonPrimary(
-                      onPressed: _verifyPin,
-                      title: 'Verify',
-                    ),
-                  );
-          }),
+          const Gap(50),
+          NumberPadKeyboard(
+            backgroundColor: Colors.transparent,
+            addDigit: _addDigit,
+            backspace: _backSpace,
+            enterButtonText: 'ENTER',
+            enterButtonTextStyle: const TextStyle(
+              fontSize: 14,
+              fontWeight: FontWeight.w700,
+              color: AppColor.primary,
+            ),
+            onEnter: () {
+              _verifyPin();
+            },
+          ),
         ],
       ),
     );
