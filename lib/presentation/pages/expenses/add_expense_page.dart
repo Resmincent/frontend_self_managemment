@@ -266,7 +266,7 @@ class _AddExpensePageState extends State<AddExpensePage> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const Text(
-          'Start Event',
+          'Date & Time',
           style: TextStyle(
               fontWeight: FontWeight.bold,
               fontSize: 16,
