@@ -213,40 +213,43 @@ class _AllIncomePageState extends State<AllIncomePage> {
   }
 
   Widget _buildCardBalance() {
-    final totalIncome = allIncomeController.totalThisMonthIncome;
-    final totalExpense = allExpenseController.totalThisMonthExpense;
+    return Obx(() {
+      final totalIncome = allIncomeController.totalThisMonthIncome;
+      final totalExpense = allExpenseController.totalThisMonthExpense;
+      final balance = totalIncome - totalExpense;
 
-    final balance = totalIncome - totalExpense;
-
-    return Container(
-      width: double.infinity,
-      height: 65,
-      decoration: BoxDecoration(
-        color: balance >= 0 ? Colors.green : Colors.red,
-        borderRadius: BorderRadius.circular(20),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            const Text(
-              'Balance',
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-                color: AppColor.colorWhite,
-              ),
-            ),
-            Text(
-              formatRupiah(balance),
-              style: const TextStyle(
-                  color: Colors.white, fontWeight: FontWeight.bold),
-            ),
-          ],
+      return Container(
+        width: double.infinity,
+        height: 65,
+        decoration: BoxDecoration(
+          color: balance >= 0 ? Colors.green : Colors.red,
+          borderRadius: BorderRadius.circular(20),
         ),
-      ),
-    );
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Text(
+                'Balance',
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  color: AppColor.colorWhite,
+                ),
+              ),
+              Text(
+                formatRupiah(balance),
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+    });
   }
 
   Widget _buildList() {
@@ -289,15 +292,15 @@ class _AllIncomePageState extends State<AllIncomePage> {
         );
       }
 
-      return Flexible(
-        child: ListView.builder(
-          itemCount: list.length,
-          padding: const EdgeInsets.only(top: 16, bottom: 24),
-          itemBuilder: (context, index) {
-            IncomeModel income = list[index];
-            return _cardIncomeToday(income);
-          },
-        ),
+      return ListView.builder(
+        itemCount: list.length,
+        shrinkWrap: true,
+        physics: const NeverScrollableScrollPhysics(),
+        padding: const EdgeInsets.only(top: 16, bottom: 24),
+        itemBuilder: (context, index) {
+          IncomeModel income = list[index];
+          return _cardIncomeToday(income);
+        },
       );
     });
   }
@@ -404,19 +407,22 @@ class _AllIncomePageState extends State<AllIncomePage> {
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20),
-          child: Column(
-            children: [
-              const Gap(16),
-              _buildHeaderIncomes(),
-              const Gap(16),
-              _buildFilterMonthYear(),
-              const Gap(16),
-              _buildCardIncomeMonth(),
-              const Gap(10),
-              _buildCardBalance(),
-              const Gap(16),
-              _buildList(),
-            ],
+          child: SingleChildScrollView(
+            physics: const BouncingScrollPhysics(),
+            child: Column(
+              children: [
+                const Gap(16),
+                _buildHeaderIncomes(),
+                const Gap(16),
+                _buildFilterMonthYear(),
+                const Gap(16),
+                _buildCardIncomeMonth(),
+                const Gap(10),
+                _buildCardBalance(),
+                const Gap(16),
+                _buildList(),
+              ],
+            ),
           ),
         ),
       ),

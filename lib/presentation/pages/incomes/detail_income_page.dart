@@ -1,6 +1,5 @@
 import 'package:d_info/d_info.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';

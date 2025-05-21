@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:intl/intl.dart';
 import 'package:self_management/data/models/income_model.dart';
 
 import '../../common/logging.dart';
@@ -124,34 +125,32 @@ class IncomeRemoteDateSource {
   static Future<(bool, String, List<IncomeModel>?)> today(int userId) async {
     Uri url = Uri.parse('${API.baseUrl}/api/incomes/today.php');
     try {
+      final now = DateTime.now();
+      final todayStr = DateFormat('yyyy-MM-dd').format(now);
+
       final response = await http.post(
         url,
         body: {
           'user_id': userId.toString(),
+          'date_income': todayStr,
         },
       );
+
       fdLog.response(response);
-
       final resBody = jsonDecode(response.body);
-
       String message = resBody['message'];
 
-      if (response.statusCode == 200) {
-        Map data = Map.from(resBody['data']);
-        List incomesRaw = data['incomes'];
-        List<IncomeModel> incomes = incomesRaw
-            .map(
-              (e) => IncomeModel.fromJson(e),
-            )
-            .toList();
+      if (response.statusCode == 200 && resBody['data'] != null) {
+        Map<String, dynamic> data = Map.from(resBody['data']);
+        List incomesRaw = data['incomes'] ?? [];
+        List<IncomeModel> incomes =
+            incomesRaw.map((e) => IncomeModel.fromJson(e)).toList();
         return (true, message, incomes);
       }
+
       return (false, message, null);
     } catch (e) {
-      fdLog.title(
-        "IncomeRemoteDateSource - today",
-        e.toString(),
-      );
+      fdLog.title("IncomeRemoteDateSource - today", e.toString());
       return (false, 'Something went wrong', null);
     }
   }

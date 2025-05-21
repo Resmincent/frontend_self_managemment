@@ -37,7 +37,8 @@ class IncomeModel {
       title: json['title'],
       category: json['category'],
       amount: (json['amount'] as num).toDouble(),
-      dateIncome: DateTime.parse(json['dateIncome']),
+      dateIncome:
+          DateTime.tryParse(json['date_income'] ?? '') ?? DateTime(2000),
     );
   }
 

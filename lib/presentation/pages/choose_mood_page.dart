@@ -131,8 +131,8 @@ class _ChooseMoodPageState extends State<ChooseMoodPage> {
             child: Transform.rotate(
               angle: pi / 3,
               child: Container(
-                width: 212,
-                height: 212,
+                width: 180,
+                height: 180,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(20),
                   color: AppColor.colorWhite,

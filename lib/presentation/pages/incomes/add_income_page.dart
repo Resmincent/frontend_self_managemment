@@ -214,7 +214,7 @@ class _AddIncomePageState extends State<AddIncomePage> {
         const Gap(16),
         DropdownButtonFormField(
           value: categoryController.text,
-          items: Constans.expenseCategory.map((e) {
+          items: Constans.typeIncome.map((e) {
             return DropdownMenuItem<String>(
               value: e,
               child: Text(

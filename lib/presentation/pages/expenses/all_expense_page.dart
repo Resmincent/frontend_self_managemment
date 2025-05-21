@@ -138,15 +138,15 @@ class _AllExpensePageState extends State<AllExpensePage> {
         );
       }
 
-      return Flexible(
-        child: ListView.builder(
-          itemCount: list.length,
-          padding: const EdgeInsets.only(top: 16, bottom: 24),
-          itemBuilder: (context, index) {
-            ExpenseModal expense = list[index];
-            return _cardExpenseToday(expense);
-          },
-        ),
+      return ListView.builder(
+        itemCount: list.length,
+        shrinkWrap: true,
+        physics: const NeverScrollableScrollPhysics(),
+        padding: const EdgeInsets.only(top: 16, bottom: 24),
+        itemBuilder: (context, index) {
+          ExpenseModal expense = list[index];
+          return _cardExpenseToday(expense);
+        },
       );
     });
   }
@@ -411,19 +411,23 @@ class _AllExpensePageState extends State<AllExpensePage> {
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20),
-          child: Column(
-            children: [
-              const Gap(16),
-              _buildHeaderExpenses(),
-              const Gap(16),
-              _buildFilterMonthYear(),
-              const Gap(16),
-              _buildCardExpenseMonth(),
-              const Gap(10),
-              _buildCardExpenseDay(),
-              const Gap(16),
-              _buildList(),
-            ],
+          child: SingleChildScrollView(
+            physics: const BouncingScrollPhysics(),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Gap(16),
+                _buildHeaderExpenses(),
+                const Gap(16),
+                _buildFilterMonthYear(),
+                const Gap(16),
+                _buildCardExpenseMonth(),
+                const Gap(10),
+                _buildCardExpenseDay(),
+                const Gap(16),
+                _buildList(),
+              ],
+            ),
           ),
         ),
       ),
