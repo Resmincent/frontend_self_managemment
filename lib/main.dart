@@ -17,7 +17,6 @@ import 'package:self_management/presentation/pages/dashboard_page.dart';
 import 'package:self_management/presentation/pages/expenses/add_expense_page.dart';
 import 'package:self_management/presentation/pages/expenses/all_expense_page.dart';
 import 'package:self_management/presentation/pages/expenses/detail_expense_page.dart';
-import 'package:self_management/games/flappy_dash/flappy_dash_page.dart';
 import 'package:self_management/presentation/pages/incomes/add_income_page.dart';
 import 'package:self_management/presentation/pages/login_page.dart';
 import 'package:self_management/presentation/pages/profile_page.dart';
@@ -30,8 +29,6 @@ import 'package:self_management/presentation/pages/solutions/detail_solution_pag
 import 'package:self_management/presentation/pages/solutions/update_solution_page.dart';
 import 'package:self_management/presentation/pages/splash_screen_page.dart';
 
-import 'games/service_locator.dart';
-import 'games/snake/snake_game_page.dart';
 import 'presentation/pages/fragments/solution_fragment.dart';
 import 'presentation/pages/incomes/all_income_page.dart';
 import 'presentation/pages/incomes/detail_income_page.dart';
@@ -39,7 +36,6 @@ import 'presentation/pages/journals/update_journal_page.dart';
 import 'presentation/pages/pomodoro/pomodoro_timer_page.dart';
 
 void main() async {
-  await setupServiceLocator();
   WidgetsFlutterBinding.ensureInitialized();
   await initializeDateFormatting('id_ID', null);
 
@@ -120,10 +116,6 @@ class MyApp extends StatelessWidget {
 
         //Profile
         ProfilePage.routeName: (context) => const ProfilePage(),
-
-        //Games
-        FlappyDashPage.routeName: (context) => const FlappyDashPage(),
-        SnakeGamePage.routeName: (context) => const SnakeGamePage(),
 
         //Journal
         AddJournalPage.routeName: (context) => const AddJournalPage(),

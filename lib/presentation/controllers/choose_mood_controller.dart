@@ -5,7 +5,7 @@ import 'package:self_management/data/datasources/mood_remote_data_source.dart';
 import 'package:self_management/data/models/mood_model.dart';
 
 class ChooseMoodController extends GetxController {
-  final _level = 3.obs;
+  final _level = 1.obs;
   int get level => _level.value;
 
   set level(int n) => _level.value = n;

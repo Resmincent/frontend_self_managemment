@@ -57,6 +57,8 @@ dependencies:
   audioplayers: ^6.4.0
   shared_preferences: ^2.5.3
   number_pad_keyboard: ^0.0.6
+  camera: ^0.11.0+2
+  permission_handler: ^12.0.0+1
 
 dev_dependencies:
   flutter_test:
@@ -84,7 +86,7 @@ flutter:
     - assets/images/
     - assets/audios/
     - assets/images/background/
-    - assets/models/model_v2_final.tflite
+    - assets/models/yolov11_v2.tflite
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

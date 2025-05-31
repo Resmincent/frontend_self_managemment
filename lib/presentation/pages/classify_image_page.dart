@@ -1,18 +1,13 @@
-import 'dart:io';
+import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
-import 'package:gap/gap.dart';
 import 'package:get/get.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:image/image.dart' as img;
-
 import 'package:self_management/common/app_color.dart';
 import 'package:self_management/common/info.dart';
 import 'package:self_management/core/session.dart';
 import 'package:self_management/data/models/user_model.dart';
-import 'package:self_management/presentation/controllers/classify_mood_controller.dart';
 import 'package:self_management/presentation/controllers/home/mood_today_controller.dart';
 import 'package:self_management/presentation/pages/recomedation_page.dart';
-import '../widgets/custom_button.dart';
+import '../controllers/detection_emotion_controller.dart';
 
 class ClassifyImagePage extends StatefulWidget {
   const ClassifyImagePage({super.key});
@@ -23,260 +18,166 @@ class ClassifyImagePage extends StatefulWidget {
 }
 
 class _ClassifyImagePageState extends State<ClassifyImagePage> {
-  final ClassifyMood _classifyMoodController = Get.put(ClassifyMood());
+  final DetectEmotionController _controller =
+      Get.put(DetectEmotionController());
   final MoodTodayController _moodTodayController =
       Get.put(MoodTodayController());
 
-  File? _selectedImage;
   UserModel? user;
 
   @override
   void initState() {
     super.initState();
     Session.getUser().then((value) {
-      setState(() {
-        user = value;
-      });
+      setState(() => user = value);
     });
-
-    _classifyMoodController.loadModel();
+    _controller.loadModel();
   }
 
-  @override
-  void dispose() {
-    ClassifyMood.delete();
-    super.dispose();
-  }
-
-  Future<void> _pickImage(ImageSource source) async {
-    final picker = ImagePicker();
-    final pickedFile = await picker.pickImage(source: source);
-
-    if (pickedFile != null) {
-      setState(() {
-        _selectedImage = File(pickedFile.path);
-      });
-
-      final bytes = await pickedFile.readAsBytes();
-      final decoded = img.decodeImage(bytes);
-      if (decoded != null) {
-        await _classifyMoodController.classifyImageBytes(bytes);
-      }
-    }
-  }
-
-  Future<void> _classifyAndSaveMood() async {
-    if (_selectedImage != null && user != null) {
-      final result = await _classifyMoodController.submitMood(user!.id);
+  Future<void> _submitMood() async {
+    if (_controller.labels.isNotEmpty && user != null) {
+      final result = await _controller.submitMood(user!.id);
       if (result.$1) {
         Info.success(result.$2);
         _moodTodayController.fetch(user!.id);
-
         if (mounted) {
           await Navigator.pushNamed(
             context,
             RecomedationPage.routeName,
-            arguments: _classifyMoodController.predictedEmotion.value,
+            arguments: _controller.labels.last,
           );
         }
       } else {
         Info.failed(result.$2);
       }
     } else {
-      Get.snackbar("Error", "Please select an image first.");
+      Get.snackbar("Error", "Belum ada emosi terdeteksi.");
     }
   }
 
-  Widget _buildHeaderClassify() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20),
-      child: Row(
-        children: [
-          Material(
-            color: AppColor.primary,
-            borderRadius: BorderRadius.circular(8),
-            child: InkWell(
-              onTap: () => Navigator.pop(context),
-              child: Container(
-                width: 40,
-                height: 40,
-                alignment: Alignment.center,
-                child: const Icon(Icons.arrow_back, color: Colors.white),
-              ),
-            ),
-          ),
-          const Gap(16),
-          const Text(
-            'Detection Image',
-            style: TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-              color: AppColor.textTitle,
-            ),
-          )
-        ],
-      ),
-    );
+  void _resetDetection() {
+    _controller.resetDetection();
   }
 
-  Widget _buildImageSection() {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 20),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          const Text(
-            'Take a picture of your face to analyze your mood',
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: 16,
-              color: AppColor.textTitle,
-            ),
-          ),
-          const Gap(20),
-          Container(
-            width: double.infinity,
-            height: 300,
-            decoration: BoxDecoration(
-              color: AppColor.colorWhite,
-              borderRadius: BorderRadius.circular(16),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.1),
-                  blurRadius: 10,
-                  offset: const Offset(0, 5),
-                ),
-              ],
-            ),
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(16),
-              child: _selectedImage != null
-                  ? Image.file(
-                      _selectedImage!,
-                      fit: BoxFit.cover,
-                    )
-                  : const Center(
-                      child: Text(
-                        'No image selected',
-                        style: TextStyle(color: Colors.grey),
-                      ),
-                    ),
-            ),
-          ),
-          const Gap(20),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              _buildImageButton(
-                onTap: () => _pickImage(ImageSource.camera),
-                icon: Icons.camera_alt,
-                label: 'Camera',
-              ),
-              const Gap(20),
-              _buildImageButton(
-                onTap: () => _pickImage(ImageSource.gallery),
-                icon: Icons.photo_library,
-                label: 'Gallery',
-              ),
-            ],
-          ),
-          const Gap(30),
-          Obx(() {
-            final emotion = _classifyMoodController.predictedEmotion.value;
-            final confidence =
-                _classifyMoodController.predictedConfidence.value;
-            return emotion.isNotEmpty
-                ? Column(
-                    children: [
-                      Text(
-                        'Detected Emotion: $emotion',
-                        style: const TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                          color: AppColor.textTitle,
-                        ),
-                      ),
-                      const Gap(8),
-                      Text(
-                        'Confidence: ${(confidence * 100).toStringAsFixed(2)}%',
-                        style: const TextStyle(
-                          fontSize: 14,
-                          color: Colors.grey,
-                        ),
-                      ),
-                    ],
-                  )
-                : const SizedBox.shrink();
-          }),
-          const Gap(20),
-          Obx(
-            () => ButtonPrimary(
-              onPressed: _classifyMoodController.isModelLoaded.value
-                  ? _classifyAndSaveMood
-                  : null,
-              title: 'Analyze Mood',
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildImageButton({
-    required VoidCallback onTap,
-    required IconData icon,
-    required String label,
-  }) {
-    return InkWell(
-      onTap: onTap,
-      child: Column(
-        children: [
-          Container(
-            width: 60,
-            height: 60,
-            decoration: BoxDecoration(
-              color: AppColor.primary,
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: Icon(
-              icon,
-              color: AppColor.colorWhite,
-              size: 28,
-            ),
-          ),
-          const Gap(8),
-          Text(
-            label,
-            style: const TextStyle(
-              fontSize: 14,
-              color: AppColor.textTitle,
-            ),
-          ),
-        ],
-      ),
-    );
+  @override
+  void dispose() {
+    _controller.cameraController.value?.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    if (user == null) {
-      return const Scaffold(
-        body: Center(child: CircularProgressIndicator()),
-      );
-    }
     return Scaffold(
-      backgroundColor: AppColor.secondary,
-      body: SafeArea(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            const Gap(20),
-            _buildHeaderClassify(),
-            const Gap(30),
-            _buildImageSection(),
-          ],
+      appBar: AppBar(
+        title: const Text('Deteksi Emosi Real-Time'),
+        backgroundColor: Colors.black,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () => Navigator.pop(context),
         ),
+        actions: [
+          Obx(() => IconButton(
+                onPressed: _controller.labels.isNotEmpty ? _submitMood : null,
+                icon: const Icon(Icons.save),
+                tooltip: 'Simpan Mood',
+              )),
+          IconButton(
+            onPressed: _resetDetection,
+            icon: const Icon(Icons.refresh),
+            tooltip: 'Reset Deteksi',
+          ),
+        ],
       ),
+      backgroundColor: AppColor.secondary,
+      body: Obx(() {
+        if (!_controller.isCameraInitialized.value ||
+            _controller.cameraController.value == null) {
+          return const Center(child: CircularProgressIndicator());
+        }
+
+        return Stack(
+          children: [
+            CameraPreview(_controller.cameraController.value!),
+
+            // Bounding Box dan Label
+            Obx(() => Stack(
+                  children:
+                      _controller.boundingBoxes.asMap().entries.map((entry) {
+                    final index = entry.key;
+                    final box = entry.value;
+                    final label = _controller.labels[index];
+
+                    return Positioned(
+                      left: box.left,
+                      top: box.top,
+                      width: box.width,
+                      height: box.height,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                            color: Colors.greenAccent,
+                            width: 2,
+                          ),
+                        ),
+                        child: Align(
+                          alignment: Alignment.topLeft,
+                          child: Container(
+                            color: Colors.greenAccent,
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 4,
+                              vertical: 2,
+                            ),
+                            child: Text(
+                              label,
+                              style: const TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    );
+                  }).toList(),
+                )),
+
+            // Label terakhir di atas layar
+            Positioned(
+              top: 16,
+              left: 16,
+              child: Obx(() => _controller.labels.isNotEmpty
+                  ? Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 12,
+                        vertical: 8,
+                      ),
+                      decoration: BoxDecoration(
+                        color: Colors.black54,
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Text(
+                        "Terakhir: ${_controller.labels.last}",
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 16,
+                        ),
+                      ),
+                    )
+                  : const SizedBox.shrink()),
+            ),
+
+            // Loading indikator
+            if (_controller.isLoading.value)
+              const Positioned(
+                top: 16,
+                right: 16,
+                child: CircularProgressIndicator(
+                  color: Colors.greenAccent,
+                ),
+              ),
+          ],
+        );
+      }),
     );
   }
 }
