@@ -149,7 +149,7 @@ class _AnalyticFragmentState extends State<AnalyticFragment> {
                     ],
                     measureAxis: const MeasureAxis(
                       showLine: true,
-                      numericViewport: NumericViewport(0, 7),
+                      numericViewport: NumericViewport(0, 3),
                       numericTickProvider: NumericTickProvider(
                         desiredTickCount: 8,
                       ),
@@ -272,7 +272,7 @@ class _AnalyticFragmentState extends State<AnalyticFragment> {
                     ],
                     measureAxis: const MeasureAxis(
                       showLine: true,
-                      numericViewport: NumericViewport(0, 7),
+                      numericViewport: NumericViewport(0, 3),
                       numericTickProvider: NumericTickProvider(
                         desiredTickCount: 8,
                       ),
