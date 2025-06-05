@@ -3,6 +3,7 @@ import 'package:gap/gap.dart';
 import 'package:self_management/common/app_color.dart';
 import 'package:self_management/presentation/pages/agendas/all_agenda_page.dart';
 import 'package:self_management/presentation/pages/fragments/solution_fragment.dart';
+import 'package:self_management/presentation/pages/incomes/all_income_page.dart';
 import 'chat_ai_page.dart';
 import 'dashboard_page.dart';
 import 'expenses/all_expense_page.dart';
@@ -22,55 +23,36 @@ class _RecomedationPageState extends State<RecomedationPage> {
   List<String> getRecommendations(String emotion) {
     switch (emotion.toLowerCase()) {
       case 'angry':
-        return ['Manajemen Waktu', 'Self-Solution', 'Jurnal Pribadi'];
-      case 'sad':
-        return ['Jurnal Pribadi', 'Chatbot AI Gemini', 'Self-Solution'];
-      case 'disgust':
-      case 'disgusted':
-        return ['Jurnal Pribadi', 'Chatbot AI Gemini'];
+        return [
+          'Chatbot AI Gemini',
+          'Self-Solution',
+          'Jurnal Pribadi',
+        ];
       case 'happy':
-        return ['Manajemen Keuangan', 'Jurnal Pribadi', 'Manajemen Waktu'];
+        return [
+          'Mengelola Pengeluaran',
+          'Mengelola Pemasukan',
+          'Jurnal Pribadi',
+          'Mengelola Agenda',
+        ];
       case 'neutral':
-        return ['Jurnal Pribadi', 'Eksplorasi Diri'];
-      case 'fear':
-      case 'fearful':
-        return ['Self-Solution', 'Chatbot AI Gemini', 'Manajemen Waktu'];
-      case 'surprise':
-      case 'surprised':
-        return ['Jurnal Pribadi', 'Chatbot AI Gemini'];
+        return [
+          'Jurnal Pribadi',
+          'Chatbot AI Gemini',
+          'Self-Solution',
+          'Mengelola Agenda',
+          'Mengelola Pengeluaran',
+          'Mengelola Pemasukan',
+        ];
       default:
         return ['Tidak ada rekomendasi tersedia'];
-    }
-  }
-
-  String getModuleGoal(String emotion) {
-    switch (emotion.toLowerCase()) {
-      case 'angry':
-        return 'Mengurangi tekanan akibat jadwal padat, membantu refleksi sumber kemarahan, dan mencari solusi mandiri.';
-      case 'sad':
-        return 'Menyalurkan emosi, memperoleh dukungan percakapan, serta meningkatkan motivasi dan pemahaman diri.';
-      case 'disgust':
-      case 'disgusted':
-        return 'Membantu mengekspresikan kejengkelan atau kekecewaan dalam bentuk tulisan atau dialog reflektif.';
-      case 'happy':
-        return 'Mendorong produktivitas dan mencatat momen positif untuk menjaga keseimbangan emosional.';
-      case 'neutral':
-        return 'Meningkatkan kesadaran diri dan membentuk rutinitas pengelolaan diri yang stabil.';
-      case 'fear':
-      case 'fearful':
-        return 'Memberikan strategi mengatasi kekhawatiran dan kecemasan melalui solusi dan pendampingan.';
-      case 'surprise':
-      case 'surprised':
-        return 'Mengelola reaksi terhadap perubahan mendadak dan mencatat respon untuk analisis diri.';
-      default:
-        return 'Tujuan modul tidak tersedia.';
     }
   }
 
   Widget _buildModuleButton(BuildContext context, String moduleName) {
     String? route;
     switch (moduleName.toLowerCase()) {
-      case 'manajemen waktu':
+      case 'mengelola agenda':
         route = AllAgendaPage.routeName;
         break;
       case 'jurnal pribadi':
@@ -79,8 +61,11 @@ class _RecomedationPageState extends State<RecomedationPage> {
       case 'chatbot ai gemini':
         route = ChatAiPage.routeName;
         break;
-      case 'manajemen keuangan':
+      case 'mengelola pengeluaran':
         route = AllExpensePage.routeName;
+        break;
+      case 'mengelola pemasukan':
+        route = AllIncomePage.routeName;
         break;
       case 'self-solution':
         route = SolutionFragment.routeName;
@@ -149,7 +134,6 @@ class _RecomedationPageState extends State<RecomedationPage> {
   Widget build(BuildContext context) {
     final emotion = widget.emotion;
     final recommendations = getRecommendations(emotion);
-    final goal = getModuleGoal(emotion);
 
     return Scaffold(
       backgroundColor: AppColor.secondary,
@@ -169,21 +153,6 @@ class _RecomedationPageState extends State<RecomedationPage> {
                     fontWeight: FontWeight.bold,
                     color: AppColor.textTitle,
                   ),
-                ),
-                const Gap(12),
-                const Text(
-                  'Tujuan Modul:',
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 16,
-                    color: AppColor.textTitle,
-                  ),
-                ),
-                const Gap(4),
-                Text(
-                  goal,
-                  style:
-                      const TextStyle(fontSize: 14, color: AppColor.textBody),
                 ),
                 const Gap(24),
                 const Text(

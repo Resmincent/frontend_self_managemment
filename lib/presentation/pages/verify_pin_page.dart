@@ -109,17 +109,16 @@ class _VerifyPinPageState extends State<VerifyPinPage> {
   }
 
   Widget _buildVerifyForm() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20),
+    return Expanded(
       child: Column(
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: List.generate(6, (index) {
               return Container(
-                margin: const EdgeInsets.symmetric(horizontal: 5),
-                width: 50,
-                height: 60,
+                margin: const EdgeInsets.symmetric(horizontal: 3),
+                width: 40,
+                height: 40,
                 child: TextFormField(
                   controller: pinControllers[index],
                   decoration: const InputDecoration(
@@ -130,28 +129,32 @@ class _VerifyPinPageState extends State<VerifyPinPage> {
                   ),
                   readOnly: true,
                   textAlign: TextAlign.center,
-                  style: const TextStyle(fontSize: 24.0),
+                  style: const TextStyle(fontSize: 12),
                   obscureText: true,
                   obscuringCharacter: '*',
                 ),
               );
             }),
           ),
-          const Gap(50),
-          NumberPadKeyboard(
-            backgroundColor: Colors.transparent,
-            addDigit: _addDigit,
-            backspace: _backSpace,
-            enterButtonText: 'ENTER',
-            enterButtonTextStyle: const TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.w700,
-              color: AppColor.primary,
+          const Spacer(),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: NumberPadKeyboard(
+              backgroundColor: Colors.transparent,
+              addDigit: _addDigit,
+              backspace: _backSpace,
+              enterButtonText: 'ENTER',
+              enterButtonTextStyle: const TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.w700,
+                color: AppColor.primary,
+              ),
+              onEnter: () {
+                _verifyPin();
+              },
             ),
-            onEnter: () {
-              _verifyPin();
-            },
           ),
+          const Gap(20),
         ],
       ),
     );
@@ -160,26 +163,20 @@ class _VerifyPinPageState extends State<VerifyPinPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: LayoutBuilder(
-        builder: (context, constraints) {
-          return SingleChildScrollView(
-            child: ConstrainedBox(
-              constraints: BoxConstraints(minHeight: constraints.maxHeight),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Column(
-                    children: [
-                      _buildHeaderVerifyPin(),
-                      const Gap(40),
-                      _buildVerifyForm(),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-          );
-        },
+      resizeToAvoidBottomInset: true,
+      body: SafeArea(
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            return Column(
+              children: [
+                const Gap(20),
+                _buildHeaderVerifyPin(),
+                const Gap(20),
+                _buildVerifyForm(),
+              ],
+            );
+          },
+        ),
       ),
     );
   }
