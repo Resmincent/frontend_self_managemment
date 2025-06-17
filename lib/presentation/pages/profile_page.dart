@@ -21,7 +21,7 @@ class _ProfilePageState extends State<ProfilePage> {
     bool? yes = await DInfo.dialogConfirmation(
       context,
       'Logout',
-      'Yes to confir',
+      'Yes to confirm',
     );
     if (yes ?? false) {
       Session.removeUser();

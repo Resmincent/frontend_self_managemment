@@ -117,8 +117,8 @@ class _VerifyPinPageState extends State<VerifyPinPage> {
             children: List.generate(6, (index) {
               return Container(
                 margin: const EdgeInsets.symmetric(horizontal: 3),
-                width: 40,
-                height: 40,
+                width: 50,
+                height: 50,
                 child: TextFormField(
                   controller: pinControllers[index],
                   decoration: const InputDecoration(

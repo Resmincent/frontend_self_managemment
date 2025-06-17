@@ -156,7 +156,7 @@ class _AllExpensePageState extends State<AllExpensePage> {
       onTap: () => _goToDetailExpense(expense.id),
       child: Container(
         margin: const EdgeInsets.only(bottom: 20),
-        padding: const EdgeInsets.all(20),
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
         decoration: BoxDecoration(
           color: AppColor.colorWhite,
           borderRadius: BorderRadius.circular(20),

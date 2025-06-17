@@ -238,7 +238,7 @@ class _JournalFragementState extends State<JournalFragement> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Padding(
-                    padding: const EdgeInsets.only(right: 55),
+                    padding: const EdgeInsets.only(right: 65),
                     child: Text(
                       journalModel.title.isNotEmpty
                           ? journalModel.title
@@ -267,15 +267,15 @@ class _JournalFragementState extends State<JournalFragement> {
               ),
             ),
             Positioned(
-              right: 10,
-              top: 10,
+              right: 15,
+              top: 19,
               width: 70,
               height: 36,
               child: Text(
                 textAlign: TextAlign.right,
                 journalModel.category,
                 style: const TextStyle(
-                  fontSize: 12,
+                  fontSize: 14,
                   fontWeight: FontWeight.bold,
                   color: AppColor.primary,
                 ),
