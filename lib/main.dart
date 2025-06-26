@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/date_symbol_data_local.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:self_management/common/app_color.dart';
 import 'package:self_management/core/notification_helper.dart';
 import 'package:self_management/data/models/agenda_model.dart';
@@ -38,12 +39,26 @@ import 'presentation/pages/incomes/all_income_page.dart';
 import 'presentation/pages/incomes/detail_income_page.dart';
 import 'presentation/pages/journals/update_journal_page.dart';
 import 'presentation/pages/pomodoro/pomodoro_timer_page.dart';
+import 'package:timezone/data/latest.dart' as tz;
+import 'package:timezone/timezone.dart' as tz;
 
 void main() async {
-  await setupServiceLocator();
   WidgetsFlutterBinding.ensureInitialized();
+
+  // Setup service locator for dependency injection
+  await setupServiceLocator();
+
+  // Initialize date formatting for Indonesian locale
   await initializeDateFormatting('id_ID', null);
+
+  tz.initializeTimeZones();
+  tz.setLocalLocation(tz.getLocation('Asia/Jakarta'));
+
+  // Initialize notification helper
   await NotificationHelper.initialize();
+
+  // Request notification permission
+  await Permission.notification.request();
   runApp(const MyApp());
 }
 

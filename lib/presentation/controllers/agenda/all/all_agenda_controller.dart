@@ -1,6 +1,5 @@
 import 'package:calendar_view/calendar_view.dart';
 import 'package:get/get.dart';
-
 import 'package:self_management/common/enums.dart';
 import 'package:self_management/core/notification_helper.dart';
 import 'package:self_management/data/datasources/agenda_remote_data_source.dart';
@@ -26,24 +25,47 @@ class AllAgendaController extends GetxController {
         statusRequest: StatusRequest.failed,
         message: message,
       );
-
       return;
     }
 
-    void notifyAgenda(int id, String title, DateTime startEvent) {
-      final notificationTime = startEvent.subtract(const Duration(minutes: 60));
-      if (notificationTime.isAfter(DateTime.now())) {
-        NotificationHelper.showNotification(
-          id: id,
-          title: "Upcoming Agenda",
-          body: "Agenda: $title akan dimulai 1 jam lagi.",
-          scheduledTime: notificationTime,
-        );
-      }
-    }
-
     List<CalendarEventData> list = data!.map((value) {
-      notifyAgenda(value.id, value.title, value.startEvent);
+      // Notifikasi 1 jam sebelum agenda
+      final notifTime = value.startEvent.subtract(const Duration(hours: 1));
+      final now = DateTime.now();
+      const tolerance = Duration(minutes: 1);
+
+      if (notifTime.difference(now) > tolerance) {
+        NotificationHelper.showNotification(
+          id: value.id,
+          title: 'Jadwal Agenda',
+          body: 'Jadwal agenda ${value.title} akan dimulai 1 jam lagi.',
+          scheduledTime: notifTime,
+        );
+      } else {
+        // Notifikasi setiap 15 menit sebelum agenda
+        final now = DateTime.now();
+        final start = value.startEvent;
+        final durationUntilStart = start.difference(now);
+
+        final reminders = durationUntilStart.inMinutes ~/ 15;
+
+        for (int i = 1; i <= reminders; i++) {
+          final reminderTime = now.add(Duration(minutes: 15 * i));
+
+          if (reminderTime.isBefore(start)) {
+            final remainingMinutes = start.difference(reminderTime).inMinutes;
+
+            NotificationHelper.showNotification(
+              id: value.id + i,
+              title: 'Pengingat Agenda',
+              body:
+                  'Jadwal agenda "${value.title}" akan dimulai dalam $remainingMinutes menit.',
+              scheduledTime: reminderTime,
+            );
+          }
+        }
+      }
+
       return CalendarEventData(
         title: value.title,
         date: value.startEvent,
@@ -59,8 +81,6 @@ class AllAgendaController extends GetxController {
       list: list,
       message: message,
     );
-
-    return state;
   }
 
   static delete() => Get.delete<AllAgendaController>(force: true);

@@ -49,6 +49,11 @@ class Dash extends PositionComponent
     // Fixed the "*velocity" syntax which appears to be a typo
     _velocity += _gravity * dt;
     position += _velocity * dt;
+
+    final bottomLimit = gameRef.size.y + size.y;
+    if (position.y > bottomLimit) {
+      gameController.gameOver();
+    }
   }
 
   void jump() {
