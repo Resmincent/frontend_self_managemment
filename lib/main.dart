@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:self_management/common/app_color.dart';
+import 'package:self_management/core/notification_helper.dart';
 import 'package:self_management/data/models/agenda_model.dart';
 import 'package:self_management/data/models/journal_model.dart';
 import 'package:self_management/data/models/solution_model.dart';
@@ -42,7 +43,7 @@ void main() async {
   await setupServiceLocator();
   WidgetsFlutterBinding.ensureInitialized();
   await initializeDateFormatting('id_ID', null);
-
+  await NotificationHelper.initialize();
   runApp(const MyApp());
 }
 

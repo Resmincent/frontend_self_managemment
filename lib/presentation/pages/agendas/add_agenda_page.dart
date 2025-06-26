@@ -40,37 +40,39 @@ class _AddAgendaPageState extends State<AddAgendaPage> {
 
   Future<void> chooseDateTime(TextEditingController controller) async {
     final now = DateTime.now();
-    final pickedData = await showDatePicker(
+
+    final pickedDate = await showDatePicker(
       context: context,
       initialDate: now,
       firstDate: DateTime(now.year),
       lastDate: DateTime(now.year + 1, now.month),
     );
 
-    if (pickedData == null) {
-      return;
-    }
-
-    if (!mounted) {
-      return;
-    }
+    if (pickedDate == null || !mounted) return;
 
     final pickedTime = await showTimePicker(
       context: context,
       initialTime: TimeOfDay.fromDateTime(now),
+      builder: (context, child) {
+        return MediaQuery(
+          data: MediaQuery.of(context).copyWith(alwaysUse24HourFormat: true),
+          child: child!,
+        );
+      },
     );
 
-    if (pickedTime == null) {
-      return;
-    }
+    if (pickedTime == null) return;
 
-    controller.text = DateFormat('yyyy-MM-dd HH:mm').format(DateTime(
-      pickedData.year,
-      pickedData.month,
-      pickedData.day,
+    final selectedDateTime = DateTime(
+      pickedDate.year,
+      pickedDate.month,
+      pickedDate.day,
       pickedTime.hour,
       pickedTime.minute,
-    ));
+    );
+
+    controller.text =
+        DateFormat('yyyy-MM-dd HH:mm', 'id_ID').format(selectedDateTime);
   }
 
   Future<void> addNow() async {

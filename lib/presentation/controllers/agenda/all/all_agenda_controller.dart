@@ -2,6 +2,7 @@ import 'package:calendar_view/calendar_view.dart';
 import 'package:get/get.dart';
 
 import 'package:self_management/common/enums.dart';
+import 'package:self_management/core/notification_helper.dart';
 import 'package:self_management/data/datasources/agenda_remote_data_source.dart';
 
 class AllAgendaController extends GetxController {
@@ -29,7 +30,20 @@ class AllAgendaController extends GetxController {
       return;
     }
 
+    void notifyAgenda(int id, String title, DateTime startEvent) {
+      final notificationTime = startEvent.subtract(const Duration(minutes: 60));
+      if (notificationTime.isAfter(DateTime.now())) {
+        NotificationHelper.showNotification(
+          id: id,
+          title: "Upcoming Agenda",
+          body: "Agenda: $title akan dimulai 1 jam lagi.",
+          scheduledTime: notificationTime,
+        );
+      }
+    }
+
     List<CalendarEventData> list = data!.map((value) {
+      notifyAgenda(value.id, value.title, value.startEvent);
       return CalendarEventData(
         title: value.title,
         date: value.startEvent,
@@ -41,7 +55,10 @@ class AllAgendaController extends GetxController {
     }).toList();
 
     state = state.copyWith(
-        statusRequest: StatusRequest.success, list: list, message: message);
+      statusRequest: StatusRequest.success,
+      list: list,
+      message: message,
+    );
 
     return state;
   }
