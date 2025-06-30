@@ -16,7 +16,7 @@ import 'package:self_management/presentation/controllers/home/mood_today_control
 import 'package:self_management/presentation/pages/agendas/all_agenda_page.dart';
 import 'package:self_management/presentation/pages/agendas/detail_agenda_page.dart';
 import 'package:self_management/presentation/pages/chat_ai_page.dart';
-import 'package:self_management/presentation/pages/choose_mood_page.dart';
+import 'package:self_management/presentation/pages/classify_image_page.dart';
 import 'package:self_management/presentation/pages/incomes/all_income_page.dart';
 import 'package:self_management/presentation/pages/pomodoro/pomodoro_timer_page.dart';
 import 'package:self_management/presentation/pages/profile_page.dart';
@@ -106,7 +106,7 @@ class _HomeFragmentState extends State<HomeFragment> {
   }
 
   Future<void> _goToMood() async {
-    await Navigator.pushNamed(context, ChooseMoodPage.routeName);
+    await Navigator.pushNamed(context, ClassifyImagePage.routeName);
   }
 
   Future<void> _goToAgendaAll() async {

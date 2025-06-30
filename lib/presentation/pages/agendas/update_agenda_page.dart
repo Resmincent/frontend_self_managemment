@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:self_management/data/models/agenda_model.dart';
 import 'package:self_management/presentation/controllers/agenda/update_agenda_controller.dart';
+import 'package:self_management/presentation/pages/agendas/all_agenda_page.dart';
 import 'package:self_management/presentation/widgets/custom_button.dart';
 import 'package:self_management/presentation/widgets/custom_input.dart';
 
@@ -170,7 +171,7 @@ class _UpdateAgendaPageState extends State<UpdateAgendaPage> {
       Info.success(state.message);
       Future.delayed(const Duration(milliseconds: 500), () {
         if (!mounted) return;
-        Navigator.pop(context);
+        Get.offAllNamed(AllAgendaPage.routeName, arguments: 'refresh');
       });
     }
   }

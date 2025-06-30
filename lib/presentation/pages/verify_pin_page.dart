@@ -116,7 +116,7 @@ class _VerifyPinPageState extends State<VerifyPinPage> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: List.generate(6, (index) {
               return Container(
-                margin: const EdgeInsets.symmetric(horizontal: 3),
+                margin: const EdgeInsets.symmetric(horizontal: 3, vertical: 5),
                 width: 50,
                 height: 50,
                 child: TextFormField(
@@ -129,7 +129,7 @@ class _VerifyPinPageState extends State<VerifyPinPage> {
                   ),
                   readOnly: true,
                   textAlign: TextAlign.center,
-                  style: const TextStyle(fontSize: 12),
+                  style: const TextStyle(fontSize: 28),
                   obscureText: true,
                   obscuringCharacter: '*',
                 ),

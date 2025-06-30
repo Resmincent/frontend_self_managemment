@@ -6,7 +6,7 @@ import 'package:intl/intl.dart';
 import 'package:self_management/common/info.dart';
 import 'package:self_management/data/models/journal_model.dart';
 import 'package:self_management/presentation/controllers/journal/delete_journal_controller.dart';
-import 'package:self_management/presentation/pages/journals/update_journal_page.dart';
+// import 'package:self_management/presentation/pages/journals/update_journal_page.dart';
 import 'package:self_management/presentation/widgets/custom_button.dart';
 
 import '../../../common/app_color.dart';
@@ -29,10 +29,10 @@ class _DetailJournalPageState extends State<DetailJournalPage> {
   final detailJournal = Get.put(DetailJournalController());
   final deleteJournal = Get.put(DeleteJournalController());
 
-  Future<void> _goToUpdateJournal(JournalModel journal) async {
-    await Navigator.pushNamed(context, UpdateJournalPage.routeName,
-        arguments: journal);
-  }
+  // Future<void> _goToUpdateJournal(JournalModel journal) async {
+  //   await Navigator.pushNamed(context, UpdateJournalPage.routeName,
+  //       arguments: journal);
+  // }
 
   @override
   void initState() {
@@ -233,15 +233,15 @@ class _DetailJournalPageState extends State<DetailJournalPage> {
     );
   }
 
-  Widget _buildButtonUpdate(JournalModel journal) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20),
-      child: ButtonPrimary(
-        onPressed: () => _goToUpdateJournal(journal),
-        title: 'Update',
-      ),
-    );
-  }
+  // Widget _buildButtonUpdate(JournalModel journal) {
+  //   return Padding(
+  //     padding: const EdgeInsets.symmetric(horizontal: 20),
+  //     child: ButtonPrimary(
+  //       onPressed: () => _goToUpdateJournal(journal),
+  //       title: 'Update',
+  //     ),
+  //   );
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -301,8 +301,8 @@ class _DetailJournalPageState extends State<DetailJournalPage> {
                   _buildCardDescription(journal.content),
                   const Gap(30),
                   _buildButtonDelete(journal.id),
-                  const Gap(20),
-                  _buildButtonUpdate(journal),
+                  // const Gap(20),
+                  // _buildButtonUpdate(journal),
                 ],
               );
             },

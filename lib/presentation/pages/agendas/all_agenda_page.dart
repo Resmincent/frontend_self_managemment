@@ -28,6 +28,19 @@ class AllAgendaPage extends StatefulWidget {
 class _AllAgendaPageState extends State<AllAgendaPage> {
   final allAgendaController = Get.put(AllAgendaController());
   final selectAgendaController = Get.put(SelectAgendaController());
+  bool _initialized = false;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (!_initialized) {
+      final args = ModalRoute.of(context)?.settings.arguments;
+      if (args != null && args == 'refresh') {
+        referesh();
+      }
+      _initialized = true;
+    }
+  }
 
   @override
   void dispose() {

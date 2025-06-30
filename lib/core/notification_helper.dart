@@ -31,15 +31,15 @@ class NotificationHelper {
       scheduledDate,
       const NotificationDetails(
         android: AndroidNotificationDetails(
-          'agenda_channel_v2',
+          'agendas_channel_v2',
           'Agenda Notifications',
           channelDescription: 'Notifikasi agenda akan muncul di sini',
           importance: Importance.max,
           priority: Priority.high,
         ),
       ),
-      androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
-      matchDateTimeComponents: DateTimeComponents.dateAndTime,
+      androidScheduleMode: AndroidScheduleMode.inexactAllowWhileIdle,
+      matchDateTimeComponents: null,
     );
   }
 }

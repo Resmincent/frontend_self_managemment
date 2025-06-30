@@ -11,6 +11,7 @@ import 'package:self_management/core/session.dart';
 import 'package:self_management/data/models/user_model.dart';
 import 'package:self_management/presentation/controllers/classify_mood_controller.dart';
 import 'package:self_management/presentation/controllers/home/mood_today_controller.dart';
+import 'package:self_management/presentation/pages/choose_mood_page.dart';
 import 'package:self_management/presentation/pages/recomedation_page.dart';
 import '../widgets/custom_button.dart';
 
@@ -46,6 +47,10 @@ class _ClassifyImagePageState extends State<ClassifyImagePage> {
   void dispose() {
     ClassifyMood.delete();
     super.dispose();
+  }
+
+  Future<void> _goToChooseMood() async {
+    await Navigator.pushNamed(context, ChooseMoodPage.routeName);
   }
 
   Future<void> _pickImage(ImageSource source) async {
@@ -177,6 +182,12 @@ class _ClassifyImagePageState extends State<ClassifyImagePage> {
                 onTap: () => _pickImage(ImageSource.gallery),
                 icon: Icons.photo_library,
                 label: 'Gallery',
+              ),
+              const Gap(20),
+              _buildImageButton(
+                onTap: _goToChooseMood,
+                icon: Icons.mood,
+                label: 'Choose Mood',
               ),
             ],
           ),
