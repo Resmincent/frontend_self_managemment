@@ -209,30 +209,32 @@ class _RegisterPageState extends State<RegisterPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: LayoutBuilder(
-        builder: (context, constraints) {
-          return SingleChildScrollView(
-            child: ConstrainedBox(
-              constraints: BoxConstraints(
-                minHeight: constraints.maxHeight,
+    return SafeArea(
+      child: Scaffold(
+        body: LayoutBuilder(
+          builder: (context, constraints) {
+            return SingleChildScrollView(
+              child: ConstrainedBox(
+                constraints: BoxConstraints(
+                  minHeight: constraints.maxHeight,
+                ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Column(
+                      children: [
+                        _buildHeaderRegister(),
+                        const Gap(40),
+                        _buildRegisterForm(),
+                      ],
+                    ),
+                    _buildLoginNavigation(),
+                  ],
+                ),
               ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Column(
-                    children: [
-                      _buildHeaderRegister(),
-                      const Gap(40),
-                      _buildRegisterForm(),
-                    ],
-                  ),
-                  _buildLoginNavigation(),
-                ],
-              ),
-            ),
-          );
-        },
+            );
+          },
+        ),
       ),
     );
   }

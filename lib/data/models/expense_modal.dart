@@ -7,14 +7,15 @@ class ExpenseModal {
   final DateTime dateExpense;
   final String? description;
 
-  ExpenseModal(
-      {required this.id,
-      this.userId,
-      required this.title,
-      required this.category,
-      required this.expense,
-      required this.dateExpense,
-      this.description});
+  ExpenseModal({
+    required this.id,
+    this.userId,
+    required this.title,
+    required this.category,
+    required this.expense,
+    required this.dateExpense,
+    this.description,
+  });
 
   Map<String, dynamic> toJson() {
     return {
@@ -30,25 +31,28 @@ class ExpenseModal {
 
   factory ExpenseModal.fromJson(Map<String, dynamic> json) {
     return ExpenseModal(
-      id: json['id'],
-      userId: json['user_id'],
+      id: int.tryParse(json['id'].toString()) ?? 0,
+      userId: json['user_id'] != null
+          ? int.tryParse(json['user_id'].toString())
+          : null,
+      title: json['title'] ?? '',
+      category: json['category'] ?? '',
+      expense: double.tryParse(json['expense'].toString()) ?? 0.0,
+      dateExpense:
+          DateTime.tryParse(json['date_expense'] ?? '') ?? DateTime(2000),
       description: json['description'],
-      title: json['title'],
-      category: json['category'],
-      expense: (json['expense'] as num).toDouble(),
-      dateExpense: DateTime.parse(json['date_expense']),
     );
   }
 
   Map<String, String> toJsonRequest() {
     return {
       'id': id.toString(),
-      'user_id': userId.toString(),
+      'user_id': userId?.toString() ?? '',
       'title': title,
       'category': category,
       'expense': expense.toString(),
       'date_expense': dateExpense.toIso8601String(),
-      'description': description.toString(),
+      'description': description ?? '',
     };
   }
 }

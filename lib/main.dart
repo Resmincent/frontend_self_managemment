@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/date_symbol_data_local.dart';
@@ -21,6 +22,7 @@ import 'package:self_management/presentation/pages/expenses/all_expense_page.dar
 import 'package:self_management/presentation/pages/expenses/detail_expense_page.dart';
 import 'package:self_management/games/flappy_dash/flappy_dash_page.dart';
 import 'package:self_management/presentation/pages/incomes/add_income_page.dart';
+import 'package:self_management/presentation/pages/live_camera_mood_page.dart';
 import 'package:self_management/presentation/pages/login_page.dart';
 import 'package:self_management/presentation/pages/profile_page.dart';
 import 'package:self_management/presentation/pages/recomedation_page.dart';
@@ -59,6 +61,8 @@ void main() async {
 
   // Request notification permission
   await Permission.notification.request();
+  SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
+
   runApp(const MyApp());
 }
 
@@ -127,6 +131,7 @@ class MyApp extends StatelessWidget {
         //Choose mood
         ChooseMoodPage.routeName: (context) => const ChooseMoodPage(),
         ClassifyImagePage.routeName: (context) => const ClassifyImagePage(),
+        LiveCameraPage.routeName: (context) => const LiveCameraPage(),
 
         //chat ai
         ChatAiPage.routeName: (context) => const ChatAiPage(),

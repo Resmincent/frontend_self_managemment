@@ -7,14 +7,15 @@ class AgendaModel {
   final DateTime endEvent;
   final String? description;
 
-  AgendaModel(
-      {required this.id,
-      this.userId,
-      required this.title,
-      required this.category,
-      required this.startEvent,
-      required this.endEvent,
-      this.description});
+  AgendaModel({
+    required this.id,
+    this.userId,
+    required this.title,
+    required this.category,
+    required this.startEvent,
+    required this.endEvent,
+    this.description,
+  });
 
   Map<String, dynamic> toJson() {
     return {
@@ -30,8 +31,10 @@ class AgendaModel {
 
   factory AgendaModel.fromJson(Map<String, dynamic> json) {
     return AgendaModel(
-      id: json['id'],
-      userId: json['user_id'],
+      id: int.tryParse(json['id'].toString()) ?? 0,
+      userId: json['user_id'] != null
+          ? int.tryParse(json['user_id'].toString())
+          : null,
       title: json['title'],
       category: json['category'],
       startEvent: DateTime.parse(json['start_event']),
@@ -43,12 +46,12 @@ class AgendaModel {
   Map<String, String> toJsonRequest() {
     return {
       'id': id.toString(),
-      'user_id': userId.toString(),
+      'user_id': userId?.toString() ?? '',
       'title': title,
       'category': category,
       'start_event': startEvent.toIso8601String(),
       'end_event': endEvent.toIso8601String(),
-      'description': description.toString(),
+      'description': description ?? '',
     };
   }
 }

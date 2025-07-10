@@ -22,20 +22,18 @@ class JournalModel {
       'category': category,
       'title': title,
       'content': content,
-      'created_at': createdAt.toIso8601String()
+      'created_at': createdAt.toIso8601String(),
     };
   }
 
   factory JournalModel.fromJson(Map<String, dynamic> json) {
     return JournalModel(
-      id: json['id'] ?? 0,
-      userId: json['user_id'] ?? 0,
-      category: json['category'] ?? 0,
-      title: json['title'] ?? 0,
-      content: json['content'] ?? 0,
-      createdAt: json['created_at'] != null
-          ? DateTime.parse(json['created_at'])
-          : DateTime.now(),
+      id: int.tryParse(json['id'].toString()) ?? 0,
+      userId: int.tryParse(json['user_id'].toString()) ?? 0,
+      category: json['category']?.toString() ?? '',
+      title: json['title']?.toString() ?? '',
+      content: json['content']?.toString() ?? '',
+      createdAt: DateTime.tryParse(json['created_at'] ?? '') ?? DateTime.now(),
     );
   }
 
@@ -43,9 +41,9 @@ class JournalModel {
     return {
       'id': id.toString(),
       'user_id': userId.toString(),
-      'category': category.toString(),
-      'title': title.toString(),
-      'content': content.toString(),
+      'category': category,
+      'title': title,
+      'content': content,
       'created_at': createdAt.toIso8601String(),
     };
   }

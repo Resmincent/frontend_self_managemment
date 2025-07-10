@@ -14,6 +14,7 @@ import 'package:self_management/presentation/controllers/home/mood_today_control
 import 'package:self_management/presentation/pages/choose_mood_page.dart';
 import 'package:self_management/presentation/pages/recomedation_page.dart';
 import '../widgets/custom_button.dart';
+import 'live_camera_mood_page.dart';
 
 class ClassifyImagePage extends StatefulWidget {
   const ClassifyImagePage({super.key});
@@ -51,6 +52,10 @@ class _ClassifyImagePageState extends State<ClassifyImagePage> {
 
   Future<void> _goToChooseMood() async {
     await Navigator.pushNamed(context, ChooseMoodPage.routeName);
+  }
+
+  Future<void> _goToLiveCamera() async {
+    await Navigator.pushNamed(context, LiveCameraPage.routeName);
   }
 
   Future<void> _pickImage(ImageSource source) async {
@@ -189,6 +194,12 @@ class _ClassifyImagePageState extends State<ClassifyImagePage> {
                 icon: Icons.mood,
                 label: 'Choose Mood',
               ),
+              const Gap(20),
+              _buildImageButton(
+                onTap: _goToLiveCamera,
+                icon: Icons.videocam,
+                label: 'LIVE Camera',
+              ),
             ],
           ),
           const Gap(30),
@@ -259,7 +270,7 @@ class _ClassifyImagePageState extends State<ClassifyImagePage> {
           Text(
             label,
             style: const TextStyle(
-              fontSize: 14,
+              fontSize: 12,
               color: AppColor.textTitle,
             ),
           ),
@@ -275,17 +286,19 @@ class _ClassifyImagePageState extends State<ClassifyImagePage> {
         body: Center(child: CircularProgressIndicator()),
       );
     }
-    return Scaffold(
-      backgroundColor: AppColor.secondary,
-      body: SafeArea(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            const Gap(20),
-            _buildHeaderClassify(),
-            const Gap(30),
-            _buildImageSection(),
-          ],
+    return SafeArea(
+      child: Scaffold(
+        backgroundColor: AppColor.secondary,
+        body: SafeArea(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              const Gap(20),
+              _buildHeaderClassify(),
+              const Gap(30),
+              _buildImageSection(),
+            ],
+          ),
         ),
       ),
     );

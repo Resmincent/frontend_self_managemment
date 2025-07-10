@@ -278,17 +278,20 @@ class _AllAgendaPageState extends State<AllAgendaPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Column(
-        children: [
-          const Gap(50),
-          _buildHeader(),
-          const Gap(10),
-          _buildSelectAgenda(),
-          Expanded(
-            child: _buildWeekView(),
-          ),
-        ],
+    return SafeArea(
+      child: Scaffold(
+        body: Column(
+          children: [
+            const Gap(20),
+            _buildHeader(),
+            const Gap(10),
+            _buildSelectAgenda(),
+            const Gap(10),
+            Expanded(
+              child: _buildWeekView(),
+            ),
+          ],
+        ),
       ),
     );
   }

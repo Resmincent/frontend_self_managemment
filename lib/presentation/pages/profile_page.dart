@@ -114,30 +114,32 @@ class _ProfilePageState extends State<ProfilePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Stack(
-        children: [
-          const Align(
-            alignment: Alignment.topRight,
-            child: TopClipPointer(),
-          ),
-          const Align(
-            alignment: Alignment.bottomLeft,
-            child: BottomClipPointer(),
-          ),
-          Positioned(
-            top: 315,
-            left: 0,
-            right: 0,
-            child: _buildProfile(),
-          ),
-          Positioned(
-            top: 58,
-            left: 20,
-            right: 0,
-            child: _buildHeader(),
-          ),
-        ],
+    return SafeArea(
+      child: Scaffold(
+        body: Stack(
+          children: [
+            const Align(
+              alignment: Alignment.topRight,
+              child: TopClipPointer(),
+            ),
+            const Align(
+              alignment: Alignment.bottomLeft,
+              child: BottomClipPointer(),
+            ),
+            Positioned(
+              top: 315,
+              left: 0,
+              right: 0,
+              child: _buildProfile(),
+            ),
+            Positioned(
+              top: 58,
+              left: 20,
+              right: 0,
+              child: _buildHeader(),
+            ),
+          ],
+        ),
       ),
     );
   }

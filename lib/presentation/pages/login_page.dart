@@ -193,30 +193,32 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: LayoutBuilder(
-        builder: (context, constraints) {
-          return SingleChildScrollView(
-            child: ConstrainedBox(
-              constraints: BoxConstraints(
-                minHeight: constraints.maxHeight,
+    return SafeArea(
+      child: Scaffold(
+        body: LayoutBuilder(
+          builder: (context, constraints) {
+            return SingleChildScrollView(
+              child: ConstrainedBox(
+                constraints: BoxConstraints(
+                  minHeight: constraints.maxHeight,
+                ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Column(
+                      children: [
+                        _buildHeaderLogin(),
+                        const Gap(40),
+                        _buildLoginForm(),
+                        _buildRegisterNavigation(),
+                      ],
+                    ),
+                  ],
+                ),
               ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Column(
-                    children: [
-                      _buildHeaderLogin(),
-                      const Gap(40),
-                      _buildLoginForm()
-                    ],
-                  ),
-                  _buildRegisterNavigation(),
-                ],
-              ),
-            ),
-          );
-        },
+            );
+          },
+        ),
       ),
     );
   }

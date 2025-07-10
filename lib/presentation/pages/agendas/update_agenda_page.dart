@@ -380,32 +380,34 @@ class _UpdateAgendaPageState extends State<UpdateAgendaPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Column(
-        children: [
-          const Gap(50),
-          _buildHeader(),
-          Expanded(
-            child: ListView(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              children: [
-                const Gap(10),
-                _buildTitleInput(),
-                const Gap(10),
-                _buildCategoryInput(),
-                const Gap(10),
-                _buildStartEventInput(),
-                const Gap(10),
-                _buildEndEventInput(),
-                const Gap(10),
-                _buildDescriptionInput(),
-                const Gap(40),
-                _buildUpdateButton(),
-                const Gap(60),
-              ],
-            ),
-          )
-        ],
+    return SafeArea(
+      child: Scaffold(
+        body: Column(
+          children: [
+            const Gap(20),
+            _buildHeader(),
+            Expanded(
+              child: ListView(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                children: [
+                  const Gap(10),
+                  _buildTitleInput(),
+                  const Gap(10),
+                  _buildCategoryInput(),
+                  const Gap(10),
+                  _buildStartEventInput(),
+                  const Gap(10),
+                  _buildEndEventInput(),
+                  const Gap(10),
+                  _buildDescriptionInput(),
+                  const Gap(40),
+                  _buildUpdateButton(),
+                  const Gap(60),
+                ],
+              ),
+            )
+          ],
+        ),
       ),
     );
   }

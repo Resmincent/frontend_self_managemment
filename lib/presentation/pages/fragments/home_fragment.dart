@@ -580,7 +580,7 @@ class _HomeFragmentState extends State<HomeFragment> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Gap(52),
+          const Gap(22),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [

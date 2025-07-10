@@ -162,15 +162,15 @@ class _VerifyPinPageState extends State<VerifyPinPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      resizeToAvoidBottomInset: true,
-      body: SafeArea(
-        child: LayoutBuilder(
+    return SafeArea(
+      child: Scaffold(
+        resizeToAvoidBottomInset: true,
+        body: LayoutBuilder(
           builder: (context, constraints) {
             return Column(
               children: [
                 const Gap(20),
-                _buildHeaderVerifyPin(),
+                SafeArea(child: _buildHeaderVerifyPin()),
                 const Gap(20),
                 _buildVerifyForm(),
               ],

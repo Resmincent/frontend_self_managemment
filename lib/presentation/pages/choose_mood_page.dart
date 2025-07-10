@@ -172,18 +172,20 @@ class _ChooseMoodPageState extends State<ChooseMoodPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColor.secondary,
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          const Gap(60),
-          _buildHeader(),
-          const Gap(40),
-          _buildChooseMood(),
-          const Gap(90),
-          _buildChoosenButton(),
-        ],
+    return SafeArea(
+      child: Scaffold(
+        backgroundColor: AppColor.secondary,
+        body: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            const Gap(20),
+            _buildHeader(),
+            const Gap(40),
+            _buildChooseMood(),
+            const Gap(90),
+            _buildChoosenButton(),
+          ],
+        ),
       ),
     );
   }

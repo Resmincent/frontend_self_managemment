@@ -407,26 +407,28 @@ class _AllExpensePageState extends State<AllExpensePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
-          child: SingleChildScrollView(
-            physics: const BouncingScrollPhysics(),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Gap(16),
-                _buildHeaderExpenses(),
-                const Gap(16),
-                _buildFilterMonthYear(),
-                const Gap(16),
-                _buildCardExpenseMonth(),
-                const Gap(10),
-                _buildCardExpenseDay(),
-                const Gap(16),
-                _buildList(),
-              ],
+    return SafeArea(
+      child: Scaffold(
+        body: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: SingleChildScrollView(
+              physics: const BouncingScrollPhysics(),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Gap(16),
+                  _buildHeaderExpenses(),
+                  const Gap(16),
+                  _buildFilterMonthYear(),
+                  const Gap(16),
+                  _buildCardExpenseMonth(),
+                  const Gap(10),
+                  _buildCardExpenseDay(),
+                  const Gap(16),
+                  _buildList(),
+                ],
+              ),
             ),
           ),
         ),

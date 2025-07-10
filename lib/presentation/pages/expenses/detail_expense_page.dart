@@ -272,67 +272,69 @@ class _DetailExpensePageState extends State<DetailExpensePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Stack(
-        children: [
-          const Positioned(
-            left: 0,
-            right: 0,
-            top: 0,
-            height: 170,
-            child: DecoratedBox(
-              decoration: BoxDecoration(
-                color: AppColor.primary,
-                borderRadius: BorderRadius.only(
-                  bottomLeft: Radius.circular(30),
-                  bottomRight: Radius.circular(30),
+    return SafeArea(
+      child: Scaffold(
+        body: Stack(
+          children: [
+            const Positioned(
+              left: 0,
+              right: 0,
+              top: 0,
+              height: 170,
+              child: DecoratedBox(
+                decoration: BoxDecoration(
+                  color: AppColor.primary,
+                  borderRadius: BorderRadius.only(
+                    bottomLeft: Radius.circular(30),
+                    bottomRight: Radius.circular(30),
+                  ),
                 ),
               ),
             ),
-          ),
-          Obx(
-            () {
-              final state = detailExpenseController.state;
-              final statusRequest = state.statusRequest;
+            Obx(
+              () {
+                final state = detailExpenseController.state;
+                final statusRequest = state.statusRequest;
 
-              if (statusRequest == StatusRequest.init) {
-                return const Center(
-                  child: BackButton(),
+                if (statusRequest == StatusRequest.init) {
+                  return const Center(
+                    child: BackButton(),
+                  );
+                }
+
+                if (statusRequest == StatusRequest.loading) {
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                }
+
+                if (statusRequest == StatusRequest.failed) {
+                  return ResponseFailed(
+                    message: state.message,
+                    margin: const EdgeInsets.symmetric(horizontal: 20),
+                  );
+                }
+
+                ExpenseModal expense = state.expense!;
+                return ListView(
+                  padding: const EdgeInsets.all(0),
+                  children: [
+                    const Gap(50),
+                    _buildHeaderTitle(expense.category),
+                    const Gap(30),
+                    _buildCardTitle(expense.title),
+                    const Gap(30),
+                    _buildCardDate(expense.dateExpense, expense.expense),
+                    const Gap(30),
+                    _buildCardDescription(expense.description ?? '-'),
+                    const Gap(30),
+                    _buildButtonDelete(expense.id),
+                  ],
                 );
-              }
-
-              if (statusRequest == StatusRequest.loading) {
-                return const Center(
-                  child: CircularProgressIndicator(),
-                );
-              }
-
-              if (statusRequest == StatusRequest.failed) {
-                return ResponseFailed(
-                  message: state.message,
-                  margin: const EdgeInsets.symmetric(horizontal: 20),
-                );
-              }
-
-              ExpenseModal expense = state.expense!;
-              return ListView(
-                padding: const EdgeInsets.all(0),
-                children: [
-                  const Gap(50),
-                  _buildHeaderTitle(expense.category),
-                  const Gap(30),
-                  _buildCardTitle(expense.title),
-                  const Gap(30),
-                  _buildCardDate(expense.dateExpense, expense.expense),
-                  const Gap(30),
-                  _buildCardDescription(expense.description ?? '-'),
-                  const Gap(30),
-                  _buildButtonDelete(expense.id),
-                ],
-              );
-            },
-          )
-        ],
+              },
+            )
+          ],
+        ),
       ),
     );
   }

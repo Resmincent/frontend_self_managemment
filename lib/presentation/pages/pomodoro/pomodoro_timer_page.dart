@@ -167,18 +167,20 @@ class _PomodoroTimerPageState extends State<PomodoroTimerPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColor.secondary,
-      body: SafeArea(
-        child: Column(
-          children: [
-            const Gap(16),
-            _buildHeaderPomodoro(),
-            const Gap(50),
-            _buildTimerDisplay(),
-            const Gap(50),
-            _buildControlButtons(),
-          ],
+    return SafeArea(
+      child: Scaffold(
+        backgroundColor: AppColor.secondary,
+        body: SafeArea(
+          child: Column(
+            children: [
+              const Gap(16),
+              _buildHeaderPomodoro(),
+              const Gap(50),
+              _buildTimerDisplay(),
+              const Gap(50),
+              _buildControlButtons(),
+            ],
+          ),
         ),
       ),
     );

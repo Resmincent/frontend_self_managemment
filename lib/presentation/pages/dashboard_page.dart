@@ -114,15 +114,17 @@ class _DashboardPageState extends State<DashboardPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      resizeToAvoidBottomInset: false,
-      body: Obx(
-        () {
-          return menu[navIndex.value]['view'];
-        },
+    return SafeArea(
+      child: Scaffold(
+        resizeToAvoidBottomInset: false,
+        body: Obx(
+          () {
+            return menu[navIndex.value]['view'];
+          },
+        ),
+        extendBody: true,
+        bottomNavigationBar: _buildMenu(),
       ),
-      extendBody: true,
-      bottomNavigationBar: _buildMenu(),
     );
   }
 }

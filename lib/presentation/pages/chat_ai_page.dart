@@ -246,16 +246,18 @@ class _ChatAiPageState extends State<ChatAiPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Column(
-        children: [
-          const Gap(40),
-          _buildHeaderAI(),
-          Expanded(
-            child: _buildListChat(),
-          ),
-          _buildInputChat(),
-        ],
+    return SafeArea(
+      child: Scaffold(
+        body: Column(
+          children: [
+            const Gap(20),
+            _buildHeaderAI(),
+            Expanded(
+              child: _buildListChat(),
+            ),
+            _buildInputChat(),
+          ],
+        ),
       ),
     );
   }
