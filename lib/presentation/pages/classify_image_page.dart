@@ -165,10 +165,26 @@ class _ClassifyImagePageState extends State<ClassifyImagePage> {
                       _selectedImage!,
                       fit: BoxFit.cover,
                     )
-                  : const Center(
-                      child: Text(
-                        'No image selected',
-                        style: TextStyle(color: Colors.grey),
+                  : Center(
+                      child: Container(
+                        padding: const EdgeInsets.all(20),
+                        child: const Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Text(
+                              '1. Pastikan kamera berada pada posisi yang stabil dan mengarah ke wajah dengan jarak yang wajar (sekitar 30–60 cm)',
+                              style: TextStyle(
+                                color: Colors.grey,
+                              ),
+                            ),
+                            Text(
+                              '2. Gunakan pencahayaan alami atau lampu terang, dan hindari cahaya dari belakang (backlight)',
+                              style: TextStyle(
+                                color: Colors.grey,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
             ),
