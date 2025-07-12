@@ -4,12 +4,8 @@ class MoodModel {
   final int level;
   final DateTime createdAt;
 
-  MoodModel({
-    this.id,
-    this.userId,
-    required this.level,
-    required this.createdAt,
-  });
+  MoodModel(
+      {this.id, this.userId, required this.level, required this.createdAt});
 
   Map<String, dynamic> toJson() {
     return {
@@ -22,19 +18,17 @@ class MoodModel {
 
   factory MoodModel.fromJson(Map<String, dynamic> json) {
     return MoodModel(
-      id: json['id'] != null ? int.tryParse(json['id'].toString()) : null,
-      userId: json['user_id'] != null
-          ? int.tryParse(json['user_id'].toString())
-          : null,
-      level: int.tryParse(json['level'].toString()) ?? 0,
+      id: json['id'],
+      userId: json['user_id'],
+      level: json['level'],
       createdAt: DateTime.parse(json['created_at']),
     );
   }
 
   Map<String, String> toJsonRequest() {
     return {
-      'id': id?.toString() ?? '',
-      'user_id': userId?.toString() ?? '',
+      'id': id.toString(),
+      'user_id': userId.toString(),
       'level': level.toString(),
       'created_at': createdAt.toIso8601String(),
     };

@@ -31,28 +31,26 @@ class IncomeModel {
 
   factory IncomeModel.fromJson(Map<String, dynamic> json) {
     return IncomeModel(
-      id: int.tryParse(json['id'].toString()) ?? 0,
-      userId: json['user_id'] != null
-          ? int.tryParse(json['user_id'].toString())
-          : null,
-      title: json['title'] ?? '',
-      category: json['category'] ?? '',
-      amount: double.tryParse(json['amount'].toString()) ?? 0.0,
+      id: json['id'],
+      userId: json['user_id'],
+      description: json['description'],
+      title: json['title'],
+      category: json['category'],
+      amount: (json['amount'] as num).toDouble(),
       dateIncome:
           DateTime.tryParse(json['date_income'] ?? '') ?? DateTime(2000),
-      description: json['description'],
     );
   }
 
   Map<String, String> toJsonRequest() {
     return {
       'id': id.toString(),
-      'user_id': userId?.toString() ?? '',
+      'user_id': userId.toString(),
       'title': title,
       'category': category,
       'amount': amount.toString(),
       'date_income': dateIncome.toIso8601String(),
-      'description': description ?? '',
+      'description': description.toString(),
     };
   }
 }
