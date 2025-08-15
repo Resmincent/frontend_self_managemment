@@ -28,7 +28,7 @@ class AgendaRemoteDataSource {
         "AgendaRemoteDataSource - add",
         e.toString(),
       );
-      return (false, 'Something went wrong');
+      return (false, 'Internal server error');
     }
   }
 
@@ -51,7 +51,7 @@ class AgendaRemoteDataSource {
         "AgendaRemoteDataSource - update",
         e.toString(),
       );
-      return (false, 'Something went wrong');
+      return (false, 'Internal server error');
     }
   }
 
@@ -86,7 +86,7 @@ class AgendaRemoteDataSource {
         "AgendaRemoteDataSource - all",
         e.toString(),
       );
-      return (false, 'Something went wrong', null);
+      return (false, 'Internal server error', null);
     }
   }
 
@@ -110,7 +110,7 @@ class AgendaRemoteDataSource {
         "AgendaRemoteDataSource - delete",
         e.toString(),
       );
-      return (false, 'Something went wrong');
+      return (false, 'Internal server error');
     }
   }
 
@@ -138,7 +138,7 @@ class AgendaRemoteDataSource {
         "AgendaRemoteDataSource - detail",
         e.toString(),
       );
-      return (false, 'Something went wrong', null);
+      return (false, 'Internal server error', null);
     }
   }
 
@@ -179,7 +179,7 @@ class AgendaRemoteDataSource {
         "AgendaRemoteDataSource - today",
         e.toString(),
       );
-      return (false, 'Something went wrong', null);
+      return (false, 'Internal server error', null);
     }
   }
 
@@ -215,7 +215,7 @@ class AgendaRemoteDataSource {
         "AgendaRemoteDataSource - analytic",
         e.toString(),
       );
-      return (false, 'Something went wrong', null);
+      return (false, 'Internal server error', null);
     }
   }
 }

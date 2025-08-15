@@ -28,7 +28,7 @@ class JournalRemoteDataSource {
         "JournalRemoteDataSource - add",
         e.toString(),
       );
-      return (false, 'Something went wrong');
+      return (false, 'Internal server error');
     }
   }
 
@@ -63,7 +63,7 @@ class JournalRemoteDataSource {
         "JournalRemoteDataSource - all",
         e.toString(),
       );
-      return (false, 'Something went wrong', null);
+      return (false, 'Internal server error', null);
     }
   }
 
@@ -87,7 +87,7 @@ class JournalRemoteDataSource {
         "JournalRemoteDataSource - delete",
         e.toString(),
       );
-      return (false, 'Something went wrong');
+      return (false, 'Internal server error');
     }
   }
 
@@ -115,7 +115,7 @@ class JournalRemoteDataSource {
         "JournalRemoteDataSource - detail",
         e.toString(),
       );
-      return (false, 'Something went wrong', null);
+      return (false, 'Internal server error', null);
     }
   }
 
@@ -149,7 +149,7 @@ class JournalRemoteDataSource {
         "JournalRemoteDataSource - search",
         e.toString(),
       );
-      return (false, 'Something went wrong', null);
+      return (false, 'Internal server error', null);
     }
   }
 
@@ -174,7 +174,7 @@ class JournalRemoteDataSource {
         "JournalRemoteDataSource - update",
         e.toString(),
       );
-      return (false, 'Something went wrong');
+      return (false, 'Internal server error');
     }
   }
 }

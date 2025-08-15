@@ -34,7 +34,7 @@ class UserRemoteDataSource {
         "UserRemoteDataSource - register",
         e.toString(),
       );
-      return (false, 'Something went wrong');
+      return (false, 'Internal server error');
     }
   }
 
@@ -70,7 +70,7 @@ class UserRemoteDataSource {
         "UserRemoteDataSource - login",
         e.toString(),
       );
-      return (false, 'Something went wrong', null);
+      return (false, 'Internal server error', null);
     }
   }
 }

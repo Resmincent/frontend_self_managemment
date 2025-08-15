@@ -27,7 +27,7 @@ class SolutionRemoteDataSource {
         "SolutionRemoteDataSource - add",
         e.toString(),
       );
-      return (false, 'Something went wrong');
+      return (false, 'Internal server error');
     }
   }
 
@@ -62,7 +62,7 @@ class SolutionRemoteDataSource {
         "SolutionRemoteDataSource - all",
         e.toString(),
       );
-      return (false, 'Something went wrong', null);
+      return (false, 'Internal server error', null);
     }
   }
 
@@ -86,7 +86,7 @@ class SolutionRemoteDataSource {
         "SolutionRemoteDataSource - delete",
         e.toString(),
       );
-      return (false, 'Something went wrong');
+      return (false, 'Internal server error');
     }
   }
 
@@ -114,7 +114,7 @@ class SolutionRemoteDataSource {
         "SolutionRemoteDataSource - detail",
         e.toString(),
       );
-      return (false, 'Something went wrong', null);
+      return (false, 'Internal server error', null);
     }
   }
 
@@ -148,7 +148,7 @@ class SolutionRemoteDataSource {
         "SolutionRemoteDataSource - search",
         e.toString(),
       );
-      return (false, 'Something went wrong', null);
+      return (false, 'Internal server error', null);
     }
   }
 
@@ -173,7 +173,7 @@ class SolutionRemoteDataSource {
         "SolutionRemoteDataSource - update",
         e.toString(),
       );
-      return (false, 'Something went wrong');
+      return (false, 'Internal server error');
     }
   }
 }

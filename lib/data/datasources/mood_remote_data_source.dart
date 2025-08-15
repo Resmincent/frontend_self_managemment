@@ -28,7 +28,7 @@ class MoodRemoteDataSource {
         "MoodRemoteDataSource - add",
         e.toString(),
       );
-      return (false, 'Something went wrong');
+      return (false, 'Internal server error');
     }
   }
 
@@ -63,7 +63,7 @@ class MoodRemoteDataSource {
         "MoodRemoteDataSource - analytic today",
         e.toString(),
       );
-      return (false, 'Something went wrong', null);
+      return (false, 'Internal server error', null);
     }
   }
 
@@ -98,7 +98,7 @@ class MoodRemoteDataSource {
         "MoodRemoteDataSource - analytic last month",
         e.toString(),
       );
-      return (false, 'Something went wrong', null);
+      return (false, 'Internal server error', null);
     }
   }
 
@@ -139,7 +139,7 @@ class MoodRemoteDataSource {
         "MoodRemoteDataSource - today",
         e.toString(),
       );
-      return (false, 'Something went wrong', null);
+      return (false, 'Internal server error', null);
     }
   }
 }

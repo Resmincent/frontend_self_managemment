@@ -29,7 +29,7 @@ class IncomeRemoteDateSource {
         "IncomeRemoteDateSource - add",
         e.toString(),
       );
-      return (false, 'Something went wrong');
+      return (false, 'Internal server error');
     }
   }
 
@@ -64,7 +64,7 @@ class IncomeRemoteDateSource {
         "IncomeRemoteDateSource - all",
         e.toString(),
       );
-      return (false, 'Something went wrong', null);
+      return (false, 'Internal server error', null);
     }
   }
 
@@ -90,7 +90,7 @@ class IncomeRemoteDateSource {
         "IncomeRemoteDateSource - delete",
         e.toString(),
       );
-      return (false, 'Something went wrong');
+      return (false, 'Internal server error');
     }
   }
 
@@ -118,7 +118,7 @@ class IncomeRemoteDateSource {
         "IncomeRemoteDateSource - detail",
         e.toString(),
       );
-      return (false, 'Something went wrong', null);
+      return (false, 'Internal server error', null);
     }
   }
 
@@ -151,7 +151,7 @@ class IncomeRemoteDateSource {
       return (false, message, null);
     } catch (e) {
       fdLog.title("IncomeRemoteDateSource - today", e.toString());
-      return (false, 'Something went wrong', null);
+      return (false, 'Internal server error', null);
     }
   }
 }

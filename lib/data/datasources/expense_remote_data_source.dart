@@ -28,7 +28,7 @@ class ExpenseRemoteDataSource {
         "ExpenseRemoteDataSource - add",
         e.toString(),
       );
-      return (false, 'Something went wrong');
+      return (false, 'Internal server error');
     }
   }
 
@@ -63,7 +63,7 @@ class ExpenseRemoteDataSource {
         "ExpenseRemoteDataSource - all",
         e.toString(),
       );
-      return (false, 'Something went wrong', null);
+      return (false, 'Internal server error', null);
     }
   }
 
@@ -87,7 +87,7 @@ class ExpenseRemoteDataSource {
         "ExpenseRemoteDataSource - delete",
         e.toString(),
       );
-      return (false, 'Something went wrong');
+      return (false, 'Internal server error');
     }
   }
 
@@ -115,7 +115,7 @@ class ExpenseRemoteDataSource {
         "ExpenseRemoteDataSource - detail",
         e.toString(),
       );
-      return (false, 'Something went wrong', null);
+      return (false, 'Internal server error', null);
     }
   }
 
@@ -156,7 +156,7 @@ class ExpenseRemoteDataSource {
         "ExpenseRemoteDataSource - today",
         e.toString(),
       );
-      return (false, 'Something went wrong', null);
+      return (false, 'Internal server error', null);
     }
   }
 
@@ -192,7 +192,7 @@ class ExpenseRemoteDataSource {
         "ExpenseRemoteDataSource - analytic",
         e.toString(),
       );
-      return (false, 'Something went wrong', null);
+      return (false, 'Internal server error', null);
     }
   }
 }
