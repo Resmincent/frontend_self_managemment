@@ -167,7 +167,7 @@ class _ClassifyImagePageState extends State<ClassifyImagePage> {
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
                             Text(
-                              '1. Pastikan kamera berada pada posisi yang stabil dan mengarah ke wajah dengan jarak yang wajar (sekitar 30–60 cm)',
+                              '1. Pastikan kamera berada pada posisi yang stabil dan mengarah ke wajah dengan jarak yang wajar (sekitar 20-30 cm)',
                               style: TextStyle(
                                 color: Colors.grey,
                               ),
